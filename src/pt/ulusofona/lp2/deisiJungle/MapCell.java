@@ -28,4 +28,56 @@ public class MapCell {
                 throw new IllegalArgumentException("Cell type must be valid! The valid types are 'Vazio' and 'Meta'");
         }
     }
+
+    /**
+     * Checks if the given player ID is present in the cell.
+     * @param playerID Player ID
+     * @return Whether the player ID is in the cell
+     */
+    boolean hasPlayerID(int playerID) {
+        for (int id : this.playerIDsInCell) {
+            if (id == playerID) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Adds a player ID to the cell.
+     * @param playerID Player ID
+     * @return Whether the player ID was successfully added
+     */
+    boolean addPlayer(int playerID) {
+        // Check if ID is already in cell
+        if (this.hasPlayerID(playerID)) {
+            return false;
+        }
+
+        // Adds player ID
+        this.playerIDsInCell.add(playerID);
+        return true;
+    }
+
+    /**
+     * Removes a player ID from the cell.
+     * @param playerID Player ID
+     * @return Whether the player ID was successfully removed
+     */
+    boolean rmPlayer(int playerID) {
+        // Check if ID is in the cell
+        if (!this.hasPlayerID(playerID)) {
+            return false;
+        }
+
+        // Removes player ID
+        for (int i = 0; i < this.playerIDsInCell.size(); i++) {
+            int currentID = this.playerIDsInCell.get(i);
+            if (currentID == playerID) {
+                this.playerIDsInCell.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
 }
