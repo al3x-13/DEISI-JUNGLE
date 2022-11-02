@@ -41,4 +41,8 @@ public class Player {
     Species getSpecies() {
         return this.species;
     }
+
+    void updateMapPosition(int newPosition) {
+        this.currentMapPosition = newPosition;
+    }
 }
