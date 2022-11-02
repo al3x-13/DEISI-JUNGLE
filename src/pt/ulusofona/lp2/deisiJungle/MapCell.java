@@ -3,17 +3,22 @@ package pt.ulusofona.lp2.deisiJungle;
 import java.util.ArrayList;
 
 public class MapCell {
+    int index;
     ArrayList<Integer> playerIDsInCell = new ArrayList<>();
     String backgroundImageFilename;
     String cellType;  // "Vazio" or "Meta"
 
-    public MapCell(String cellType) {
+    public MapCell(int cellIndex, String cellType) {
+        if (cellIndex <= 0) {
+            throw new IllegalArgumentException("Cell index must be greater than 1!");
+        }
+
         switch (cellType) {
             case "Vazio":
                 this.cellType = cellType;
                 backgroundImageFilename = "blank.png";
                 break;
-            case "meta":
+            case "Meta":
                 this.cellType = cellType;
                 backgroundImageFilename = "finish.png";
                 break;

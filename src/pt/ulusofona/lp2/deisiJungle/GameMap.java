@@ -14,10 +14,11 @@ public class GameMap {
 
         // Initializes each cell of the map to its corresponding type
         for (int i = 0; i < this.map.length; i++) {
+            int cellIndex = i+1;
             if (i == this.map.length - 1) {
-                this.map[i] = new MapCell("Meta");
+                this.map[i] = new MapCell(cellIndex, "Meta");
             } else {
-                this.map[i] = new MapCell("Vazio");
+                this.map[i] = new MapCell(cellIndex, "Vazio");
             }
         }
     }
