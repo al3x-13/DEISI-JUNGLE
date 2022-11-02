@@ -4,8 +4,22 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class GameManager {
+    // Game Species
+    ArrayList<Species> species = new ArrayList<>() {
+        {
+            add(new Species('E', "Elefante", "elephant.png"));
+            add(new Species('L', "Leão", "lion.png"));
+            add(new Species('T', "Tartaruga", "turtle.png"));
+            add(new Species('P', "Pássaro", "bird.png"));
+            add(new Species('Z', "Tarzan", "tarzan.png"));
+        }
+    };
     ArrayList<Player> players = new ArrayList<>();
-    GameMap map;
+    GameMap map = null;
+
+    public GameManager() {
+        // This can be empty 4 now
+    }
 
     /**
      * Provides information about all the allowed species in the game.
@@ -17,19 +31,11 @@ public class GameManager {
      * @return Array containing info about allowed game species
      */
     public String[][] getSpecies() {
-        Species elephant = new Species('E', "Elefante", "elephant.png");
-        Species lion = new Species('L', "Leão", "lion.png");
-        Species turtle = new Species('T', "Tartaruga", "turtle.png");
-        Species bird = new Species('P', "Pássaro", "bird.png");
-        Species tarzan = new Species('Z', "Tarzan", "tarzan.png");
-
-        return new String[][] {
-                elephant.getSpeciesData(),
-                lion.getSpeciesData(),
-                turtle.getSpeciesData(),
-                bird.getSpeciesData(),
-                tarzan.getSpeciesData()
-        };
+        String[][] output = new String[species.size()][];
+        for (int i = 0; i < species.size(); i++) {
+            output[i] = species.get(i).getSpeciesData();
+        }
+        return output;
     }
 
     /**
@@ -40,7 +46,80 @@ public class GameManager {
      * @return Whether the initial map was successfully created
      */
     public boolean createInitialJungle(int jungleSize, int initialEnergy, String[][] playersInfo) {
-        // TODO
+        reset();  // Resets game data structures
+
+        // Validates 'jungleSize'
+        if (jungleSize < 1) {
+            return false;
+        }
+
+        // Validates 'initialEnergy'
+        if (initialEnergy < 1) {
+            return false;
+        }
+
+        // Validates number of players (2-4 players)
+        int numberOfPlayers = playersInfo.length;
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) {
+            return false;
+        }
+
+        // Validates number of map cells (at least 2 per player)
+        if (jungleSize < numberOfPlayers * 2) {
+            return false;
+        }
+
+        // Validates players' info
+        for (String[] player : playersInfo) {
+            int playerID;
+            try {
+                playerID = Integer.parseInt(player[0]);
+            } catch (NumberFormatException e) {
+                return false;
+            }
+
+            String playerName;
+            if (player[1] == null || player[1].length() == 0) {
+                return false;
+            } else {
+                playerName = player[1];
+            }
+
+            Character playerSpeciesID;
+            if (player[2] == null || player[2].length() == 0) {
+                return false;
+            } else {
+                playerSpeciesID = player[2].charAt(0);
+            }
+
+            // Gets Species by ID
+            Species playerSpecies = getSpeciesByID(playerSpeciesID);
+
+            // Validates player species (checks if it exists)
+            if (playerSpecies == null) {
+                return false;
+            }
+
+            for (Player currentPlayer : players) {
+                // Checks if the ID already exists
+                if (currentPlayer.getID() == playerID) {
+                    return false;
+                }
+
+                // In case the player species corresponds to 'tarzan' (cant have 2 'tarzan's)
+                if (currentPlayer.getSpecies().getID() == playerSpeciesID) {
+                    return false;
+                }
+            }
+
+            // Creates new Player instance and adds it to 'players' ArrayList
+            players.add(new Player(playerID, playerName, playerSpecies, initialEnergy));
+        }
+
+        // Initializes game map
+        map = new GameMap(jungleSize);
+
+        // TODO: improve this
         return false;
     }
 
@@ -147,7 +226,23 @@ public class GameManager {
      * Useful for resetting game and Unit tests.
      */
     public void reset() {
-        this.players = new ArrayList<>();
+        players = new ArrayList<>();
+        map = null;
         // TODO: update as we add more stuff
+    }
+
+    /**
+     * Gets Species object from all game species using the species ID.<p>
+     * If there's no Species for the given ID it returns null.
+     * @param id Species ID
+     * @return Species object or null
+     */
+    public Species getSpeciesByID(Character id) {
+        for (Species species : species) {
+            if (species.getID() == id) {
+                return species;
+            }
+        }
+        return null;
     }
 }
