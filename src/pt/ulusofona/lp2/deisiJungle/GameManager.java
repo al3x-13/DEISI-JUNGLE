@@ -129,8 +129,10 @@ public class GameManager {
      * @return Array with all player IDs in the cell
      */
     public int[] getPlayerIds(int squareNr) {
-        // TODO
-        return new int[0];
+        if (map.getSize() <= squareNr && map.getMapCell(squareNr).isEmpty()){
+            return new int[0];
+        }
+        return map.getMapCell(squareNr).getplayerIDsInCell();
     }
 
     /**

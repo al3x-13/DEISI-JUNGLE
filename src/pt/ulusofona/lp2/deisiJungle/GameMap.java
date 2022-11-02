@@ -22,4 +22,25 @@ public class GameMap {
             }
         }
     }
+
+    /**
+     * @return Map Size
+     */
+    int getSize() {
+        return this.size;
+    }
+
+    /**
+     * Gets indicated Cell
+     * @param squareNr
+     * @return Cell
+     */
+    MapCell getMapCell(int squareNr){
+        for (int i = 0 ; i < map.length ; i++){
+            if (map[i].getIndex() == squareNr){
+                return map[i];
+            }
+        }
+        return null;
+    }
 }

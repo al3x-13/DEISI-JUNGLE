@@ -1,5 +1,6 @@
 package pt.ulusofona.lp2.deisiJungle;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MapCell {
@@ -79,5 +80,31 @@ public class MapCell {
             }
         }
         return false;
+    }
+
+    /**
+     * Verifies if Cell is Empty
+     * @return Whether the cell is Empty or Not
+     */
+    boolean isEmpty(){
+        return this.playerIDsInCell.size() == 0;
+    }
+
+    /**
+     * @return Index
+     */
+    int getIndex(){
+        return this.index;
+    }
+
+    /**
+     * @return Array With PlayerIDs
+     */
+    int[] getplayerIDsInCell(){
+        int output[] = new int[playerIDsInCell.size()];
+        for (int i = 0 ;i < playerIDsInCell.size(); i++){
+            output[i] = playerIDsInCell.get(i);
+        }
+        return output;
     }
 }

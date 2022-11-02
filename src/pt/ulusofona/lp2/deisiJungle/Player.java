@@ -42,6 +42,10 @@ public class Player {
         return this.species;
     }
 
+    /**
+     * Updates Player Map Position
+     * @param newPosition New Player Position
+     */
     void updateMapPosition(int newPosition) {
         this.currentMapPosition = newPosition;
     }
