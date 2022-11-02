@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class GameManager {
+    ArrayList<Player> players = new ArrayList<>();
+    GameMap map;
+
     /**
      * Provides information about all the allowed species in the game.
      * Each element of the array has the following format:<p>
@@ -136,7 +139,15 @@ public class GameManager {
      * @return Who is Taborda
      */
     public String whoIsTaborda() {
-        // TODO: Is this right???
         return "professional wrestling";
+    }
+
+    /**
+     * Resets all structures used to store game data.<p>
+     * Useful for resetting game and Unit tests.
+     */
+    public void reset() {
+        this.players = new ArrayList<>();
+        // TODO: update as we add more stuff
     }
 }
