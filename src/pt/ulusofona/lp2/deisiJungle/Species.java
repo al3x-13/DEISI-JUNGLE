@@ -36,4 +36,11 @@ public class Species {
     String[] getSpeciesData() {
         return new String[] { this.id.toString(), this.name, this.imageFilename };
     }
+
+    /**
+     * @return Species ID
+     */
+    Character getID() {
+        return this.id;
+    }
 }

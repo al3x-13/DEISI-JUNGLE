@@ -13,4 +13,32 @@ public class Player {
         this.species = species;
         this.energyUnits = energyUnits;
     }
+
+    /**
+     * @return Player ID
+     */
+    int getID() {
+        return this.id;
+    }
+
+    /**
+     * @return Player name
+     */
+    String getName() {
+        return this.name;
+    }
+
+    /**
+     * @return Player current energy units
+     */
+    int getEnergy() {
+        return this.energyUnits;
+    }
+
+    /**
+     * @return Player Species
+     */
+    Species getSpecies() {
+        return this.species;
+    }
 }
