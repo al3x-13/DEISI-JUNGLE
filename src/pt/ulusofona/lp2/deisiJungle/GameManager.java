@@ -14,8 +14,19 @@ public class GameManager {
      * @return Array containing info about allowed game species
      */
     public String[][] getSpecies() {
-        // TODO
-        return new String[0][0];
+        Species elephant = new Species('E', "Elefante", "elephant.png");
+        Species lion = new Species('L', "Leão", "lion.png");
+        Species turtle = new Species('T', "Tartaruga", "turtle.png");
+        Species bird = new Species('P', "Pássaro", "bird.png");
+        Species tarzan = new Species('Z', "Tarzan", "tarzan.png");
+
+        return new String[][] {
+                elephant.getSpeciesData(),
+                lion.getSpeciesData(),
+                turtle.getSpeciesData(),
+                bird.getSpeciesData(),
+                tarzan.getSpeciesData()
+        };
     }
 
     /**
