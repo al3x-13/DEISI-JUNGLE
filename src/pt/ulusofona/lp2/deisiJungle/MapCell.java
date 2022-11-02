@@ -11,6 +11,8 @@ public class MapCell {
     public MapCell(int cellIndex, String cellType) {
         if (cellIndex <= 0) {
             throw new IllegalArgumentException("Cell index must be greater than 1!");
+        } else {
+            this.index = cellIndex;
         }
 
         switch (cellType) {
