@@ -1,5 +1,7 @@
 package pt.ulusofona.lp2.deisiJungle;
 
+import java.util.Objects;
+
 public class Species {
     Character id;
     String name;
@@ -9,6 +11,19 @@ public class Species {
         this.id = id;
         this.name = name;
         this.imageFilename = imageFilename;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Species species = (Species) o;
+        return Objects.equals(id, species.id) && Objects.equals(name, species.name) && Objects.equals(imageFilename, species.imageFilename);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, imageFilename);
     }
 
     /**
