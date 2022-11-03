@@ -101,9 +101,9 @@ public class MapCell {
      * @return Array With PlayerIDs
      */
     int[] getplayerIDsInCell(){
-        int output[] = new int[playerIDsInCell.size()];
-        for (int i = 0 ;i < playerIDsInCell.size(); i++){
-            output[i] = playerIDsInCell.get(i);
+        int output[] = new int[this.playerIDsInCell.size()];
+        for (int i = 0; i < this.playerIDsInCell.size(); i++){
+            output[i] = this.playerIDsInCell.get(i);
         }
         return output;
     }
