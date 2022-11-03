@@ -43,4 +43,11 @@ public class Species {
     Character getID() {
         return this.id;
     }
+
+    /**
+     * @return Species Name
+     */
+    String getName() {
+        return this.name;
+    }
 }
