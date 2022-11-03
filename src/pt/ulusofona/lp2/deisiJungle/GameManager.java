@@ -17,9 +17,7 @@ public class GameManager {
     ArrayList<Player> players = new ArrayList<>();
     GameMap map = null;
 
-    public GameManager() {
-        // This can be empty 4 now
-    }
+    public GameManager() {}
 
     /**
      * Provides information about all the allowed species in the game.
@@ -107,7 +105,7 @@ public class GameManager {
                 }
 
                 // In case the player species corresponds to 'tarzan' (cant have 2 'tarzan's)
-                if (currentPlayer.getSpecies().getID() == playerSpeciesID) {
+                if (playerSpecies.getName().equals("Tarzan") && currentPlayer.getSpecies().getID() == playerSpeciesID) {
                     return false;
                 }
             }
@@ -120,7 +118,7 @@ public class GameManager {
         map = new GameMap(jungleSize);
 
         // TODO: improve this
-        return false;
+        return true;
     }
 
     /**
@@ -129,10 +127,18 @@ public class GameManager {
      * @return Array with all player IDs in the cell
      */
     public int[] getPlayerIds(int squareNr) {
-        if (map.getSize() <= squareNr && map.getMapCell(squareNr).isEmpty()){
+        if (map.getSize() < squareNr){
             return new int[0];
         }
-        return map.getMapCell(squareNr).getplayerIDsInCell();
+
+        // Gets cell object
+        MapCell cell = map.getMapCell(squareNr);
+
+        if (cell == null) {
+            return new int[0];
+        }
+
+        return cell.getplayerIDsInCell();
     }
 
     /**
