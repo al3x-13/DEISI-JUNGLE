@@ -251,29 +251,74 @@ public class TestGameManager {
     }
 
     @Test
-    public void test_01_GetCurrentPlayerInfo() {
-        // Testing with valid ID
+    public void test_01_GetPlayersInfo() {
+        // Testing with 2 players
         GameManager game = new GameManager();
 
         String[][] playersInfo = new String[][] {
-                { "1", "Player 1", "L"},
-                { "3", "Player 2", "T"}
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, 20, playersInfo);
 
-        // TODO: make tests 4 this
+        String[][] realResult = game.getPlayersInfo();
+
+        boolean hasPlayer1 = false;
+        boolean hasPlayer2 = false;
+        for (String[] player : realResult) {
+            // Checks for player1
+            if (player[0].equals("1") && player[1].equals("Player 1") && player[2].equals("L") && player[3].equals("20")) {
+                hasPlayer1 = true;
+            }
+
+            if (player[0].equals("3") && player[1].equals("Player 2") && player[2].equals("T") && player[3].equals("20")) {
+                hasPlayer2 = true;
+            }
+        }
+
+        assertTrue(hasPlayer1 && hasPlayer2);
+        // TODO: Improve this test
     }
 
     @Test
-    public void test_01_GetPlayersInfo() {
+    public void test_02_GetPlayersInfo() {
+        // Testing with 4 players
         GameManager game = new GameManager();
 
         String[][] playersInfo = new String[][] {
-                { "1", "Player 1", "L"},
-                { "3", "Player 2", "T"}
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" },
+                { "4", "Player 3", "T"},
+                { "22", "Player 4", "B"}
         };
         game.createInitialJungle(10, 20, playersInfo);
 
-        // TODO: make tests 4 this
+        String[][] realResult = game.getPlayersInfo();
+
+        boolean hasPlayer1 = false;
+        boolean hasPlayer2 = false;
+        boolean hasPlayer3 = false;
+        boolean hasPlayer4 = false;
+        for (String[] player : realResult) {
+            // Checks for player1
+            if (player[0].equals("1") && player[1].equals("Player 1") && player[2].equals("L") && player[3].equals("20")) {
+                hasPlayer1 = true;
+            }
+
+            if (player[0].equals("3") && player[1].equals("Player 2") && player[2].equals("T") && player[3].equals("20")) {
+                hasPlayer2 = true;
+            }
+
+            if (player[0].equals("4") && player[1].equals("Player 3") && player[2].equals("T") && player[3].equals("20")) {
+                hasPlayer3 = true;
+            }
+
+            if (player[0].equals("22") && player[1].equals("Player 4") && player[2].equals("B") && player[3].equals("20")) {
+                hasPlayer4 = true;
+            }
+        }
+
+        assertTrue(hasPlayer1 && hasPlayer2 && hasPlayer3 && hasPlayer4);
+        // TODO: Improve this test
     }
 }
