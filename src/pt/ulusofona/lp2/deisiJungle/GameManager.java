@@ -183,8 +183,15 @@ public class GameManager {
      * @return The player info or null if the player does not exist
      */
     public String[] getPlayerInfo(int playerId) {
-        // TODO
-        return new String[0];
+        String[] playerInfo = new String[4];
+        if (!(players.get(playerId) == null)){
+            playerInfo[0] = String.valueOf(players.get(playerId).getID());
+            playerInfo[1] = String.valueOf(players.get(playerId).getName());
+            playerInfo[2] = String.valueOf(players.get(playerId).getSpecies());
+            playerInfo[3] = String.valueOf(players.get(playerId).getEnergy());
+            return playerInfo;
+        }
+        return null;
     }
 
     /**
