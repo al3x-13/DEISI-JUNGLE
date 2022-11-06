@@ -26,7 +26,7 @@ public class GameMap {
     /**
      * @return Map Size
      */
-    int getSize() {
+    int getMapSize() {
         return this.size;
     }
 
