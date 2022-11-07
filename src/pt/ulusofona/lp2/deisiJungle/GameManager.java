@@ -1,7 +1,6 @@
 package pt.ulusofona.lp2.deisiJungle;
 
 import javax.swing.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameManager {
@@ -17,6 +16,7 @@ public class GameManager {
     };
     ArrayList<Player> players = new ArrayList<>();
     GameMap map = null;
+    int currentPlayerIndex;
 
     public GameManager() {}
 
@@ -121,6 +121,9 @@ public class GameManager {
         // Sorts players by ID
         sortPlayersByID();
 
+        // Sets the index of the first player to make a play
+        currentPlayerIndex = 0;
+
         // TODO: improve this
         return true;
     }
@@ -204,8 +207,12 @@ public class GameManager {
      * @return Current player info
      */
     public String[] getCurrentPlayerInfo() {
-        // TODO
-        return new String[0];
+        return new String[] {
+            String.valueOf(this.players.get(currentPlayerIndex).getID()),
+            this.players.get(currentPlayerIndex).getName(),
+            String.valueOf(this.players.get(currentPlayerIndex).getSpecies().getID()),
+            String.valueOf(this.players.get(currentPlayerIndex).getEnergy())
+        };
     }
 
     /**
