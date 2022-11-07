@@ -257,7 +257,7 @@ public class GameManager {
         int playerDestinationIndex = playerCurrentPosition + nrSquares;
 
         // Calculates destination to make sure the player does not exceed map limit
-        if (playerCurrentPosition > this.map.getFinishMapCellIndex()) {
+        if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
             playerDestinationIndex = this.map.getFinishMapCellIndex();
         }
 
@@ -317,8 +317,30 @@ public class GameManager {
      * @return Game results
      */
     public ArrayList<String> getGameResults() {
-        // TODO
-        return new ArrayList<>();
+        ArrayList<String> gameResults = new ArrayList<>();
+
+        ArrayList<Integer> orderedPlayerIDs = this.map.getPlayerIDsOrderedByFinishPosition();
+        for (Integer id : orderedPlayerIDs) {
+            for (Player player : this.players) {
+                if (player.getID() == id) {
+                    // Builds game results string for each player
+                    gameResults.add(
+                            new StringBuilder()
+                                    .append(player.getCurrentMapPosition())
+                                    .append(" ")
+                                    .append(player.getName())
+                                    .append(", ")
+                                    .append(player.getSpecies().getID())
+                                    .append(", ")
+                                    .append(player.getCurrentMapPosition())
+                                    .toString()
+                    );
+                    break;
+                }
+            }
+        }
+
+        return gameResults;
     }
 
     /**
@@ -344,7 +366,6 @@ public class GameManager {
     public void reset() {
         players = new ArrayList<>();
         map = null;
-        // TODO: update as we add more stuff
     }
 
     /**
