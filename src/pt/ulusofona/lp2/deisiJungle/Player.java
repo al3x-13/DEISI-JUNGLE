@@ -5,7 +5,7 @@ public class Player {
     String name;
     Species species;
     int energyUnits;
-    int currentMapPosition = 0;
+    int currentMapPosition = 1;  // Game cells' index starts at 1
 
     public Player(int id, String name, Species species, int energyUnits) {
         this.id = id;
@@ -43,10 +43,25 @@ public class Player {
     }
 
     /**
+     * @return Player current position in the map
+     */
+    int getCurrentMapPosition() {
+        return this.currentMapPosition;
+    }
+
+    /**
      * Updates Player Map Position
      * @param newPosition New Player Position
      */
     void updateMapPosition(int newPosition) {
         this.currentMapPosition = newPosition;
+    }
+
+    /**
+     * Decreases player energy by the given amount of units (move cost).
+     * @param energyUnits Energy units to decrease from overall energy
+     */
+    void decreaseEnergy(int energyUnits) {
+        this.energyUnits -= energyUnits;
     }
 }
