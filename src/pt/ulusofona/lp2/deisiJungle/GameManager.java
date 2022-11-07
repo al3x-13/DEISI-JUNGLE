@@ -1,6 +1,7 @@
 package pt.ulusofona.lp2.deisiJungle;
 
 import javax.swing.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class GameManager {
@@ -111,11 +112,14 @@ public class GameManager {
             }
 
             // Creates new Player instance and adds it to 'players' ArrayList
-            players.add(new Player(playerID, playerName, playerSpecies, initialEnergy));
+            this.players.add(new Player(playerID, playerName, playerSpecies, initialEnergy));
         }
 
         // Initializes game map
         map = new GameMap(jungleSize);
+
+        // Sorts players by ID
+        sortPlayersByID();
 
         // TODO: improve this
         return true;
@@ -296,5 +300,22 @@ public class GameManager {
             }
         }
         return -1;
+    }
+
+    public void sortPlayersByID() {
+        // Selection Sort
+        for (int i = 0; i < this.players.size() - 1; i++) {
+            int lowestID = i;
+            // Find the lowest ID
+            for (int j = i+1; j < this.players.size(); j++) {
+                if (this.players.get(j).getID() < this.players.get(lowestID).getID()) {
+                    lowestID = j;
+                }
+            }
+;
+            Player temp = this.players.get(lowestID);
+            this.players.set(lowestID, this.players.get(i));
+            this.players.set(i, temp);
+        }
     }
 }
