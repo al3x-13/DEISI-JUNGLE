@@ -1,5 +1,7 @@
 package pt.ulusofona.lp2.deisiJungle;
 
+import com.sun.jdi.event.ClassPrepareEvent;
+
 import javax.swing.*;
 import java.util.ArrayList;
 
@@ -16,7 +18,9 @@ public class GameManager {
     };
     ArrayList<Player> players = new ArrayList<>();
     GameMap map = null;
-    int currentPlayerIndex;
+    // Stores the current round player index for 'players' ArrayList
+    int currentRoundPlayerIndex;
+    int energySpentPerPlay = 2;  // Amount of energy spend on each play
 
     public GameManager() {}
 
@@ -121,8 +125,13 @@ public class GameManager {
         // Sorts players by ID
         sortPlayersByID();
 
+        // Places players in the first 'MapCell'
+        for (Player player : this.players) {
+            this.map.placePlayerInCell(player.getID(), 1);
+        }
+
         // Sets the index of the first player to make a play
-        currentPlayerIndex = 0;
+        currentRoundPlayerIndex = 0;
 
         // TODO: improve this
         return true;
@@ -208,10 +217,10 @@ public class GameManager {
      */
     public String[] getCurrentPlayerInfo() {
         return new String[] {
-            String.valueOf(this.players.get(currentPlayerIndex).getID()),
-            this.players.get(currentPlayerIndex).getName(),
-            String.valueOf(this.players.get(currentPlayerIndex).getSpecies().getID()),
-            String.valueOf(this.players.get(currentPlayerIndex).getEnergy())
+            String.valueOf(this.players.get(currentRoundPlayerIndex).getID()),
+            this.players.get(currentRoundPlayerIndex).getName(),
+            String.valueOf(this.players.get(currentRoundPlayerIndex).getSpecies().getID()),
+            String.valueOf(this.players.get(currentRoundPlayerIndex).getEnergy())
         };
     }
 
@@ -237,8 +246,29 @@ public class GameManager {
      * @return Whether current player was moved successfully
      */
     public boolean moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
-        // TODO
-        return false;
+        // Checks if 'nrSquares' is a valid value
+        if (!bypassValidation && (nrSquares < 1 || nrSquares > 6)) {
+            return false;
+        }
+
+        // Get current player
+        Player currentPlayer = this.players.get(currentRoundPlayerIndex);
+        int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
+        int playerDestinationIndex = playerCurrentPosition + nrSquares;
+
+        // Calculates destination to make sure the player does not exceed map limit
+        if (playerCurrentPosition > this.map.getFinishMapCellIndex()) {
+            playerDestinationIndex = this.map.getFinishMapCellIndex();
+        }
+
+        if (!map.movePlayer(currentPlayer, playerDestinationIndex, this.energySpentPerPlay)) {
+            return false;
+        }
+
+        // Updates player for next play
+        currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
+
+        return true;
     }
 
     /**
@@ -246,8 +276,39 @@ public class GameManager {
      * @return Winner info
      */
     public String[] getWinnerInfo() {
-        // TODO
-        return new String[0];
+        if (!isGameOver()) {
+            return null;
+        }
+
+        // Gets winner in case one has gotten to the finish
+        for (Player player : this.players) {
+            if (player.getCurrentMapPosition() == this.map.getFinishMapCellIndex()) {
+                return new String[] {
+                    String.valueOf(player.getID()),
+                    player.getName(),
+                    String.valueOf(player.getSpecies().getID()),
+                    String.valueOf(player.getEnergy())
+                };
+            }
+        }
+
+        // Gets the player in the most advanced cell (no one finished the game)
+        Player winner = null;
+        int currentFurthestPlayer = -1;
+
+        for (Player player : this.players) {
+            if (player.getCurrentMapPosition() > currentFurthestPlayer) {
+                winner = player;
+                currentFurthestPlayer = player.getCurrentMapPosition();
+            }
+        }
+
+        return new String[] {
+                String.valueOf(winner.getID()),
+                winner.getName(),
+                String.valueOf(winner.getSpecies().getID()),
+                String.valueOf(winner.getEnergy())
+        };
     }
 
     /**
@@ -315,6 +376,9 @@ public class GameManager {
         return -1;
     }
 
+    /**
+     * Sorts players ArrayList by ID (using quicksort algo).
+     */
     public void sortPlayersByID() {
         // Selection Sort
         for (int i = 0; i < this.players.size() - 1; i++) {
@@ -330,5 +394,27 @@ public class GameManager {
             this.players.set(lowestID, this.players.get(i));
             this.players.set(i, temp);
         }
+    }
+
+    /**
+     * Checks if the game is over, i.e. if any player has arrived at the finish
+     * or if the players have ran out of energy.
+     * @return Whether the game is over or not
+     */
+    boolean isGameOver() {
+        boolean enoughEnergyLeft = false;
+
+        for (Player player : this.players) {
+            // Checks if any of the players arrived at the finish cell (AKA won)
+            if (player.getCurrentMapPosition() == this.map.getFinishMapCellIndex()) {
+                return true;
+            }
+
+            // Checks if at least some players still have enough energy to keep playing
+            if (player.getEnergy() >= this.energySpentPerPlay) {
+                enoughEnergyLeft = true;
+            }
+        }
+        return !enoughEnergyLeft;
     }
 }
