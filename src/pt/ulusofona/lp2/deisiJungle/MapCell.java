@@ -91,19 +91,38 @@ public class MapCell {
     }
 
     /**
-     * @return Index
+     * @return Cell Index
      */
     int getIndex(){
         return this.index;
     }
 
     /**
-     * @return Array With PlayerIDs
+     * Gets player IDs in current cell in integer array format (e.g. [3,5], for players with ID 3 and 5).
+     * @return Array with player IDs
      */
-    int[] getplayerIDsInCell(){
+    int[] getPlayerIDsInCell(){
         int output[] = new int[this.playerIDsInCell.size()];
         for (int i = 0; i < this.playerIDsInCell.size(); i++){
             output[i] = this.playerIDsInCell.get(i);
+        }
+        return output;
+    }
+
+    /**
+     * Gets player IDs in current cell in String format (e.g. "3,5", for players with ID 3 and 5).
+     * @return String with current players in cell
+     */
+    String getPlayerIDsInCellToString() {
+        String output = "";
+
+        if (this.playerIDsInCell.size() > 0) {
+            output = this.playerIDsInCell.toString();
+
+            // Removes square brackets and empty spaces
+            output = output.replace("[", "")
+                    .replace("]", "")
+                    .replace(" ", "");
         }
         return output;
     }

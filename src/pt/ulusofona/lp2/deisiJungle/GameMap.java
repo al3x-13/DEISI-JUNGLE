@@ -31,8 +31,8 @@ public class GameMap {
     }
 
     /**
-     * Gets indicated Cell
-     * @param squareNr
+     * Gets the corresponding Cell for the given index
+     * @param squareNr Cell index
      * @return Cell
      */
     MapCell getMapCell(int squareNr){

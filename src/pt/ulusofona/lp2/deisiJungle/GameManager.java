@@ -2,7 +2,6 @@ package pt.ulusofona.lp2.deisiJungle;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameManager {
     // Game Species
@@ -139,7 +138,7 @@ public class GameManager {
             return new int[0];
         }
 
-        return cell.getplayerIDsInCell();
+        return cell.getPlayerIDsInCell();
     }
 
     /**
@@ -153,7 +152,7 @@ public class GameManager {
      */
     public String[] getSquareInfo(int squareNr) {
         String[] squareInfo = new String[3];
-        String IDsString = "";
+
         if (squareNr >= 0 && squareNr <= map.getMapSize()) {
             if (squareNr == map.getMapSize()){
                 squareInfo[0] = "finish.png";
@@ -162,18 +161,14 @@ public class GameManager {
                 squareInfo[0] = "blank.png";
                 squareInfo[1] = "Vazio";
             }
-            //Convert Info from ArrayList to String
-            ArrayList<Integer> IDsArray = map.getMapCell(squareNr).playerIDsInCell;
-            for (int i = 0 ; i < IDsArray.size() ; i++){
-                if (i == IDsArray.size()-1){
-                    IDsString += IDsArray.get(i);
-                }else {
-                    IDsString += IDsArray.get(i) + ",";
-                }
-            }
-            squareInfo[2] = IDsString;
+
+            // Converts players' IDs from ArrayList to String
+            squareInfo[2] = map.getMapCell(squareNr).getPlayerIDsInCellToString();
+
             return squareInfo;
         }
+
+        // Returns null in case the cell is not valid
         return null;
     }
 
