@@ -1,5 +1,8 @@
 package pt.ulusofona.lp2.deisiJungle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class GameMap {
     int size;
     MapCell[] map;
@@ -34,7 +37,7 @@ public class GameMap {
      * @return Index (game index) of the MapCell with finish
      */
     int getFinishMapCellIndex() {
-        return this.size - 1;
+        return this.size;
     }
 
     /**
@@ -89,5 +92,24 @@ public class GameMap {
      */
     boolean placePlayerInCell(int playerID, int cellIndex) {
         return this.map[cellIndex - 1].addPlayer(playerID);
+    }
+
+    /**
+     * Gets the player IDs at game finish ordered from 1st to last.
+     * @return Player IDs ordered by game finish positions
+     */
+    ArrayList<Integer> getPlayerIDsOrderedByFinishPosition() {
+        ArrayList<Integer> playerIDs = new ArrayList<>();
+
+        // Iterates over game map from finish to start to get player IDs ordered from 1st to last
+        for (int i = this.map.length - 1; i >= 0 ; i--) {
+            int[] ids = this.map[i].getPlayerIDsInCell();
+            Arrays.sort(ids);
+
+            for (int id : ids) {
+                playerIDs.add(id);
+            }
+        }
+        return playerIDs;
     }
 }
