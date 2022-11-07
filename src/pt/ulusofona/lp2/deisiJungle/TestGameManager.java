@@ -289,7 +289,7 @@ public class TestGameManager {
                 { "1", "Player 1", "L" },
                 { "3", "Player 2", "T" },
                 { "4", "Player 3", "T"},
-                { "22", "Player 4", "B"}
+                { "22", "Player 4", "P"}
         };
         game.createInitialJungle(10, 20, playersInfo);
 
@@ -320,5 +320,49 @@ public class TestGameManager {
 
         assertTrue(hasPlayer1 && hasPlayer2 && hasPlayer3 && hasPlayer4);
         // TODO: Improve this test
+    }
+
+    @Test
+    public void test_01_SortPlayersByID() {
+        // Testing with already sorted ArrayList
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" },
+                { "4", "Player 3", "T"},
+                { "22", "Player 4", "P"}
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+        game.sortPlayersByID();
+
+        assertTrue(
+                game.players.get(0).getID() == 1
+                        && game.players.get(1).getID() == 3
+                        && game.players.get(2).getID() == 4
+                        && game.players.get(3).getID() == 22
+        );
+    }
+
+    @Test
+    public void test_02_SortPlayersByID() {
+        // Testing with unsorted ArrayList
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "22", "Player 4", "P"},
+                { "1", "Player 1", "L" },
+                { "4", "Player 3", "T"},
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+        game.sortPlayersByID();
+
+        assertTrue(
+                game.players.get(0).getID() == 1
+                        && game.players.get(1).getID() == 3
+                        && game.players.get(2).getID() == 4
+                        && game.players.get(3).getID() == 22
+        );
     }
 }
