@@ -313,7 +313,7 @@ public class TestGameManager {
                 hasPlayer3 = true;
             }
 
-            if (player[0].equals("22") && player[1].equals("Player 4") && player[2].equals("B") && player[3].equals("20")) {
+            if (player[0].equals("22") && player[1].equals("Player 4") && player[2].equals("P") && player[3].equals("20")) {
                 hasPlayer4 = true;
             }
         }
