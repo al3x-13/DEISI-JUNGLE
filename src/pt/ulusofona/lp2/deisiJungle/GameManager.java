@@ -178,12 +178,18 @@ public class GameManager {
      * @return The player info or null if the player does not exist
      */
     public String[] getPlayerInfo(int playerId) {
-        String[] playerInfo = new String[4];
-        if (!(players.get(playerId) == null)){
-            playerInfo[0] = String.valueOf(players.get(playerId).getID());
-            playerInfo[1] = String.valueOf(players.get(playerId).getName());
-            playerInfo[2] = String.valueOf(players.get(playerId).getSpecies());
-            playerInfo[3] = String.valueOf(players.get(playerId).getEnergy());
+        Player player;
+
+        // Gets player index or -1 if player ID is not valid
+        int playerIndex = getPlayerIndex(playerId);
+        if (playerIndex != -1) {  // Check if player exists
+            player = this.players.get(playerIndex);
+
+            String[] playerInfo = new String[4];
+            playerInfo[0] = String.valueOf(player.getID());
+            playerInfo[1] = String.valueOf(player.getName());
+            playerInfo[2] = String.valueOf(player.getSpecies().getID());
+            playerInfo[3] = String.valueOf(player.getEnergy());
             return playerInfo;
         }
         return null;
@@ -276,5 +282,19 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Gets the player index in the ArrayList where players are stored.
+     * @param playerID Player ID
+     * @return The player index in the ArrayList or -1 in case the player does not exist.
+     */
+    public int getPlayerIndex(int playerID) {
+        for (int index = 0; index < this.players.size(); index++) {
+            if (this.players.get(index).getID() == playerID) {
+                return index;
+            }
+        }
+        return -1;
     }
 }
