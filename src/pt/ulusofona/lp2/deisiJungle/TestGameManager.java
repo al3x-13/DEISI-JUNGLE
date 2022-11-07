@@ -365,4 +365,80 @@ public class TestGameManager {
                         && game.players.get(3).getID() == 22
         );
     }
+
+    @Test
+    public void test_01_MoveCurrentPlayer() {
+        // Testing with invalid number of squares
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertFalse(game.moveCurrentPlayer(7, false));
+        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+    }
+
+    @Test
+    public void test_02_MoveCurrentPlayer() {
+        // Testing bypass validation
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertTrue(game.moveCurrentPlayer(7, true));
+        assertEquals(8, game.players.get(0).getCurrentMapPosition());
+    }
+
+    @Test
+    public void test_03_MoveCurrentPlayer() {
+        // Testing valid moves
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        // Moving player with ID 1
+        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertTrue(game.moveCurrentPlayer(5, false));
+        // Getting current player position from player object
+        assertEquals(6, game.players.get(0).getCurrentMapPosition());
+        // Checking if player was removed from the previous cell
+        assertFalse(game.map.map[0].hasPlayerID(1));
+        // Checking if player was added to the correct cell
+        assertTrue(game.map.map[5].hasPlayerID(1));
+    }
+
+    @Test
+    public void test_04_MoveCurrentPlayer() {
+        // Testing with a number of squares that exceed the map limits (with bypassValidation)
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        // Moving player with ID 1
+        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertTrue(game.moveCurrentPlayer(11, true));
+        // Getting current player position from player object
+        assertEquals(10, game.players.get(0).getCurrentMapPosition());
+        // Checking if player was removed from the previous cell
+        assertFalse(game.map.map[0].hasPlayerID(1));
+        // Checking if player was added to the correct cell (last one in this case)
+        assertTrue(game.map.map[9].hasPlayerID(1));
+    }
 }
