@@ -15,8 +15,12 @@ public class Species {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Species species = (Species) o;
         return Objects.equals(id, species.id) && Objects.equals(name, species.name) && Objects.equals(imageFilename, species.imageFilename);
     }
