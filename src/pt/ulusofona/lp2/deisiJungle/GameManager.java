@@ -322,7 +322,7 @@ public class GameManager {
                     gameResults.add(
                             new StringBuilder()
                                     .append("#")
-                                    .append(i)
+                                    .append(i + 1)
                                     .append(" ")
                                     .append(player.getName())
                                     .append(", ")
