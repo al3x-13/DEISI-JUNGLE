@@ -1,7 +1,5 @@
 package pt.ulusofona.lp2.deisiJungle;
 
-import com.sun.jdi.event.ClassPrepareEvent;
-
 import javax.swing.*;
 import java.util.ArrayList;
 
@@ -349,7 +347,7 @@ public class GameManager {
      */
     public JPanel getAuthorsPanel() {
         // TODO
-        return new JPanel();
+        return null;
     }
 
     /**
