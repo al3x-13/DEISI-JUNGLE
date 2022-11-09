@@ -167,7 +167,7 @@ public class GameManager {
     public String[] getSquareInfo(int squareNr) {
         String[] squareInfo = new String[3];
 
-        if (squareNr >= 0 && squareNr <= map.getMapSize()) {
+        if (squareNr > 0 && squareNr <= map.getMapSize()) {
             // Gets map cell
             MapCell mapCell = map.getMapCell(squareNr);
             if (mapCell != null) {
@@ -175,8 +175,9 @@ public class GameManager {
                 squareInfo[1] = mapCell.getCellType();
                 // Converts players' IDs from ArrayList to String;
                 squareInfo[2] = mapCell.getPlayerIDsInCellToString();
+
+                return squareInfo;
             }
-            return squareInfo;
         }
 
         // Returns null in case the cell is not valid
