@@ -442,4 +442,23 @@ public class TestGameManager {
         // Checking if player was added to the correct cell (last one in this case)
         assertTrue(game.map.map[9].hasPlayerID(1));
     }
+
+    @Test
+    public void test_05_MoveCurrentPlayer() {
+        // Testing with not sufficient energy
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        // Moving player with ID 1
+        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertTrue(game.moveCurrentPlayer(3, false));
+        assertEquals(4, game.players.get(0).getCurrentMapPosition());
+        game.players.get(0).energyUnits = 1;
+        assertTrue(game.moveCurrentPlayer(4, true));
+    }
 }
