@@ -98,6 +98,20 @@ public class MapCell {
     }
 
     /**
+     * @return Cell type
+     */
+    String getCellType() {
+        return this.cellType;
+    }
+
+    /**
+     * @return Image filename
+     */
+    String getImageFilename() {
+        return this.backgroundImageFilename;
+    }
+
+    /**
      * Gets player IDs in current cell in integer array format (e.g. [3,5], for players with ID 3 and 5).
      * @return Array with player IDs
      */
@@ -123,6 +137,8 @@ public class MapCell {
             output = output.replace("[", "")
                     .replace("]", "")
                     .replace(" ", "");
+        } else {;
+            output = "";
         }
         return output;
     }

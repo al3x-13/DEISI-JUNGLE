@@ -168,17 +168,14 @@ public class GameManager {
         String[] squareInfo = new String[3];
 
         if (squareNr >= 0 && squareNr <= map.getMapSize()) {
-            if (squareNr == map.getMapSize()){
-                squareInfo[0] = "finish.png";
-                squareInfo[1] = "Meta";
-            }else {
-                squareInfo[0] = "blank.png";
-                squareInfo[1] = "Vazio";
+            // Gets map cell
+            MapCell mapCell = map.getMapCell(squareNr);
+            if (mapCell != null) {
+                squareInfo[0] = mapCell.getImageFilename();
+                squareInfo[1] = mapCell.getCellType();
+                // Converts players' IDs from ArrayList to String;
+                squareInfo[2] = mapCell.getPlayerIDsInCellToString();
             }
-
-            // Converts players' IDs from ArrayList to String
-            squareInfo[2] = map.getMapCell(squareNr).getPlayerIDsInCellToString();
-
             return squareInfo;
         }
 
