@@ -293,6 +293,11 @@ public class GameManager {
         int currentFurthestPlayer = -1;
 
         for (Player player : this.players) {
+            if (player.getCurrentMapPosition() == currentFurthestPlayer && player.getID() > winner.getID()) {
+                winner = player;
+                currentFurthestPlayer = player.getCurrentMapPosition();
+            }
+
             if (player.getCurrentMapPosition() > currentFurthestPlayer) {
                 winner = player;
                 currentFurthestPlayer = player.getCurrentMapPosition();
@@ -327,7 +332,7 @@ public class GameManager {
                                     .append(" ")
                                     .append(player.getName())
                                     .append(", ")
-                                    .append(player.getSpecies().getID())
+                                    .append(player.getSpecies().getName())
                                     .append(", ")
                                     .append(player.getCurrentMapPosition())
                                     .toString()
