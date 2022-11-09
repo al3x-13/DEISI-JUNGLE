@@ -61,6 +61,11 @@ public class GameMap {
      * @return Whether the player was successfully moved to the desired destination or not
      */
     boolean movePlayer(Player player, int destIndex, int energyCost) {
+        // Cheks if player has enough energy to make the play
+        if (player.getEnergy() < energyCost) {
+            return false;
+        }
+
         // Gets player current position in the map
         int currentIndex = player.getCurrentMapPosition();
 
