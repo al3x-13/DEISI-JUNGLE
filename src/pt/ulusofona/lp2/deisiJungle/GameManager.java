@@ -315,13 +315,14 @@ public class GameManager {
         ArrayList<String> gameResults = new ArrayList<>();
 
         ArrayList<Integer> orderedPlayerIDs = this.map.getPlayerIDsOrderedByFinishPosition();
-        for (Integer id : orderedPlayerIDs) {
+        for (int i = 0; i < orderedPlayerIDs.size(); i++) {
             for (Player player : this.players) {
-                if (player.getID() == id) {
+                if (player.getID() == orderedPlayerIDs.get(i)) {
                     // Builds game results string for each player
                     gameResults.add(
                             new StringBuilder()
-                                    .append(player.getCurrentMapPosition())
+                                    .append("#")
+                                    .append(i)
                                     .append(" ")
                                     .append(player.getName())
                                     .append(", ")
