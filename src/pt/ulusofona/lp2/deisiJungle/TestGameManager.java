@@ -146,6 +146,7 @@ public class TestGameManager {
         int[] expectedResult = null;
         assertEquals(expectedResult, game.getSquareInfo(30));
         assertEquals(expectedResult, game.getSquareInfo(11));
+        assertEquals(expectedResult, game.getSquareInfo(0));
     }
 
     @Test
@@ -169,7 +170,7 @@ public class TestGameManager {
     }
 
     @Test
-    public void test_03_GetSquaresInfo() {
+    public void test_03_GetSquareInfo() {
         // Testing with empty cell with players
         GameManager game = new GameManager();
 
@@ -192,7 +193,7 @@ public class TestGameManager {
     }
 
     @Test
-    public void test_04_GetSquaresInfo() {
+    public void test_04_GetSquareInfo() {
         // Testing with finish cell
         GameManager game = new GameManager();
 
