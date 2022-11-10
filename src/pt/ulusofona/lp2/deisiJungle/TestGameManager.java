@@ -461,4 +461,76 @@ public class TestGameManager {
         game.players.get(0).energyUnits = 1;
         assertTrue(game.moveCurrentPlayer(4, true));
     }
+
+    @Test
+    public void test_01_FullGame() {
+        // Testing player with the lowest ID gets to the finish line
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        game.moveCurrentPlayer(4, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(3, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(6, true);
+        assertTrue(game.isGameOver());
+        assertEquals(1, Integer.parseInt(game.getWinnerInfo()[0]));
+    }
+
+    @Test
+    public void test_02_FullGame() {
+        // Testing player with the highest ID getting to the finish line
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 20, playersInfo);
+
+        game.moveCurrentPlayer(2, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(5, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(6, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(5, true);
+        assertTrue(game.isGameOver());
+        assertEquals(3, Integer.parseInt(game.getWinnerInfo()[0]));
+    }
+
+    @Test
+    public void test_03_FullGame() {
+        // Testing no energy tie
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, 5, playersInfo);
+
+        game.moveCurrentPlayer(2, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(5, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(5, true);
+        assertFalse(game.isGameOver());
+        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(2, true);
+        assertTrue(game.isGameOver());
+        assertEquals(1, Integer.parseInt(game.getWinnerInfo()[0]));
+    }
 }
