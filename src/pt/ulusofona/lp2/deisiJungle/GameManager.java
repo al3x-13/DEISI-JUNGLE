@@ -258,11 +258,12 @@ public class GameManager {
         }
 
         if (!map.movePlayer(currentPlayer, playerDestinationIndex, this.energySpentPerPlay)) {
+            switchToNextPlayer();
             return false;
         }
 
         // Updates player for next play
-        currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
+        switchToNextPlayer();
 
         return true;
     }
@@ -439,5 +440,10 @@ public class GameManager {
             }
         }
         return !enoughEnergyLeft;
+    }
+
+    void switchToNextPlayer() {
+        // Updates player for next play
+        currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
     }
 }
