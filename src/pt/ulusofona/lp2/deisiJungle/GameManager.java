@@ -245,11 +245,13 @@ public class GameManager {
     public boolean moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
         // Checks if game is over
         if (this.gameOver) {
+            switchToNextPlayer();
             return false;
         }
 
         // Checks if 'nrSquares' is a valid value
         if (!bypassValidation && (nrSquares < 1 || nrSquares > 6)) {
+            switchToNextPlayer();
             return false;
         }
 
@@ -272,9 +274,7 @@ public class GameManager {
         this.gameOver = isGameOver();
 
         // Updates player for next play
-        if (!this.gameOver) {
-            switchToNextPlayer();
-        }
+        switchToNextPlayer();
 
         return true;
     }
