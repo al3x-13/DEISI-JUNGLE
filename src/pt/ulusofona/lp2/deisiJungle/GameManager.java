@@ -19,6 +19,7 @@ public class GameManager {
     // Stores the current round player index for 'players' ArrayList
     int currentRoundPlayerIndex;
     int energySpentPerPlay = 2;  // Amount of energy spend on each play
+    boolean gameOver;
 
     public GameManager() {}
 
@@ -242,6 +243,11 @@ public class GameManager {
      * @return Whether current player was moved successfully
      */
     public boolean moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
+        // Checks if game is over
+        if (this.gameOver) {
+            return false;
+        }
+
         // Checks if 'nrSquares' is a valid value
         if (!bypassValidation && (nrSquares < 1 || nrSquares > 6)) {
             return false;
@@ -262,8 +268,13 @@ public class GameManager {
             return false;
         }
 
+        // Checks if game is over
+        this.gameOver = isGameOver();
+
         // Updates player for next play
-        switchToNextPlayer();
+        if (!this.gameOver) {
+            switchToNextPlayer();
+        }
 
         return true;
     }
@@ -296,7 +307,6 @@ public class GameManager {
         for (Player player : this.players) {
             if (player.getCurrentMapPosition() == currentFurthestPlayer && player.getID() < winner.getID()) {
                 winner = player;
-                currentFurthestPlayer = player.getCurrentMapPosition();
             }
 
             if (player.getCurrentMapPosition() > currentFurthestPlayer) {
@@ -369,6 +379,7 @@ public class GameManager {
     public void reset() {
         players = new ArrayList<>();
         map = null;
+        this.gameOver = false;
     }
 
     /**
@@ -442,6 +453,9 @@ public class GameManager {
         return !enoughEnergyLeft;
     }
 
+    /**
+     * Updates the current shift player.
+     */
     void switchToNextPlayer() {
         // Updates player for next play
         currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
