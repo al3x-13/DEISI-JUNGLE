@@ -50,13 +50,8 @@ public class GameManager {
     public boolean createInitialJungle(int jungleSize, int initialEnergy, String[][] playersInfo) {
         reset();  // Resets game data structures
 
-        // Validates 'jungleSize'
-        if (jungleSize < 1) {
-            return false;
-        }
-
-        // Validates 'initialEnergy'
-        if (initialEnergy < 1) {
+        // Validates 'jungleSize' and 'initialEnergy'
+        if (jungleSize < 1 || initialEnergy < 1) {
             return false;
         }
 
@@ -121,7 +116,6 @@ public class GameManager {
         map = new GameMap(jungleSize, this.players);
         sortPlayersByID();
         currentRoundPlayerIndex = 0;  // Sets the index of the first player to make a play
-
         return true;
     }
 
