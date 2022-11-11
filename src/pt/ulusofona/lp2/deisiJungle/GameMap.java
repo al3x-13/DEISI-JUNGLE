@@ -7,7 +7,7 @@ public class GameMap {
     int size;
     MapCell[] map;
 
-    GameMap(int size) {
+    GameMap(int size, ArrayList<Player> players) {
         if (size < 1) {
             throw new IllegalArgumentException("Map size must be greater than 1!");
         }
@@ -23,6 +23,11 @@ public class GameMap {
             } else {
                 this.map[i] = new MapCell(cellIndex, "Vazio");
             }
+        }
+
+        // Places players in the first 'MapCell'
+        for (Player player : players) {
+            this.placePlayerInCell(player.getID(), 1);
         }
     }
 

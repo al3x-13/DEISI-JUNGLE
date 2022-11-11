@@ -94,7 +94,6 @@ public class GameManager {
                 playerSpeciesID = player[2].charAt(0);
             }
 
-            // Gets Species by ID
             Species playerSpecies = getSpeciesByID(playerSpeciesID);
 
             // Validates player species (checks if it exists)
@@ -118,21 +117,11 @@ public class GameManager {
             this.players.add(new Player(playerID, playerName, playerSpecies, initialEnergy));
         }
 
-        // Initializes game map
-        map = new GameMap(jungleSize);
-
-        // Sorts players by ID
+        // Initializes game map and places players in the first 'MapCell'
+        map = new GameMap(jungleSize, this.players);
         sortPlayersByID();
+        currentRoundPlayerIndex = 0;  // Sets the index of the first player to make a play
 
-        // Places players in the first 'MapCell'
-        for (Player player : this.players) {
-            this.map.placePlayerInCell(player.getID(), 1);
-        }
-
-        // Sets the index of the first player to make a play
-        currentRoundPlayerIndex = 0;
-
-        // TODO: improve this
         return true;
     }
 
