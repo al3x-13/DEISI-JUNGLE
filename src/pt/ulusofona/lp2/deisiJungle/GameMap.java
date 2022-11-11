@@ -46,9 +46,9 @@ public class GameMap {
      * @return Cell
      */
     MapCell getMapCell(int squareNr){
-        for (int i = 0 ; i < map.length ; i++){
-            if (map[i].getIndex() == squareNr){
-                return map[i];
+        for (MapCell mapCell : map) {
+            if (mapCell.getIndex() == squareNr) {
+                return mapCell;
             }
         }
         return null;
@@ -91,12 +91,12 @@ public class GameMap {
     /**
      * Places a player in a cell without any previous verification or validation.
      * Does not remove the player from the previous cell it was in, it that is the case.
-     * @param playerID Player ID
+     *
+     * @param playerID  Player ID
      * @param cellIndex Destination cell index
-     * @return Whether the player was successfully placed in the destination cell
      */
-    boolean placePlayerInCell(int playerID, int cellIndex) {
-        return this.map[cellIndex - 1].addPlayer(playerID);
+    void placePlayerInCell(int playerID, int cellIndex) {
+        this.map[cellIndex - 1].addPlayer(playerID);
     }
 
     /**
