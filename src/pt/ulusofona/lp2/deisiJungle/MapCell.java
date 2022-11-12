@@ -23,7 +23,7 @@ public class MapCell {
                 break;
             case "Finish":
                 this.cellType = cellType;
-                backgroundImageFilename = "jungle_finish.png";
+                backgroundImageFilename = "finish.png";
                 break;
             case "Middle":
                 this.cellType = cellType;
