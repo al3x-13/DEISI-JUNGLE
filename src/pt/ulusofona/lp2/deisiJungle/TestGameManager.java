@@ -160,7 +160,7 @@ public class TestGameManager {
         };
         game.createInitialJungle(10, 20, playersInfo);
 
-        String[] expectedResult = new String[] { "blank.png", "Vazio", "" };
+        String[] expectedResult = new String[] { "middle.png", "Middle", "" };
         String[] realResult = game.getSquareInfo(5);
         assertTrue(
                 expectedResult[0].equals(realResult[0])
@@ -183,7 +183,7 @@ public class TestGameManager {
         // Add players with ID 3 to cell 5
         MapCell cell = game.map.getMapCell(5);
         cell.addPlayer(3);
-        String[] expectedResult = new String[] { "blank.png", "Vazio", "3" };
+        String[] expectedResult = new String[] { "middle.png", "Middle", "3" };
         String[] realResult = game.getSquareInfo(5);
         assertTrue(
                 expectedResult[0].equals(realResult[0])
@@ -207,7 +207,7 @@ public class TestGameManager {
         MapCell cell = game.map.getMapCell(10);
         cell.addPlayer(3);
 
-        String[] expectedResult = new String[] { "finish.png", "Meta", "3" };
+        String[] expectedResult = new String[] { "finish.png", "Finish", "3" };
         String[] realResult = game.getSquareInfo(10);
         assertTrue(
                 expectedResult[0].equals(realResult[0])

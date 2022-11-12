@@ -19,7 +19,7 @@ public class MapCell {
         switch (cellType) {
             case "Start":
                 this.cellType = cellType;
-                backgroundImageFilename = "jungle_start.png";
+                backgroundImageFilename = "start.png";
                 break;
             case "Finish":
                 this.cellType = cellType;
@@ -27,7 +27,7 @@ public class MapCell {
                 break;
             case "Middle":
                 this.cellType = cellType;
-                backgroundImageFilename = "jungle_middle.png";
+                backgroundImageFilename = "middle.png";
                 break;
             default:
                 throw new IllegalArgumentException(
