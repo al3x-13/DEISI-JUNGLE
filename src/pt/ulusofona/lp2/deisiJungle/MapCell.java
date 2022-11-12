@@ -7,7 +7,7 @@ public class MapCell {
     int index;
     ArrayList<Integer> playerIDsInCell = new ArrayList<>();
     String backgroundImageFilename;
-    String cellType;  // "Vazio" or "Meta"
+    String cellType;  // "Start", "Middle" or "Finish"
 
     public MapCell(int cellIndex, String cellType) {
         if (cellIndex <= 0) {
@@ -17,16 +17,22 @@ public class MapCell {
         }
 
         switch (cellType) {
-            case "Vazio":
+            case "Start":
                 this.cellType = cellType;
-                backgroundImageFilename = "blank.png";
+                backgroundImageFilename = "jungle_start.png";
                 break;
-            case "Meta":
+            case "Finish":
                 this.cellType = cellType;
-                backgroundImageFilename = "finish.png";
+                backgroundImageFilename = "jungle_finish.png";
+                break;
+            case "Middle":
+                this.cellType = cellType;
+                backgroundImageFilename = "jungle_middle.png";
                 break;
             default:
-                throw new IllegalArgumentException("Cell type must be valid! The valid types are 'Vazio' and 'Meta'");
+                throw new IllegalArgumentException(
+                        "Cell type must be valid! The valid types are 'Start', 'Middle' and 'Finish'"
+                );
         }
     }
 

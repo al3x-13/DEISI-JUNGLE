@@ -18,10 +18,12 @@ public class GameMap {
         // Initializes each cell of the map to its corresponding type
         for (int i = 0; i < this.map.length; i++) {
             int cellIndex = i+1;
-            if (i == this.map.length - 1) {
-                this.map[i] = new MapCell(cellIndex, "Meta");
+            if (i == 0) {
+                this.map[i] = new MapCell(cellIndex, "Start");
+            } else if (i == this.map.length - 1) {
+                this.map[i] = new MapCell(cellIndex, "Finish");
             } else {
-                this.map[i] = new MapCell(cellIndex, "Vazio");
+                this.map[i] = new MapCell(cellIndex, "Middle");
             }
         }
 
