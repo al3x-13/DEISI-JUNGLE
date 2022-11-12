@@ -1,7 +1,11 @@
 package pt.ulusofona.lp2.deisiJungle;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameManager {
@@ -345,8 +349,21 @@ public class GameManager {
      * @return Credits
      */
     public JPanel getAuthorsPanel() {
-        // TODO
-        return null;
+        JPanel credits = new JPanel();
+        credits.setBounds(0, 0, 300, 300);
+        credits.setBackground(new Color(195, 216, 218));
+        File bgFile = new File("src/images/credits.png");
+
+        BufferedImage img;
+        try {
+            img = ImageIO.read(bgFile);
+        } catch (IOException e) {
+            return null;
+        }
+
+        JLabel bg = new JLabel(new ImageIcon(img));
+        credits.add(bg);
+        return credits;
     }
 
     /**
