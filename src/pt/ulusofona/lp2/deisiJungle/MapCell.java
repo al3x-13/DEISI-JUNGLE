@@ -89,14 +89,6 @@ public class MapCell {
     }
 
     /**
-     * Verifies if Cell is Empty
-     * @return Whether the cell is Empty or Not
-     */
-    boolean isEmpty(){
-        return this.playerIDsInCell.size() == 0;
-    }
-
-    /**
      * @return Cell Index
      */
     int getIndex(){
