@@ -1,5 +1,7 @@
 package pt.ulusofona.lp2.deisiJungle;
 
+import org.junit.runners.model.InitializationError;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -46,29 +48,43 @@ public class GameManager {
     }
 
     /**
+     * Provides information about all the allowed food types in the game.
+     * Each element of the array has the following format:<p>
+     * [0] -> Food ID<p>
+     * [1] -> Food Name<p>
+     * [2] -> Food Image Filename, e.g. 'meat.png'
+     * It must return at least 5 food types.
+     * @return Array containing info about allowed game food types
+     */
+    public String[][] getFoodTypes() {
+        return new String[][] {};
+    }
+
+    /**
      * Creates the initial game Map.
      * @param jungleSize map size
-     * @param initialEnergy initial player energy
      * @param playersInfo players info
+     * @param foodsInfo foods info
      * @return Whether the initial map was successfully created
      */
-    public boolean createInitialJungle(int jungleSize, int initialEnergy, String[][] playersInfo) {
+    public InitializationError createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo) {
+        // TODO: make this function properly
         reset();  // Resets game data structures
 
-        // Validates 'jungleSize' and 'initialEnergy'
-        if (jungleSize < 1 || initialEnergy < 1) {
-            return false;
+        // Validates 'jungleSize'
+        if (jungleSize < 1) {
+            return null;
         }
 
         // Validates number of players (2-4 players)
         int numberOfPlayers = playersInfo.length;
         if (numberOfPlayers < 2 || numberOfPlayers > 4) {
-            return false;
+            return null;
         }
 
         // Validates number of map cells (at least 2 per player)
         if (jungleSize < numberOfPlayers * 2) {
-            return false;
+            return null;
         }
 
         // Validates players' info
@@ -77,19 +93,19 @@ public class GameManager {
             try {
                 playerID = Integer.parseInt(player[0]);
             } catch (NumberFormatException e) {
-                return false;
+                return null;
             }
 
             String playerName;
             if (player[1] == null || player[1].length() == 0) {
-                return false;
+                return null;
             } else {
                 playerName = player[1];
             }
 
             Character playerSpeciesID;
             if (player[2] == null || player[2].length() == 0) {
-                return false;
+                return null;
             } else {
                 playerSpeciesID = player[2].charAt(0);
             }
@@ -98,22 +114,23 @@ public class GameManager {
 
             // Validates player species (checks if it exists)
             if (playerSpecies == null) {
-                return false;
+                return null;
             }
 
             for (Player currentPlayer : players) {
                 // Checks if the ID already exists
                 if (currentPlayer.getID() == playerID) {
-                    return false;
+                    return null;
                 }
 
                 // In case the player species corresponds to 'tarzan' (cant have 2 'tarzan's)
                 if (playerSpecies.getName().equals("Tarzan") && currentPlayer.getSpecies().getID() == playerSpeciesID) {
-                    return false;
+                    return null;
                 }
             }
 
             // Creates new Player instance and adds it to 'players' ArrayList
+            int initialEnergy = 0;  // TODO
             this.players.add(new Player(playerID, playerName, playerSpecies, initialEnergy));
         }
 
@@ -121,7 +138,17 @@ public class GameManager {
         map = new GameMap(jungleSize, this.players);
         sortPlayersByID();
         currentRoundPlayerIndex = 0;  // Sets the index of the first player to make a play
-        return true;
+        return null;
+    }
+
+    /**
+     * Creates the initial game Map.
+     * @param jungleSize map size
+     * @param playersInfo players info
+     * @return Whether the initial map was successfully created
+     */
+    public InitializationError createInitialJungle(int jungleSize, String[][] playersInfo) {
+        return createInitialJungle(jungleSize, playersInfo, null);
     }
 
     /**
@@ -225,22 +252,34 @@ public class GameManager {
     }
 
     /**
+     * Gets info about energy for the player who's currently playing.
+     * Each element of the array has the following format:<p>
+     * [0] -> Energy consumption after moving <nrPositions><p>
+     * [1] -> Energy gain by not moving<p>
+     * @return Info about current player's energy
+     */
+    public String[] getCurrentPlayerEnergyInfo(int nrPositions) {
+        // TODO
+        return new String[]{};
+    }
+
+    /**
      * Moves the player who's currently playing to the desired map cell.
      * @param nrSquares number of cells to move (must be 1 <= nrSquares <= 6)
      * @param bypassValidation bypasses all previous validations when true
      * @return Whether current player was moved successfully
      */
-    public boolean moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
+    public MovementResult moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
         // Checks if game is over
         if (this.gameOver) {
             switchToNextPlayer();
-            return false;
+            return null;
         }
 
         // Checks if 'nrSquares' is a valid value
         if (!bypassValidation && (nrSquares < 1 || nrSquares > 6)) {
             switchToNextPlayer();
-            return false;
+            return null;
         }
 
         // Get current player
@@ -255,7 +294,7 @@ public class GameManager {
 
         if (!map.movePlayer(currentPlayer, playerDestinationIndex, this.energySpentPerPlay)) {
             switchToNextPlayer();
-            return false;
+            return null;
         }
 
         // Checks if game is over
@@ -264,7 +303,7 @@ public class GameManager {
         // Updates player for next play
         switchToNextPlayer();
 
-        return true;
+        return null;
     }
 
     /**
@@ -371,6 +410,24 @@ public class GameManager {
      */
     public String whoIsTaborda() {
         return "professional wrestling";
+    }
+
+    /**
+     * Saves the current game state into a file so that it can be continued later.
+     * @param file File to store game state
+     * @return Whether the game state was successfully saved or not
+     */
+    public boolean saveGame(File file) {
+        return false;
+    }
+
+    /**
+     * Loads game state from a file.
+     * @param file File used to load game state
+     * @return Whether the game state was successfully loaded or not
+     */
+    public boolean loadGame(File file) {
+        return false;
     }
 
     /**
