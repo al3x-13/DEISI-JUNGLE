@@ -1,5 +1,5 @@
 package pt.ulusofona.lp2.deisiJungle;
 
-public class MovementResult {
+public record MovementResult(MovementResultCode code, String message) {
     // TODO
 }
