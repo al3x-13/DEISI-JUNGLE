@@ -88,6 +88,59 @@ public class TestGameManager {
     }
 
     @Test
+    public void test_06_CreateInitialJungle() {
+        // Testing with empty/null food ID
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L"},
+                { "3", "Player 2", "T"}
+        };
+
+        String[][] foodsInfo = new String[][] {
+                { "", "3" }
+        };
+        assertNotNull(game.createInitialJungle(10, playersInfo, foodsInfo));
+
+        foodsInfo = new String[][] {
+                { null, "3" }
+        };
+        assertNotNull(game.createInitialJungle(10, playersInfo, foodsInfo));
+    }
+
+    @Test
+    public void test_07_CreateInitialJungle() {
+        // Testing with non-existent food type
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L"},
+                { "3", "Player 2", "T"}
+        };
+
+        String[][] foodsInfo = new String[][] {
+                { "z", "3" }
+        };
+        assertNotNull(game.createInitialJungle(10, playersInfo, foodsInfo));
+    }
+
+    @Test
+    public void test_08_CreateInitialJungle() {
+        // Testing with valid values
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L"},
+                { "3", "Player 2", "T"}
+        };
+
+        String[][] foodsInfo = new String[][] {
+                { "a", "3" }
+        };
+        assertNull(game.createInitialJungle(10, playersInfo, foodsInfo));
+    }
+
+    @Test
     public void test_01_GetPlayerIds() {
         // Testing with non-existent cell
         GameManager game = new GameManager();
@@ -254,6 +307,31 @@ public class TestGameManager {
                         expectedResult[2].equals(realResult[2]) &&
                         expectedResult[3].equals(realResult[3]) &&
                         expectedResult[4].equals(realResult[4])
+        );
+    }
+
+    @Test
+    public void test_01_GetCurrentPlayerEnergyInfo() {
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L"},
+                { "3", "Player 2", "T"}
+        };
+        game.createInitialJungle(10, playersInfo);
+
+        String[] expectedResult = new String[] { "6", "10" };
+        String[] realResult = game.getCurrentPlayerEnergyInfo(3);
+        assertTrue(
+                expectedResult[0].equals(realResult[0]) &&
+                        expectedResult[1].equals(realResult[1])
+        );
+
+        expectedResult = new String[] { "5", "5" };
+        realResult = game.getCurrentPlayerEnergyInfo(5);
+        assertTrue(
+                expectedResult[0].equals(realResult[0]) &&
+                        expectedResult[1].equals(realResult[1])
         );
     }
 
