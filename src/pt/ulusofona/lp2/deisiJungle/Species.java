@@ -2,15 +2,37 @@ package pt.ulusofona.lp2.deisiJungle;
 
 import java.util.Objects;
 
-public class Species {
-    Character id;
-    String name;
-    String imageFilename;
+public abstract class Species {
+    private Character id;
+    private String name;
+    private String imageFilename;
+    private DietType diet;
+    private int energyUnits;
+    private int energyConsumption;
+    private int energyGainOnIdle;
+    private int speedMin;
+    private int speedMax;
 
-    public Species(Character id, String name, String imageFilename) {
+    public Species(
+            Character id,
+            String name,
+            String imageFilename,
+            DietType diet,
+            int initialEnergy,
+            int energyConsumption,
+            int energyGainOnIdle,
+            int speedMin,
+            int speedMax
+    ) {
         this.id = id;
         this.name = name;
         this.imageFilename = imageFilename;
+        this.diet = diet;
+        this.energyUnits = initialEnergy;
+        this.energyConsumption = energyConsumption;
+        this.energyGainOnIdle = energyGainOnIdle;
+        this.speedMin = speedMin;
+        this.speedMax = speedMax;
     }
 
     @Override
