@@ -76,4 +76,18 @@ public abstract class Species {
     String getName() {
         return this.name;
     }
+
+    /**
+     * @return Species Diet Type
+     */
+    public DietType getDiet() {
+        return this.diet;
+    }
+
+    /**
+     * @return Species' current energy
+     */
+    public int getEnergyUnits() {
+        return energyUnits;
+    }
 }
