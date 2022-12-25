@@ -2,7 +2,7 @@ package pt.ulusofona.lp2.deisiJungle;
 
 import java.util.Objects;
 
-public abstract class Species {
+public class Species {
     private Character id;
     private String name;
     private String imageFilename;
