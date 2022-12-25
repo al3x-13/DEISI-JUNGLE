@@ -12,15 +12,16 @@ public class GameManager {
     // Game Species
     ArrayList<Species> species = new ArrayList<>() {
         {
-            add(new Species('E', "Elefante", "elephant.png"));
-            add(new Species('L', "Leão", "lion.png"));
-            add(new Species('T', "Tartaruga", "turtle.png"));
-            add(new Species('P', "Pássaro", "bird.png"));
-            add(new Species('Z', "Tarzan", "tarzan.png"));
+            add(new Species('E', "Elefante", "elephant.png", DietType.HERBIVORE, 180, 4, 10, 1, 6));
+            add(new Species('L', "Leão", "lion.png", DietType.CARNIVORE, 80, 2, 10, 4, 6));
+            add(new Species('T', "Tartaruga", "turtle.png", DietType.HERBIVORE, 150, 1, 5, 1, 3));
+            add(new Species('P', "Pássaro", "bird.png", DietType.OMNIVORE, 70, 4, 50, 5, 6));
+            add(new Species('Z', "Tarzan", "tarzan.png", DietType.OMNIVORE, 70, 2, 20, 1, 6));
         }
     };
     ArrayList<Player> players = new ArrayList<>();
     GameMap map = null;
+    int currentPlay = 1;
     // Stores the current round player index for 'players' ArrayList
     int currentRoundPlayerIndex;
     int energySpentPerPlay = 2;  // Amount of energy spend on each play
@@ -515,5 +516,13 @@ public class GameManager {
     void switchToNextPlayer() {
         // Updates player for next play
         currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
+    }
+
+    /**
+     * Gets current play number.
+     * @return Current play
+     */
+    public int getCurrentPlay() {
+        return this.currentPlay;
     }
 }
