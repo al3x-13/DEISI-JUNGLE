@@ -1,6 +1,5 @@
 package pt.ulusofona.lp2.deisiJungle;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class MapCell {
@@ -8,6 +7,7 @@ public class MapCell {
     ArrayList<Integer> playerIDsInCell = new ArrayList<>();
     String backgroundImageFilename;
     String cellType;  // "Vazio" or "Meta" to pass DP tests
+    Food foodItem = null;
 
     public MapCell(int cellIndex, String cellType) {
         if (cellIndex <= 0) {
@@ -139,5 +139,19 @@ public class MapCell {
             output = "";
         }
         return output;
+    }
+
+    /**
+     * Adds food item to cell.
+     * @param food Food to add
+     * @return Whether food was successfully added
+     */
+    boolean addFood(Food food) {
+        if (this.foodItem != null) {
+            return false;
+        }
+
+        this.foodItem = food;
+        return true;
     }
 }
