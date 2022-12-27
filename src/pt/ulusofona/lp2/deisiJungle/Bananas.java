@@ -14,8 +14,11 @@ public class Bananas extends Food {
      * After first banana: -40 energy units
      */
     @Override
-    public int getFoodEnergyOnConsumption(Species species) {
-        // TODO
-        return 0;
+    public int getFoodEnergyOnConsumption(Player player, int currentPlay) {
+        if (player.getConsumedBananas() > 0) {
+            return -40;
+        } else {
+            return 40;
+        }
     }
 }

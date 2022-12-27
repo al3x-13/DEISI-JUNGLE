@@ -15,8 +15,7 @@ public class MagicMushrooms extends Food {
      * Odd play number: -magicNumber% energy
      */
     @Override
-    public int getFoodEnergyOnConsumption(Species species) {
-        // TODO
-        return 0;
+    public int getFoodEnergyOnConsumption(Player player, int currentPlay) {
+        return currentPlay % 2 == 0 ? this.magicNumber : -this.magicNumber;
     }
 }

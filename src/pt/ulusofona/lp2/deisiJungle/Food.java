@@ -13,8 +13,9 @@ public abstract class Food {
 
     /**
      * Gets the energy the given species will gain/lose based on the species' diet.
-     * @param species Species given
+     * @param player Player
+     * @param currentPlay Current play number
      * @return Amount of energy the species will gain/lose upon consuming the food
      */
-    public abstract int getFoodEnergyOnConsumption(Species species);
+    public abstract int getFoodEnergyOnConsumption(Player player, int currentPlay);
 }
