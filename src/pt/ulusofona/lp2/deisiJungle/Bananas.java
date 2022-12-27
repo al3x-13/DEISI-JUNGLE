@@ -4,7 +4,7 @@ public class Bananas extends Food {
     private int consumableUnits;
 
     public Bananas() {
-        super('b', "bananas.png", "");
+        super('b', "Cacho de bananas", "bananas.png", "");
         this.consumableUnits = 3;
         this.tooltip = "Bananas : " + this.consumableUnits + " : " + "+ 40 energia";
     }

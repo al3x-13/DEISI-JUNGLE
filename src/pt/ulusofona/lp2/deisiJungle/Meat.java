@@ -4,7 +4,7 @@ public class Meat extends Food {
     private boolean spoiled;
 
     public Meat() {
-        super('c', "meat.png", "");
+        super('c', "Carne", "meat.png", "");
         this.spoiled = false;
 
         // TODO

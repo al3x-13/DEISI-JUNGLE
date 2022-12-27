@@ -19,6 +19,16 @@ public class GameManager {
             add(new Species('Z', "Tarzan", "tarzan.png", DietType.OMNIVORE, 70, 2, 20, 1, 6));
         }
     };
+    // Game Food Types
+    ArrayList<Food> foods = new ArrayList<>() {
+        {
+            add(new Grass());
+            add(new Water());
+            add(new Bananas());
+            add(new Meat());;
+            add(new MagicMushrooms());
+        }
+    };
     ArrayList<Player> players = new ArrayList<>();
     GameMap map = null;
     int currentPlay = 1;
@@ -56,7 +66,11 @@ public class GameManager {
      * @return Array containing info about allowed game food types
      */
     public String[][] getFoodTypes() {
-        return new String[][] {};
+        String[][] output = new String[foods.size()][];
+        for (int i = 0; i < foods.size(); i++) {
+            output[i] = foods.get(i).getFoodData();
+        }
+        return output;
     }
 
     /**
@@ -129,8 +143,7 @@ public class GameManager {
             }
 
             // Creates new Player instance and adds it to 'players' ArrayList
-            int initialEnergy = 0;  // TODO
-            this.players.add(new Player(playerID, playerName, playerSpecies, initialEnergy));
+            this.players.add(new Player(playerID, playerName, playerSpecies));
         }
 
         // Initializes game map and places players in the first 'MapCell'
