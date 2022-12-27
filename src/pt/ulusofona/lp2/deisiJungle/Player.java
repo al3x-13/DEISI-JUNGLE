@@ -60,6 +60,20 @@ public class Player {
     }
 
     /**
+     * @return Distance covered by the player in the current game
+     */
+    public int getDistanceCovered() {
+        return this.distanceCovered;
+    }
+
+    /**
+     * @return Banas consumed by the player in the current game
+     */
+    public int getConsumedBananas() {
+        return this.consumedBananas;
+    }
+
+    /**
      * Updates Player Map Position
      * @param newPosition New Player Position
      */
@@ -73,5 +87,13 @@ public class Player {
      */
     void decreaseEnergy(int energyUnits) {
         this.energyUnits -= energyUnits;
+    }
+
+    /**
+     * Increases distance covered by the player
+     * @param nrCells Number of cells to increase
+     */
+    void increaseDistanceCovered(int nrCells) {
+        this.distanceCovered += nrCells;
     }
 }
