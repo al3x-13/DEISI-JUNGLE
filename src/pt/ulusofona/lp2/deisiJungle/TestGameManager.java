@@ -542,7 +542,7 @@ public class TestGameManager {
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(3, false));
         assertEquals(4, game.players.get(0).getCurrentMapPosition());
-        game.players.get(0).energyUnits = 1;
+        game.players.get(0).setEnergy(1);
         assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(4, true));
     }
 
