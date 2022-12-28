@@ -85,9 +85,16 @@ public class Species {
     }
 
     /**
-     * @return Species' current energy
+     * @return Species current energy
      */
     public int getEnergyUnits() {
         return energyUnits;
+    }
+
+    /**
+     * @return Species Speed in format "X..Y"
+     */
+    public String getSpeed() {
+        return this.speedMin + ".." + this.speedMax;
     }
 }

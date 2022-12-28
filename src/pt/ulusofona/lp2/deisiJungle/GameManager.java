@@ -236,11 +236,13 @@ public class GameManager {
         if (playerIndex != -1) {  // Check if player exists
             player = this.players.get(playerIndex);
 
-            String[] playerInfo = new String[4];
+            String[] playerInfo = new String[5];
             playerInfo[0] = String.valueOf(player.getID());
             playerInfo[1] = String.valueOf(player.getName());
             playerInfo[2] = String.valueOf(player.getSpecies().getID());
             playerInfo[3] = String.valueOf(player.getEnergy());
+            playerInfo[4] = player.getSpecies().getSpeed();
+
             return playerInfo;
         }
         return null;
