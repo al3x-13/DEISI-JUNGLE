@@ -84,20 +84,15 @@ public class GameManager {
         // TODO: make this function properly
         reset();  // Resets game data structures
 
-        // Validates 'jungleSize'
-        if (jungleSize < 1) {
-            return null;
-        }
-
         // Validates number of players (2-4 players)
         int numberOfPlayers = playersInfo.length;
         if (numberOfPlayers < 2 || numberOfPlayers > 4) {
-            return null;
+            return new InitializationError("Invalid number of players! The number of players must be between 2 and 4.");
         }
 
-        // Validates number of map cells (at least 2 per player)
+        // Validates jungleSize, the map must have at least 2 cells per player
         if (jungleSize < numberOfPlayers * 2) {
-            return null;
+            return new InitializationError("Invalid jungle size! The map must have at least 2 cells per player.");
         }
 
         // Validates players' info
@@ -106,19 +101,19 @@ public class GameManager {
             try {
                 playerID = Integer.parseInt(player[0]);
             } catch (NumberFormatException e) {
-                return null;
+                return new InitializationError("Invalid player ID! The ID must be a number.");
             }
 
             String playerName;
             if (player[1] == null || player[1].length() == 0) {
-                return null;
+                return new InitializationError("Invalid player name! The name must not be null nor empty.");
             } else {
                 playerName = player[1];
             }
 
             Character playerSpeciesID;
             if (player[2] == null || player[2].length() == 0) {
-                return null;
+                return new InitializationError("Invalid Species ID! The Species ID must be a character.");
             } else {
                 playerSpeciesID = player[2].charAt(0);
             }
@@ -127,18 +122,18 @@ public class GameManager {
 
             // Validates player species (checks if it exists)
             if (playerSpecies == null) {
-                return null;
+                return new InitializationError("Invalid Species ID! The given Species does not exist.");
             }
 
             for (Player currentPlayer : players) {
                 // Checks if the ID already exists
                 if (currentPlayer.getID() == playerID) {
-                    return null;
+                    return new InitializationError("Invalid player ID! This ID already exists.");
                 }
 
                 // In case the player species corresponds to 'tarzan' (cant have 2 'tarzan's)
                 if (playerSpecies.getName().equals("Tarzan") && currentPlayer.getSpecies().getID() == playerSpeciesID) {
-                    return null;
+                    return new InitializationError("Tarzan already exists!");
                 }
             }
 
@@ -148,6 +143,51 @@ public class GameManager {
 
         // Initializes game map and places players in the first 'MapCell'
         map = new GameMap(jungleSize, this.players);
+
+        // Validates foods info
+        if (foodsInfo != null) {
+            for (String[] food : foodsInfo) {
+                // Checks if food ID has a valid format
+                Character foodID;
+                if (food[0] == null || food[0].length() == 0) {
+                    return new InitializationError("Invalid Food ID! The Food ID must be a character.");
+                }
+                foodID = food[0].charAt(0);
+
+                // Checks if food ID is valid (i.e. contained in 'getFoodTypes')
+                Food foodObject = getFoodByID(foodID);
+                if (foodObject == null) {
+                    return new InitializationError("Invalid Food ID! The given Food ID does not exist.");
+                }
+
+                // Checks if food object has a valid position
+                int foodPosition;
+                try {
+                    foodPosition = Integer.parseInt(food[1]);
+                    if (foodPosition <= 1 || foodPosition >= jungleSize) {
+                        return new InitializationError(
+                            "Invalid Food Position! " +
+                            "Food position must be in the map range except start and finish positions."
+                        );
+                    }
+                } catch (NumberFormatException e) {
+                    return new InitializationError("Invalid Food Position! Food position must be an integer value.");
+                }
+
+                // Gets 'MapCell' in which the food will be placed
+                MapCell foodCell = map.getMapCell(foodPosition);
+
+                // Places food in the given map position
+                // If that cell already has a food item returns an error
+                if (!foodCell.addFood(foodObject)) {
+                    return new InitializationError(
+                            "Invalid Food Position! " +
+                            "The given food position is already filled with anothe food item."
+                    );
+                }
+            }
+        }
+
         sortPlayersByID();
         currentRoundPlayerIndex = 0;  // Sets the index of the first player to make a play
         return null;
@@ -462,6 +502,21 @@ public class GameManager {
         for (Species species : species) {
             if (species.getID() == id) {
                 return species;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets Food object from all game food types using the Food ID.<p>
+     * If there's no Food that matches the given ID, it returns null.
+     * @param id Food ID
+     * @return Food object or null
+     */
+    public Food getFoodByID(char id) {
+        for (Food food : foods) {
+            if (food.getID() == id) {
+                return food;
             }
         }
         return null;

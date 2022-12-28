@@ -21,6 +21,13 @@ public abstract class Food {
     public abstract int getFoodEnergyOnConsumption(Player player, int currentPlay);
 
     /**
+     * @return Food ID
+     */
+    public char getID() {
+        return this.id;
+    }
+
+    /**
      * Provides information about the food type. The format is a String array as follows:<p>
      * [0] -> Food ID<p>
      * [1] -> Food Name<p>
