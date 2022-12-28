@@ -154,4 +154,11 @@ public class MapCell {
         this.foodItem = food;
         return true;
     }
+
+    /**
+     * @return Food Item
+     */
+    Food getfoodItem(){
+        return this.foodItem;
+    }
 }

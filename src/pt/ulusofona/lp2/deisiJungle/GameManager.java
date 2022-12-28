@@ -189,21 +189,32 @@ public class GameManager {
      * [0] -> Image Filename to draw in that cell, e.g. 'blank.png'<p>
      * [1] -> Cell description, e.g. 'empty', 'finish'<p>
      * [2] -> Player IDs in that cell, e.g. '3,5'
+     * [3] -> Food ID<p>
+     * [4] -> Food Name<p>
+     * [5] -> Food Image Filename, e.g. 'water.png'
      * @param squareNr map cell index
      * @return Info about the given cell
      */
     public String[] getSquareInfo(int squareNr) {
-        String[] squareInfo = new String[3];
+        String[] squareInfo = new String[6];
 
         if (squareNr > 0 && squareNr <= map.getMapSize()) {
             // Gets map cell
             MapCell mapCell = map.getMapCell(squareNr);
             if (mapCell != null) {
+                // Gets food in specific map cell
+                Food food = mapCell.getfoodItem();
+
                 squareInfo[0] = mapCell.getImageFilename();
                 squareInfo[1] = mapCell.getCellType();
                 // Converts players' IDs from ArrayList to String;
                 squareInfo[2] = mapCell.getPlayerIDsInCellToString();
-
+                if (food != null){
+                    String[] foodInfo = food.getFoodData();
+                    squareInfo[3] = foodInfo[1];
+                    squareInfo[4] = foodInfo[2];
+                    squareInfo[5] = foodInfo[3];
+                }
                 return squareInfo;
             }
         }
