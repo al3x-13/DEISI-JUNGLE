@@ -97,4 +97,18 @@ public class Species {
     public String getSpeed() {
         return this.speedMin + ".." + this.speedMax;
     }
+
+    /**
+     * @return Species energy gain on idle
+     */
+    public int getEnergyGainOnIdle() {
+        return this.energyGainOnIdle;
+    }
+
+    /**
+     * @return Species energy consumption
+     */
+    public int getEnergyConsumption() {
+        return this.energyConsumption;
+    }
 }

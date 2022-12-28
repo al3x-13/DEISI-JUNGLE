@@ -324,8 +324,10 @@ public class GameManager {
      * @return Info about current player's energy
      */
     public String[] getCurrentPlayerEnergyInfo(int nrPositions) {
-        // TODO
-        return new String[]{};
+        String[] playerEnergyInfo = new String[2];
+        playerEnergyInfo[0] = String.valueOf(this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyConsumption()*nrPositions);
+        playerEnergyInfo[1] = String.valueOf(this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyGainOnIdle());
+        return playerEnergyInfo;
     }
 
     /**
