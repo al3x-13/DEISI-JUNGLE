@@ -7,6 +7,7 @@ public class Player {
     private int energyUnits;
     private int currentMapPosition = 1;  // Game cells' index starts at 1
     private int distanceCovered = 0;
+    private int totalFoodConsumed = 0;
     private int consumedBananas = 0;
 
     public Player(int id, String name, Species species) {
@@ -67,6 +68,13 @@ public class Player {
     }
 
     /**
+     * @return Energy consumed per play
+     */
+    public int getEnergyConsumption() {
+        return this.species.getEnergyConsumption();
+    }
+
+    /**
      * @return Banas consumed by the player in the current game
      */
     public int getConsumedBananas() {
@@ -95,5 +103,22 @@ public class Player {
      */
     void increaseDistanceCovered(int nrCells) {
         this.distanceCovered += nrCells;
+    }
+
+    /**
+     * Updates player energy with energy gained/lost food consumption with given energy.
+     * Increases total consumed food count by 1.
+     * @param foodEnergy Energy to add/subtract
+     */
+    void consumeFood(int foodEnergy) {
+        this.energyUnits += foodEnergy;
+        this.totalFoodConsumed++;
+    }
+
+    /**
+     * Increases total bananas consumed by 1.
+     */
+    void increaseBananasConsumedBy1() {
+        this.consumedBananas++;
     }
 }
