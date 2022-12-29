@@ -10,11 +10,15 @@ public class Water extends Food {
      * Omnivore: +20% energy
      */
     @Override
-    public int getFoodEnergyOnConsumption(Player player, int currentPlay) {
+    public void consumeFood(Player player, int currentPlay) {
+        int foodEnergy;
         Species species = player.getSpecies();
         if (species.getDiet() == DietType.OMNIVORE) {
-            return (int) (species.getEnergyUnits() * 0.3f);
+            foodEnergy = (int) (species.getEnergyUnits() * 0.3f);
+        } else {
+            foodEnergy = 15;
         }
-        return 15;
+
+        player.consumeFood(foodEnergy);
     }
 }

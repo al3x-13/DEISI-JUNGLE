@@ -8,17 +8,18 @@ public abstract class Food {
 
     public Food(char id, String name, String imageFilename, String tooltip) {
         this.id = id;
+        this.name = name;
         this.imageFilename = imageFilename;
         this.tooltip = tooltip;
     }
 
     /**
-     * Gets the energy the given species will gain/lose based on the species' diet.
+     * Updates player data (energy, etc.) based on the species' diet and the consumed food type.
      * @param player Player
      * @param currentPlay Current play number
-     * @return Amount of energy the species will gain/lose upon consuming the food
+     * @return Whether food was successfully consumed or not
      */
-    public abstract int getFoodEnergyOnConsumption(Player player, int currentPlay);
+    public abstract void consumeFood(Player player, int currentPlay);
 
     /**
      * @return Food ID

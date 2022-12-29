@@ -14,11 +14,15 @@ public class Bananas extends Food {
      * After first banana: -40 energy units
      */
     @Override
-    public int getFoodEnergyOnConsumption(Player player, int currentPlay) {
+    public void consumeFood(Player player, int currentPlay) {
+        int foodEnergy;
         if (player.getConsumedBananas() > 0) {
-            return -40;
+            foodEnergy = -40;
         } else {
-            return 40;
+            foodEnergy = 40;
         }
+
+        player.consumeFood(foodEnergy);
+        player.increaseBananasConsumedBy1();
     }
 }

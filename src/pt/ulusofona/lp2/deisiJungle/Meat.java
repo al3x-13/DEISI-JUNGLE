@@ -19,11 +19,11 @@ public class Meat extends Food {
      *      - Herbivore: 0 energy units<p>
      */
     @Override
-    public int getFoodEnergyOnConsumption(Player player, int currentPlay) {
+    public void consumeFood(Player player, int currentPlay) {
         Species species = player.getSpecies();
         if (species.getDiet() == DietType.CARNIVORE || species.getDiet() == DietType.OMNIVORE) {
-            return currentPlay <= 12 ? 50 : -50;
+            int foodEnergy = currentPlay <= 12 ? 50 : -50;
+            player.consumeFood(foodEnergy);
         }
-        return 0;
     }
 }

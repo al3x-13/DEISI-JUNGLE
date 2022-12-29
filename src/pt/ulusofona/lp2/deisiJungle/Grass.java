@@ -10,11 +10,15 @@ public class Grass extends Food {
      * Carnivore: -20 energy units
      */
     @Override
-    public int getFoodEnergyOnConsumption(Player player, int currenPlay) {
+    public void consumeFood(Player player, int currentPlay) {
+        int foodEnergy;
         Species species = player.getSpecies();
         if (species.getDiet() == DietType.HERBIVORE || species.getDiet() == DietType.OMNIVORE) {
-            return 20;
+            foodEnergy = 20;
+        } else {
+            foodEnergy = -20;
         }
-        return -20;
+
+        player.consumeFood(foodEnergy);
     }
 }
