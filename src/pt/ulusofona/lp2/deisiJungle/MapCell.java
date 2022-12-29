@@ -156,9 +156,9 @@ public class MapCell {
     }
 
     /**
-     * @return Food Item
+     * @return Cell Food Item, if there's no food returns null
      */
-    Food getfoodItem(){
+    Food getFoodItem(){
         return this.foodItem;
     }
 }
