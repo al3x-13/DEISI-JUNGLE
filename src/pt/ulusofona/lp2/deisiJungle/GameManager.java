@@ -303,10 +303,7 @@ public class GameManager {
     public String[][] getPlayersInfo() {
         String[][] playersInfo = new String[this.players.size()][4];
         for (int i = 0; i < this.players.size(); i++) {
-            playersInfo[i][0] = String.valueOf(this.players.get(i).getID());
-            playersInfo[i][1] = this.players.get(i).getName();
-            playersInfo[i][2] = String.valueOf(this.players.get(i).getSpecies().getID());
-            playersInfo[i][3] = String.valueOf(this.players.get(i).getEnergy());
+            playersInfo[i] = getPlayerInfo(this.players.get(i).getID());
         }
         return playersInfo;
     }
