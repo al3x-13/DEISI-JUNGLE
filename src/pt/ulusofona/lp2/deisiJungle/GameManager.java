@@ -337,13 +337,13 @@ public class GameManager {
         // TODO: refactor this
         // Checks if game is over
         if (this.gameOver) {
-            switchToNextPlayer();
+            switchToNextPlayerAndUpdateCurrentPlay();
             return null;
         }
 
         // Checks if 'nrSquares' is a valid value without 'bypassValidation'
         if (!bypassValidation && (nrSquares < -6 || nrSquares > 6)) {
-            switchToNextPlayer();
+            switchToNextPlayerAndUpdateCurrentPlay();
             return new MovementResult(
                     MovementResultCode.INVALID_MOVEMENT,
                     "Invalid number of squares! Value must be between -6 and 6."
@@ -356,7 +356,7 @@ public class GameManager {
         // Checks if 'nrSquares' is a valid value with 'bypassValidation'
         int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
         if (bypassValidation && ((playerCurrentPosition + nrSquares) < 1)) {
-            switchToNextPlayer();
+            switchToNextPlayerAndUpdateCurrentPlay();
             return new MovementResult(
                     MovementResultCode.INVALID_MOVEMENT,
                     "Invalid number of squares! Player position after movement cannot be less than 1.");
@@ -379,7 +379,7 @@ public class GameManager {
         }
 
         if (!map.movePlayer(currentPlayer, playerDestinationIndex, this.energySpentPerPlay)) {
-            switchToNextPlayer();
+            switchToNextPlayerAndUpdateCurrentPlay();
             return new MovementResult(
                     MovementResultCode.INVALID_MOVEMENT,
                     "Could not move player!"
@@ -403,7 +403,7 @@ public class GameManager {
         this.gameOver = isGameOver();
 
         // Updates player for next play
-        switchToNextPlayer();
+        switchToNextPlayerAndUpdateCurrentPlay();
 
         // Player movement completed successfully
         if (caughtFood) {
@@ -652,9 +652,11 @@ public class GameManager {
     /**
      * Updates the current shift player.
      */
-    void switchToNextPlayer() {
+    void switchToNextPlayerAndUpdateCurrentPlay() {
         // Updates player for next play
         currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
+        // Updates current playe number
+        currentPlay++;
     }
 
     /**
