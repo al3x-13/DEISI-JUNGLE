@@ -155,8 +155,7 @@ public class GameManager {
                 foodID = food[0].charAt(0);
 
                 // Checks if food ID is valid (i.e. contained in 'getFoodTypes')
-                Food foodObject = getFoodByID(foodID);
-                if (foodObject == null) {
+                if (!foodExists(foodID)) {
                     return new InitializationError("Invalid Food ID! The given Food ID does not exist.");
                 }
 
@@ -179,7 +178,8 @@ public class GameManager {
 
                 // Places food in the given map position
                 // If that cell already has a food item returns an error
-                if (!foodCell.addFood(foodObject)) {
+                Food newFood = createFood(foodID);
+                if (!foodCell.addFood(newFood)) {
                     return new InitializationError(
                             "Invalid Food Position! " +
                             "The given food position is already filled with anothe food item."
@@ -574,13 +574,13 @@ public class GameManager {
      * @param id Food ID
      * @return Food object or null
      */
-    public Food getFoodByID(char id) {
+    public boolean foodExists(char id) {
         for (Food food : foods) {
             if (food.getID() == id) {
-                return food;
+                return true;
             }
         }
-        return null;
+        return false;
     }
 
     /**
@@ -665,5 +665,32 @@ public class GameManager {
      */
     public int getCurrentPlay() {
         return this.currentPlay;
+    }
+
+    /**
+     * Creates a new Food object and returns it.
+     * @param foodID Food type to be created
+     * @return Food Object
+     */
+    private Food createFood(char foodID) {
+        Food food = null;
+        switch (foodID) {
+            case 'e':
+                food = new Grass();
+                break;
+            case 'a':
+                food = new Water();
+                break;
+            case 'b':
+                food = new Bananas();
+                break;
+            case 'c':
+                food = new Meat();
+                break;
+            case 'm':
+                food = new MagicMushrooms();
+                break;
+        }
+        return food;
     }
 }
