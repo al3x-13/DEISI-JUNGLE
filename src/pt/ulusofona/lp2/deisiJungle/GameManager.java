@@ -294,12 +294,7 @@ public class GameManager {
      * @return Current player info
      */
     public String[] getCurrentPlayerInfo() {
-        return new String[] {
-            String.valueOf(this.players.get(currentRoundPlayerIndex).getID()),
-            this.players.get(currentRoundPlayerIndex).getName(),
-            String.valueOf(this.players.get(currentRoundPlayerIndex).getSpecies().getID()),
-            String.valueOf(this.players.get(currentRoundPlayerIndex).getEnergy())
-        };
+        return getPlayerInfo(this.players.get(currentRoundPlayerIndex).getID());
     }
 
     /**
@@ -360,7 +355,7 @@ public class GameManager {
 
         // Checks if 'nrSquares' is a valid value with 'bypassValidation'
         int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
-        if (bypassValidation && ((playerCurrentPosition - nrSquares) < 1)) {
+        if (bypassValidation && ((playerCurrentPosition + nrSquares) < 1)) {
             switchToNextPlayer();
             return new MovementResult(
                     MovementResultCode.INVALID_MOVEMENT,
@@ -370,7 +365,7 @@ public class GameManager {
         // Checks if player has sufficient energy to make the play
         int playerEnergy = currentPlayer.getEnergy();
         int playerEnergyConsumedPerPlay = currentPlayer.getEnergyConsumption();
-        if (playerEnergy >= playerEnergyConsumedPerPlay) {
+        if (playerEnergy < playerEnergyConsumedPerPlay) {
             return new MovementResult(
                     MovementResultCode.NO_ENERGY,
                     "Player does not have enough energy to make the play!"
