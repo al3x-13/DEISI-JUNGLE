@@ -81,7 +81,7 @@ public class GameManager {
      * @return Whether the initial map was successfully created
      */
     public InitializationError createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo) {
-        // TODO: make this function properly
+        // TODO: refactor this
         reset();  // Resets game data structures
 
         // Validates number of players (2-4 players)
@@ -243,7 +243,7 @@ public class GameManager {
             MapCell mapCell = map.getMapCell(squareNr);
             if (mapCell != null) {
                 // Gets food in specific map cell
-                Food food = mapCell.getfoodItem();
+                Food food = mapCell.getFoodItem();
 
                 squareInfo[0] = mapCell.getImageFilename();
                 squareInfo[1] = mapCell.getCellType();
@@ -337,31 +337,69 @@ public class GameManager {
      * @return Whether current player was moved successfully
      */
     public MovementResult moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
+        // TODO: refactor this
         // Checks if game is over
         if (this.gameOver) {
             switchToNextPlayer();
             return null;
         }
 
-        // Checks if 'nrSquares' is a valid value
-        if (!bypassValidation && (nrSquares < 1 || nrSquares > 6)) {
+        // Checks if 'nrSquares' is a valid value without 'bypassValidation'
+        if (!bypassValidation && (nrSquares < -6 || nrSquares > 6)) {
             switchToNextPlayer();
-            return null;
+            return new MovementResult(
+                    MovementResultCode.INVALID_MOVEMENT,
+                    "Invalid number of squares! Value must be between -6 and 6."
+            );
         }
 
-        // Get current player
+        // Gets current player
         Player currentPlayer = this.players.get(currentRoundPlayerIndex);
+
+        // Checks if 'nrSquares' is a valid value with 'bypassValidation'
         int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
-        int playerDestinationIndex = playerCurrentPosition + nrSquares;
+        if (bypassValidation && ((playerCurrentPosition - nrSquares) < 1)) {
+            switchToNextPlayer();
+            return new MovementResult(
+                    MovementResultCode.INVALID_MOVEMENT,
+                    "Invalid number of squares! Player position after movement cannot be less than 1.");
+        }
+
+        // Checks if player has sufficient energy to make the play
+        int playerEnergy = currentPlayer.getEnergy();
+        int playerEnergyConsumedPerPlay = currentPlayer.getEnergyConsumption();
+        if (playerEnergy >= playerEnergyConsumedPerPlay) {
+            return new MovementResult(
+                    MovementResultCode.NO_ENERGY,
+                    "Player does not have enough energy to make the play!"
+            );
+        }
 
         // Calculates destination to make sure the player does not exceed map limit
+        int playerDestinationIndex = playerCurrentPosition + nrSquares;
         if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
             playerDestinationIndex = this.map.getFinishMapCellIndex();
         }
 
         if (!map.movePlayer(currentPlayer, playerDestinationIndex, this.energySpentPerPlay)) {
             switchToNextPlayer();
-            return null;
+            return new MovementResult(
+                    MovementResultCode.INVALID_MOVEMENT,
+                    "Could not move player!"
+            );
+        }
+
+        // Increase player covered distance
+        currentPlayer.increaseDistanceCovered(Math.abs(nrSquares));
+
+        boolean caughtFood = false;
+        MapCell destinationCell = this.map.getMapCell(playerDestinationIndex);
+        Food destinationCellFood = destinationCell.getFoodItem();
+        // Checks if destination has food in it
+        if (destinationCellFood != null) {
+            // Food consumption by the player
+            destinationCellFood.consumeFood(currentPlayer, currentPlay);
+            caughtFood = true;
         }
 
         // Checks if game is over
@@ -370,7 +408,11 @@ public class GameManager {
         // Updates player for next play
         switchToNextPlayer();
 
-        return null;
+        // Player movement completed successfully
+        if (caughtFood) {
+            return new MovementResult(MovementResultCode.CAUGHT_FOOD, "Apanhou " + destinationCellFood.name);
+        }
+        return new MovementResult(MovementResultCode.VALID_MOVEMENT, "Player moved successfully!");
     }
 
     /**
