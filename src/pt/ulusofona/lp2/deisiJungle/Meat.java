@@ -6,8 +6,6 @@ public class Meat extends Food {
     public Meat() {
         super('c', "Carne", "meat.png", "");
         this.spoiled = false;
-
-        // TODO
     }
 
     /**
@@ -25,5 +23,17 @@ public class Meat extends Food {
             int foodEnergy = currentPlay <= 12 ? 50 : -50;
             player.consumeFood(foodEnergy);
         }
+    }
+
+    /**
+     * Updates Meat Spoil Status
+     * @param currentPlay Current Player Number
+     */
+    public void updateSpoilStatusAndTooltip(int currentPlay) {
+        if (currentPlay > 12) {
+            this.spoiled = true;
+        }
+
+        this.tooltip = "Carne : +- 50 energia : " + (currentPlay - 1) + " jogadas";
     }
 }

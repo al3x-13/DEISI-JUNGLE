@@ -243,6 +243,9 @@ public class GameManager {
                 Food food = mapCell.getFoodItem();
 
                 if (food != null) {
+                    // Updates food types dependent on current play number
+                    updateFoodsDependentOnCurrentPlay(food, currentPlay);
+
                     squareInfo[0] = food.getImageFilename();
                     squareInfo[1] = food.getTooltip();
                 } else {
@@ -692,5 +695,18 @@ public class GameManager {
                 break;
         }
         return food;
+    }
+
+    /**
+     * Updates food types which depend on the current play number.
+     * @param food Food To Be Updated
+     * @param currentPlay Current Play Number
+     */
+    private void updateFoodsDependentOnCurrentPlay(Food food, int currentPlay) {
+        switch (food.getID()) {
+            case 'c':
+                ((Meat) food).updateSpoilStatusAndTooltip(currentPlay);
+                break;
+        }
     }
 }
