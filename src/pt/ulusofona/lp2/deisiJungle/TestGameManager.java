@@ -2,6 +2,8 @@ package pt.ulusofona.lp2.deisiJungle;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class TestGameManager {
@@ -198,10 +200,9 @@ public class TestGameManager {
         };
         game.createInitialJungle(10, playersInfo);
         int[] expectedResult = null;
-        // TODO: fix this
-        // assertEquals(expectedResult, game.getSquareInfo(30));
-        // assertEquals(expectedResult, game.getSquareInfo(11));
-        // assertEquals(expectedResult, game.getSquareInfo(0));
+        assertEquals(expectedResult, game.getSquareInfo(30));
+        assertEquals(expectedResult, game.getSquareInfo(11));
+        assertEquals(expectedResult, game.getSquareInfo(0));
     }
 
     @Test
@@ -217,12 +218,11 @@ public class TestGameManager {
 
         String[] expectedResult = new String[] { "middle.png", "Vazio", "" };
         String[] realResult = game.getSquareInfo(5);
-        // TODO: fix this
-        /* assertTrue(
+        assertTrue(
                 expectedResult[0].equals(realResult[0])
                 && expectedResult[1].equals(realResult[1])
                 && expectedResult[2].equals(realResult[2])
-        ); */
+        );
     }
 
     @Test
@@ -241,12 +241,11 @@ public class TestGameManager {
         cell.addPlayer(3);
         String[] expectedResult = new String[] { "middle.png", "Vazio", "3" };
         String[] realResult = game.getSquareInfo(5);
-        // TODO: fix this
-        /* assertTrue(
+        assertTrue(
                 expectedResult[0].equals(realResult[0])
                         && expectedResult[1].equals(realResult[1])
                         && expectedResult[2].equals(realResult[2])
-        ); */
+        );
     }
 
     @Test
@@ -266,12 +265,44 @@ public class TestGameManager {
 
         String[] expectedResult = new String[] { "finish.png", "Meta", "3" };
         String[] realResult = game.getSquareInfo(10);
-        // TODO: fix this
-        /* assertTrue(
+        assertTrue(
                 expectedResult[0].equals(realResult[0])
                         && expectedResult[1].equals(realResult[1])
                         && expectedResult[2].equals(realResult[2])
-        ); */
+        );
+    }
+
+    @Test
+    public void test_05_GetSquareInfo() {
+        // Testing with food in cell
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L"},
+                { "3", "Player 2", "T"}
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "3" },
+                { "b", "6"}
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        String[] expectedResult = new String[] { "water.png", "Agua : + 15U|20% energia", "" };
+        String[] realResult = game.getSquareInfo(3);
+        assertTrue(
+                expectedResult[0].equals(realResult[0])
+                        && expectedResult[1].equals(realResult[1])
+                        && expectedResult[2].equals(realResult[2])
+        );
+
+        game.moveCurrentPlayer(5, true);
+        expectedResult = new String[] { "bananas.png", "Bananas : 2 : + 40 energia", "1" };
+        realResult = game.getSquareInfo(6);
+        System.out.println(Arrays.toString(realResult));
+        assertTrue(
+                expectedResult[0].equals(realResult[0])
+                        && expectedResult[1].equals(realResult[1])
+                        && expectedResult[2].equals(realResult[2])
+        );
     }
 
     @Test
@@ -325,7 +356,8 @@ public class TestGameManager {
         assertTrue(
                 expectedResult[0].equals(realResult[0]) &&
                         expectedResult[1].equals(realResult[1])
-        );
+        );;
+        game.moveCurrentPlayer(3, true);
 
         expectedResult = new String[] { "5", "5" };
         realResult = game.getCurrentPlayerEnergyInfo(5);
@@ -352,11 +384,23 @@ public class TestGameManager {
         boolean hasPlayer2 = false;
         for (String[] player : realResult) {
             // Checks for player1
-            if (player[0].equals("1") && player[1].equals("Player 1") && player[2].equals("L") && player[3].equals("20")) {
+            if (
+                player[0].equals("1")
+                && player[1].equals("Player 1")
+                && player[2].equals("L")
+                && player[3].equals("80")
+                && player[4].equals("4..6")
+            ) {
                 hasPlayer1 = true;
             }
 
-            if (player[0].equals("3") && player[1].equals("Player 2") && player[2].equals("T") && player[3].equals("20")) {
+            if (
+                player[0].equals("3")
+                && player[1].equals("Player 2")
+                && player[2].equals("T")
+                && player[3].equals("150")
+                && player[4].equals("1..3")
+            ) {
                 hasPlayer2 = true;
             }
         }
@@ -386,19 +430,27 @@ public class TestGameManager {
         boolean hasPlayer4 = false;
         for (String[] player : realResult) {
             // Checks for player1
-            if (player[0].equals("1") && player[1].equals("Player 1") && player[2].equals("L") && player[3].equals("20")) {
+            if (player[0].equals("1") && player[1].equals("Player 1") && player[2].equals("L")
+                    && player[3].equals("80") && player[4].equals("4..6")
+            ) {
                 hasPlayer1 = true;
             }
 
-            if (player[0].equals("3") && player[1].equals("Player 2") && player[2].equals("T") && player[3].equals("20")) {
+            if (player[0].equals("3") && player[1].equals("Player 2") && player[2].equals("T")
+                    && player[3].equals("150") && player[4].equals("1..3")
+            ) {
                 hasPlayer2 = true;
             }
 
-            if (player[0].equals("4") && player[1].equals("Player 3") && player[2].equals("T") && player[3].equals("20")) {
+            if (player[0].equals("4") && player[1].equals("Player 3") && player[2].equals("T")
+                    && player[3].equals("150") && player[4].equals("1..3")
+            ) {
                 hasPlayer3 = true;
             }
 
-            if (player[0].equals("22") && player[1].equals("Player 4") && player[2].equals("P") && player[3].equals("20")) {
+            if (player[0].equals("22") && player[1].equals("Player 4") && player[2].equals("P")
+                    && player[3].equals("70") && player[4].equals("5..6")
+            ) {
                 hasPlayer4 = true;
             }
         }
@@ -463,7 +515,7 @@ public class TestGameManager {
         game.createInitialJungle(10, playersInfo);
 
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(7, false));
+        assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(7, false).code());
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
     }
 
@@ -479,7 +531,7 @@ public class TestGameManager {
         game.createInitialJungle(10, playersInfo);
 
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(7, true));
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(7, true).code());
         assertEquals(8, game.players.get(0).getCurrentMapPosition());
     }
 
@@ -496,7 +548,7 @@ public class TestGameManager {
 
         // Moving player with ID 1
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(5, false));
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(5, false).code());
         // Getting current player position from player object
         assertEquals(6, game.players.get(0).getCurrentMapPosition());
         // Checking if player was removed from the previous cell
@@ -518,7 +570,7 @@ public class TestGameManager {
 
         // Moving player with ID 1
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(11, true));
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(11, true).code());
         // Getting current player position from player object
         assertEquals(10, game.players.get(0).getCurrentMapPosition());
         // Checking if player was removed from the previous cell
@@ -540,10 +592,11 @@ public class TestGameManager {
 
         // Moving player with ID 1
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(3, false));
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(3, false).code());
         assertEquals(4, game.players.get(0).getCurrentMapPosition());
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(2, false).code());
         game.players.get(0).setEnergy(1);
-        assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(4, true));
+        assertEquals(MovementResultCode.NO_ENERGY, game.moveCurrentPlayer(4, true).code());
     }
 
     @Test
@@ -610,11 +663,11 @@ public class TestGameManager {
         game.moveCurrentPlayer(5, true);
         assertFalse(game.isGameOver());
         assertNull(game.getWinnerInfo());
-        game.moveCurrentPlayer(5, true);
+        game.moveCurrentPlayer(2, true);
         assertFalse(game.isGameOver());
         assertNull(game.getWinnerInfo());
-        game.moveCurrentPlayer(2, true);
+        game.moveCurrentPlayer(5, true);
         assertTrue(game.isGameOver());
-        assertEquals(1, Integer.parseInt(game.getWinnerInfo()[0]));
+        assertEquals(3, Integer.parseInt(game.getWinnerInfo()[0]));
     }
 }
