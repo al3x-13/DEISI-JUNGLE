@@ -38,4 +38,11 @@ public abstract class Food {
     String[] getFoodData() {
         return new String[] { String.valueOf(this.id), this.name, this.imageFilename };
     }
+
+    /**
+     * @return Food Tooltip
+     */
+    public String getTooltip() {
+        return tooltip;
+    }
 }

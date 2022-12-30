@@ -227,11 +227,8 @@ public class GameManager {
      * Gets info about the given map cell in order for the Visualizer to draw it.<p>
      * Each element of the array has the following format:<p>
      * [0] -> Image Filename to draw in that cell, e.g. 'blank.png'<p>
-     * [1] -> Cell description, e.g. 'empty', 'finish'<p>
+     * [1] -> Cell description, e.g. 'empty', 'finish', 'Bananas : <N> : + 40 energia'<p>
      * [2] -> Player IDs in that cell, e.g. '3,5'
-     * [3] -> Food ID<p>
-     * [4] -> Food Name<p>
-     * [5] -> Food Image Filename, e.g. 'water.png'
      * @param squareNr map cell index
      * @return Info about the given cell
      */
@@ -249,11 +246,9 @@ public class GameManager {
                 squareInfo[1] = mapCell.getCellType();
                 // Converts players' IDs from ArrayList to String;
                 squareInfo[2] = mapCell.getPlayerIDsInCellToString();
+
                 if (food != null){
-                    String[] foodInfo = food.getFoodData();
-                    squareInfo[3] = foodInfo[1];
-                    squareInfo[4] = foodInfo[2];
-                    squareInfo[5] = foodInfo[3];
+                    squareInfo[1] = food.getTooltip();
                 }
                 return squareInfo;
             }
