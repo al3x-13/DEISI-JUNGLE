@@ -40,6 +40,13 @@ public abstract class Food {
     }
 
     /**
+     * @return Food Filename
+     */
+    public String getImageFilename() {
+        return this.imageFilename;
+    }
+
+    /**
      * @return Food Tooltip
      */
     public String getTooltip() {

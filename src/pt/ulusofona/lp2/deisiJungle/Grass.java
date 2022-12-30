@@ -2,7 +2,7 @@ package pt.ulusofona.lp2.deisiJungle;
 
 public class Grass extends Food {
     public Grass() {
-        super('e', "Erva","grass.png", "Erva: +-20 energia");
+        super('e', "Erva","grass.png", "Erva : +-20 energia");
     }
 
     /**

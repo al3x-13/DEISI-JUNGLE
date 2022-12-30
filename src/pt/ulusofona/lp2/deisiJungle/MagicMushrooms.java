@@ -6,7 +6,7 @@ public class MagicMushrooms extends Food {
     public MagicMushrooms() {
         super('m', "Cogumelos magicos", "mushroom.png", "");
         this.magicNumber = (int) ((Math.random() * (50 - 10)) + 10);
-        this.tooltip = "Cogumelo Magico: +- " + this.magicNumber + "% energia";
+        this.tooltip = "Cogumelo Magico : +- " + this.magicNumber + "% energia";
     }
 
     /**

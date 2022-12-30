@@ -2,7 +2,7 @@ package pt.ulusofona.lp2.deisiJungle;
 
 public class Water extends Food {
     public Water() {
-        super('a', "Agua", "water.png", "Agua: + 15U|20% energia");
+        super('a', "Agua", "water.png", "Agua : + 15U|20% energia");
     }
 
     /**
