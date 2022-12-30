@@ -435,27 +435,28 @@ public class GameManager {
             }
         }
 
-        // Gets the player in the most advanced cell (no one finished the game)
-        Player winner = null;
-        int currentFurthestPlayer = -1;
+        // Gets the second-closest player to the finish (distance between 2 closest players
+        // to finish is greater than half of the map)
+        int winnerID;
+        int closestPlayerToFinishID = -1;
+        int secondClosestPlayerToFinishID = -1;
 
-        for (Player player : this.players) {
-            if (player.getCurrentMapPosition() == currentFurthestPlayer && player.getID() < winner.getID()) {
-                winner = player;
-            }
+        for (int i = map.getMapSize(); i > 0; i--) {
+            MapCell currentCell = map.getMapCell(i);
+            int[] playersIDsInCell = currentCell.getPlayerIDsInCell();
 
-            if (player.getCurrentMapPosition() > currentFurthestPlayer) {
-                winner = player;
-                currentFurthestPlayer = player.getCurrentMapPosition();
+            for (int playerID : playersIDsInCell) {
+                if (closestPlayerToFinishID < 0) {
+                    closestPlayerToFinishID = playerID;
+                } else if (secondClosestPlayerToFinishID < 0) {
+                    secondClosestPlayerToFinishID = playerID;
+                    break;
+                }
             }
         }
 
-        return new String[] {
-                String.valueOf(winner.getID()),
-                winner.getName(),
-                String.valueOf(winner.getSpecies().getID()),
-                String.valueOf(winner.getEnergy())
-        };
+        winnerID = secondClosestPlayerToFinishID;
+        return getPlayerInfo(winnerID);
     }
 
     /**
@@ -638,6 +639,7 @@ public class GameManager {
                     closestPlayerToFinishPosition = i;
                 } else if (secondClosestPlayerToFisnishPosition < 0) {
                     secondClosestPlayerToFisnishPosition = i;
+                    break;
                 }
             }
         }
