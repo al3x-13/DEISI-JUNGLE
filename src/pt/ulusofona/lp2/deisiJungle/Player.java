@@ -116,6 +116,13 @@ public class Player {
     }
 
     /**
+     * @return Total Food Consumed
+     */
+    public int getTotalFoodConsumed() {
+        return this.totalFoodConsumed;
+    }
+
+    /**
      * Increases total bananas consumed by 1.
      */
     void increaseBananasConsumedBy1() {

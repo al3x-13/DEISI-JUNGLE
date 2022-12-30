@@ -482,6 +482,10 @@ public class GameManager {
                                     .append(player.getSpecies().getName())
                                     .append(", ")
                                     .append(player.getCurrentMapPosition())
+                                    .append(", ")
+                                    .append(player.getDistanceCovered())
+                                    .append(", ")
+                                    .append(player.getTotalFoodConsumed())
                                     .toString()
                     );
                     break;
