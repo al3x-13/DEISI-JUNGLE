@@ -320,8 +320,12 @@ public class GameManager {
      */
     public String[] getCurrentPlayerEnergyInfo(int nrPositions) {
         String[] playerEnergyInfo = new String[2];
-        playerEnergyInfo[0] = String.valueOf(this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyConsumption()*nrPositions);
-        playerEnergyInfo[1] = String.valueOf(this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyGainOnIdle());
+        playerEnergyInfo[0] = String.valueOf(
+                this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyConsumption() * nrPositions
+        );
+        playerEnergyInfo[1] = String.valueOf(
+                this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyGainOnIdle()
+        );
         return playerEnergyInfo;
     }
 
@@ -610,24 +614,35 @@ public class GameManager {
 
     /**
      * Checks if the game is over, i.e. if any player has arrived at the finish
-     * or if the players have ran out of energy.
+     * or if the distance between the 2 closest player to the finish is greater
+     * than half of the map size.
      * @return Whether the game is over or not
      */
     boolean isGameOver() {
-        boolean enoughEnergyLeft = false;
-
+        // Checks if any of the players arrived at the finish cell (AKA won)
         for (Player player : this.players) {
-            // Checks if any of the players arrived at the finish cell (AKA won)
             if (player.getCurrentMapPosition() == this.map.getFinishMapCellIndex()) {
                 return true;
             }
+        }
 
-            // Checks if at least some players still have enough energy to keep playing
-            if (player.getEnergy() >= this.energySpentPerPlay) {
-                enoughEnergyLeft = true;
+        // Checks if the distance between the 2 closest players to the finish is greater than half the map
+        int closestPlayerToFinishPosition = -1;
+        int secondClosestPlayerToFisnishPosition = -1;
+        for (int i = map.getMapSize(); i > 0; i--) {
+            MapCell currentCell = map.getMapCell(i);
+            int[] playersIDsInCell = currentCell.getPlayerIDsInCell();
+
+            for (int playerID : playersIDsInCell) {
+                if (closestPlayerToFinishPosition < 0) {
+                    closestPlayerToFinishPosition = i;
+                } else if (secondClosestPlayerToFisnishPosition < 0) {
+                    secondClosestPlayerToFisnishPosition = i;
+                }
             }
         }
-        return !enoughEnergyLeft;
+
+        return (closestPlayerToFinishPosition - secondClosestPlayerToFisnishPosition) > (map.getMapSize() / 2);
     }
 
     /**
