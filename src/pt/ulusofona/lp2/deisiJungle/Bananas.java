@@ -29,5 +29,6 @@ public class Bananas extends Food {
         player.consumeFood(foodEnergy);
         player.increaseBananasConsumedBy1();
         this.consumableUnits--;
+        this.tooltip = "Bananas : " + this.consumableUnits + " : " + "+ 40 energia";
     }
 }
