@@ -25,7 +25,7 @@ public class GameManager {
             add(new Grass());
             add(new Water());
             add(new Bananas());
-            add(new Meat());;
+            add(new Meat());
             add(new MagicMushrooms());
         }
     };
@@ -233,7 +233,7 @@ public class GameManager {
      * @return Info about the given cell
      */
     public String[] getSquareInfo(int squareNr) {
-        String[] squareInfo = new String[6];
+        String[] squareInfo = new String[3];
 
         if (squareNr > 0 && squareNr <= map.getMapSize()) {
             // Gets map cell
@@ -242,14 +242,17 @@ public class GameManager {
                 // Gets food in specific map cell
                 Food food = mapCell.getFoodItem();
 
-                squareInfo[0] = mapCell.getImageFilename();
-                squareInfo[1] = mapCell.getCellType();
+                if (food != null) {
+                    squareInfo[0] = food.getImageFilename();
+                    squareInfo[1] = food.getTooltip();
+                } else {
+                    squareInfo[0] = mapCell.getImageFilename();
+                    squareInfo[1] = mapCell.getCellType();
+                }
+
                 // Converts players' IDs from ArrayList to String;
                 squareInfo[2] = mapCell.getPlayerIDsInCellToString();
 
-                if (food != null){
-                    squareInfo[1] = food.getTooltip();
-                }
                 return squareInfo;
             }
         }
