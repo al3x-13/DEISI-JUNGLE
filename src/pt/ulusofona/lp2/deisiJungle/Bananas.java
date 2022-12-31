@@ -31,4 +31,11 @@ public class Bananas extends Food {
         this.consumableUnits--;
         this.tooltip = "Bananas : " + this.consumableUnits + " : " + "+ 40 energia";
     }
+
+    /**
+     * @return Consumable Units
+     */
+    public int getConsumableUnits() {
+        return consumableUnits;
+    }
 }

@@ -21,4 +21,11 @@ public class MagicMushrooms extends Food {
 
         player.consumeFood(foodEnergy);
     }
+
+    /**
+     * @return Magic Number
+     */
+    public int getMagicNumber() {
+        return magicNumber;
+    }
 }
