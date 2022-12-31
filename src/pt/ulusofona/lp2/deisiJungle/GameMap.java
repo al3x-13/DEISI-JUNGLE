@@ -67,12 +67,7 @@ public class GameMap {
      * @param destIndex Index of the destination MapCell
      * @return Whether the player was successfully moved to the desired destination or not
      */
-    boolean movePlayer(Player player, int destIndex, int energyCost) {
-        // Cheks if player has enough energy to make the play
-        if (player.getEnergy() < energyCost) {
-            return false;
-        }
-
+    boolean movePlayerAndUpdateEnergy(Player player, int destIndex, int energyCost) {
         // Gets player current position in the map
         int currentIndex = player.getCurrentMapPosition();
 
@@ -87,7 +82,7 @@ public class GameMap {
         }
 
         // Charge energy for the player move
-        player.decreaseEnergy(2);
+        player.decreaseEnergy(energyCost);
 
         // Updates player current map position
         player.updateMapPosition(destIndex);
