@@ -128,4 +128,19 @@ public class Player {
     void increaseBananasConsumedBy1() {
         this.consumedBananas++;
     }
+
+    /**
+     * Loads player data saved in game save.
+     * @param currentMapPosition Current Map Position
+     * @param distanceCovered Distance Covered
+     * @param totalFoodConsumed Total Food Consumed
+     * @param consumedBananas Consumed Bananas
+     */
+    void loadSavedData(int energyUnits, int currentMapPosition, int distanceCovered, int totalFoodConsumed, int consumedBananas) {
+        this.energyUnits = energyUnits;
+        this.currentMapPosition = currentMapPosition;
+        this.distanceCovered = distanceCovered;
+        this.totalFoodConsumed = totalFoodConsumed;
+        this.consumedBananas = consumedBananas;
+    }
 }

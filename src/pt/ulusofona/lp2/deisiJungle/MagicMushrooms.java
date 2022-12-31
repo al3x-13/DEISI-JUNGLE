@@ -28,4 +28,12 @@ public class MagicMushrooms extends Food {
     public int getMagicNumber() {
         return magicNumber;
     }
+
+    /**
+     * @param magicNumber Magic Number
+     */
+    public void loadSavedData(int magicNumber) {
+        this.magicNumber = magicNumber;
+        this.tooltip = "Cogumelo Magico : +- " + this.magicNumber + "% energia";
+    }
 }
