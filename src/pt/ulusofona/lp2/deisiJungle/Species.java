@@ -111,4 +111,18 @@ public class Species {
     public int getEnergyConsumption() {
         return this.energyConsumption;
     }
+
+    /**
+     * @return Species Min Speed
+     */
+    public int getSpeedMin() {
+        return speedMin;
+    }
+
+    /**
+     * @return Species Max Speed
+     */
+    public int getSpeedMax() {
+        return speedMax;
+    }
 }
