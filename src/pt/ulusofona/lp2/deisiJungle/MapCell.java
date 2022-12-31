@@ -3,11 +3,11 @@ package pt.ulusofona.lp2.deisiJungle;
 import java.util.ArrayList;
 
 public class MapCell {
-    int index;
-    ArrayList<Integer> playerIDsInCell = new ArrayList<>();
-    String backgroundImageFilename;
-    String cellType;  // "Vazio" or "Meta" to pass DP tests
-    Food foodItem = null;
+    private int index;
+    private ArrayList<Integer> playerIDsInCell = new ArrayList<>();
+    private String backgroundImageFilename;
+    private String cellType;  // "Vazio" or "Meta" to pass DP tests
+    private Food foodItem = null;
 
     public MapCell(int cellIndex, String cellType) {
         if (cellIndex <= 0) {
