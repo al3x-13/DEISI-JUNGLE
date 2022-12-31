@@ -341,44 +341,49 @@ public class GameManager {
             return null;
         }
 
-        // Checks if 'nrSquares' is a valid value without 'bypassValidation'
-        if (!bypassValidation && (nrSquares < -6 || nrSquares > 6)) {
-            switchToNextPlayerAndUpdateCurrentPlay();
-            return new MovementResult(
-                    MovementResultCode.INVALID_MOVEMENT,
-                    "Invalid number of squares! Value must be between -6 and 6."
-            );
-        }
-
         // Gets current player
         Player currentPlayer = this.players.get(currentRoundPlayerIndex);
+        Species currentPlayerSpecies = currentPlayer.getSpecies();
+        int nrSquaresAbs = Math.abs(nrSquares);
 
-        // Checks if 'nrSquares' is a valid value with 'bypassValidation'
-        int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
-        if (bypassValidation && ((playerCurrentPosition + nrSquares) < 1)) {
-            switchToNextPlayerAndUpdateCurrentPlay();
-            return new MovementResult(
-                    MovementResultCode.INVALID_MOVEMENT,
-                    "Invalid number of squares! Player position after movement cannot be less than 1.");
+        // Checks if 'nrSquares' is a valid value without 'bypassValidation'
+        if (!bypassValidation) {
+            if (nrSquaresAbs < currentPlayerSpecies.getSpeedMin() || nrSquaresAbs > currentPlayerSpecies.getSpeedMax()) {
+                switchToNextPlayerAndUpdateCurrentPlay();
+                return new MovementResult(
+                        MovementResultCode.INVALID_MOVEMENT,
+                        "Invalid number of squares! " +
+                                "Value for " + currentPlayerSpecies.getName() +
+                                " must be between " + currentPlayerSpecies.getSpeedMin() +
+                                " and " + currentPlayerSpecies.getSpeedMax() + "."
+                );
+            }
         }
 
         // Checks if player has sufficient energy to make the play
         int playerEnergy = currentPlayer.getEnergy();
-        int playerEnergyConsumedPerPlay = currentPlayer.getEnergyConsumption();
-        if (playerEnergy < playerEnergyConsumedPerPlay) {
+        int playerEnergyConsumedPerMove = currentPlayer.getEnergyConsumption();
+        int playEnergyCost = nrSquaresAbs * playerEnergyConsumedPerMove;
+        if (playerEnergy < playEnergyCost) {
             return new MovementResult(
                     MovementResultCode.NO_ENERGY,
                     "Player does not have enough energy to make the play!"
             );
         }
 
-        // Calculates destination to make sure the player does not exceed map limit
+        // Makes sure the player does not exceed map limit
+        int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
         int playerDestinationIndex = playerCurrentPosition + nrSquares;
         if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
             playerDestinationIndex = this.map.getFinishMapCellIndex();
         }
 
-        if (!map.movePlayer(currentPlayer, playerDestinationIndex, this.energySpentPerPlay)) {
+        // Makes sure the player cannot retreat behind position 1
+        if (playerDestinationIndex < 1) {
+            playerDestinationIndex = 1;
+        }
+
+        if (!map.movePlayerAndUpdateEnergy(currentPlayer, playerDestinationIndex, playEnergyCost)) {
             switchToNextPlayerAndUpdateCurrentPlay();
             return new MovementResult(
                     MovementResultCode.INVALID_MOVEMENT,

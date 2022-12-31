@@ -584,11 +584,6 @@ public class TestGameManager {
         // Testing with not sufficient energy
         GameManager game = new GameManager();
 
-        String[][] playersInfo = new String[][] {
-                { "1", "Player 1", "L" },
-                { "3", "Player 2", "T" }
-        };
-        game.createInitialJungle(10, playersInfo);
 
         // Moving player with ID 1
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
@@ -597,6 +592,34 @@ public class TestGameManager {
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(2, false).code());
         game.players.get(0).setEnergy(1);
         assertEquals(MovementResultCode.NO_ENERGY, game.moveCurrentPlayer(4, true).code());
+    }
+
+    @Test
+    public void test_01_Energy() {
+        // Testing energy gain by consuming food
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "3" },
+                { "b", "6" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        assertEquals(80, player1.getEnergy());
+        game.moveCurrentPlayer(2, true);
+        // 80 (energy) - 2 (move) - 2 (move) + 15 (water) = 91
+        assertEquals(91, player1.getEnergy());
+
+        assertEquals(150, player2.getEnergy());
+        game.moveCurrentPlayer(5, true);
+        // 150 (energy) - 5 * 1 (move) + 40 (bananas) = 185
+        assertEquals(185, player2.getEnergy());
     }
 
     @Test
