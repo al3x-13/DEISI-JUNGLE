@@ -7,7 +7,7 @@ public class Species {
     private String name;
     private String imageFilename;
     private DietType diet;
-    private int energyUnits;
+    private int initialEnergy;
     private int energyConsumption;
     private int energyGainOnIdle;
     private int speedMin;
@@ -28,7 +28,7 @@ public class Species {
         this.name = name;
         this.imageFilename = imageFilename;
         this.diet = diet;
-        this.energyUnits = initialEnergy;
+        this.initialEnergy = initialEnergy;
         this.energyConsumption = energyConsumption;
         this.energyGainOnIdle = energyGainOnIdle;
         this.speedMin = speedMin;
@@ -60,7 +60,15 @@ public class Species {
      * @return Species data
      */
     String[] getSpeciesData() {
-        return new String[] { this.id.toString(), this.name, this.imageFilename };
+        return new String[] {
+                this.id.toString(),
+                this.name,
+                this.imageFilename,
+                String.valueOf(this.initialEnergy),
+                String.valueOf(this.energyConsumption),
+                String.valueOf(this.energyGainOnIdle),
+                getSpeed()
+        };
     }
 
     /**
@@ -87,8 +95,8 @@ public class Species {
     /**
      * @return Species current energy
      */
-    public int getEnergyUnits() {
-        return energyUnits;
+    public int getInitialEnergy() {
+        return initialEnergy;
     }
 
     /**

@@ -14,7 +14,7 @@ public class Player {
         this.id = id;
         this.name = name;
         this.species = species;
-        this.energyUnits = species.getEnergyUnits();
+        this.energyUnits = species.getInitialEnergy();
     }
 
     /**
