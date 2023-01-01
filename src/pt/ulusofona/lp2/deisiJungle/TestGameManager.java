@@ -581,17 +581,21 @@ public class TestGameManager {
 
     @Test
     public void test_05_MoveCurrentPlayer() {
-        // Testing with not sufficient energy
+        // Testing with not enough energy
         GameManager game = new GameManager();
-
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, playersInfo);
 
         // Moving player with ID 1
         assertEquals(1, game.players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(3, false).code());
-        assertEquals(4, game.players.get(0).getCurrentMapPosition());
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(4, false).code());
+        assertEquals(5, game.players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(2, false).code());
         game.players.get(0).setEnergy(1);
-        assertEquals(MovementResultCode.NO_ENERGY, game.moveCurrentPlayer(4, true).code());
+        assertEquals(MovementResultCode.NO_ENERGY, game.moveCurrentPlayer(4, false).code());
     }
 
     @Test
@@ -620,6 +624,69 @@ public class TestGameManager {
         game.moveCurrentPlayer(5, true);
         // 150 (energy) - 5 * 1 (move) + 40 (bananas) = 185
         assertEquals(185, player2.getEnergy());
+    }
+
+    @Test
+    public void test_02_Energy() {
+        // Testing energy gain by consuming water
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "Z" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "3" },
+                { "b", "6" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        assertEquals(80, player1.getEnergy());
+        game.moveCurrentPlayer(2, true);
+        // 80 (energy) - 2 (move) - 2 (move) + 15 (water) = 91
+        assertEquals(91, player1.getEnergy());
+
+        assertEquals(70, player2.getEnergy());
+        game.moveCurrentPlayer(2, true);
+        // 70 (energy) - 2 (move) - 2 (move) + 13 (water) = 79
+        assertEquals(79, player2.getEnergy());
+    }
+
+    @Test
+    public void test_03_Energy() {
+        // Testing energy gain by consuming more than 3 bananas
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "b", "3" },
+                { "b", "5" },
+                { "b", "7" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        game.moveCurrentPlayer(3, true);
+        assertEquals(150, player2.getEnergy());
+        game.moveCurrentPlayer(2, false);
+        // 150 (energy) - 1 (move) - 1 (move) + 40 (banana) = 188
+        assertEquals(188, player2.getEnergy());
+
+        game.moveCurrentPlayer(2, true);
+        game.moveCurrentPlayer(2, false);
+        // 188 (energy) - 1 (move) - 1 (move) - 40 (banana) = 146
+        assertEquals(146, player2.getEnergy());
+
+        game.moveCurrentPlayer(2, true);
+        game.moveCurrentPlayer(2, false);
+        // 146 (energy) - 1 (move) - 1 (move) - 40 (banana) = 104
+        assertEquals(104, player2.getEnergy());
     }
 
     @Test
