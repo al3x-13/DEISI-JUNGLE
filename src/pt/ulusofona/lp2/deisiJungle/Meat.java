@@ -34,6 +34,6 @@ public class Meat extends Food {
             this.spoiled = true;
         }
 
-        this.tooltip = "Carne : +- 50 energia : " + (currentPlay - 1) + " jogadas";
+        this.tooltip = "Carne : + 50 energia : " + (currentPlay - 1) + " jogadas";
     }
 }
