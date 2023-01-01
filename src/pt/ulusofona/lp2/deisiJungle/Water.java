@@ -14,7 +14,7 @@ public class Water extends Food {
         int foodEnergy;
         Species species = player.getSpecies();
         if (species.getDiet() == DietType.OMNIVORE) {
-            foodEnergy = (int) (species.getEnergyUnits() * 0.3f);
+            foodEnergy = (int) (player.getEnergy() * 0.2f);
         } else {
             foodEnergy = 15;
         }
