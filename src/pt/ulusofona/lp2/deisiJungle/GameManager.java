@@ -150,7 +150,7 @@ public class GameManager {
         if (foodsInfo != null) {
             for (String[] food : foodsInfo) {
                 // Checks if food ID has a valid format
-                Character foodID;
+                char foodID;
                 if (food[0] == null || food[0].length() == 0) {
                     return new InitializationError("Invalid Food ID! The Food ID must be a character.");
                 }
@@ -165,9 +165,9 @@ public class GameManager {
                 int foodPosition;
                 try {
                     foodPosition = Integer.parseInt(food[1]);
-                    if (foodPosition <= 1 || foodPosition >= jungleSize) {
+                    if (foodPosition < 1 || foodPosition > jungleSize) {
                         return new InitializationError(
-                                "Invalid Food Position! " +
+                                        "Invalid Food Position! " +
                                         "Food position must be in the map range except start and finish positions."
                         );
                     }
@@ -183,7 +183,7 @@ public class GameManager {
                 Food newFood = createFood(foodID);
                 if (!foodCell.addFood(newFood)) {
                     return new InitializationError(
-                            "Invalid Food Position! " +
+                                    "Invalid Food Position! " +
                                     "The given food position is already filled with anothe food item."
                     );
                 }
@@ -416,7 +416,7 @@ public class GameManager {
         if (caughtFood) {
             return new MovementResult(MovementResultCode.CAUGHT_FOOD, "Apanhou " + destinationCellFood.name);
         }
-        return new MovementResult(MovementResultCode.VALID_MOVEMENT, "Player moved successfully!");
+        return new MovementResult(MovementResultCode.VALID_MOVEMENT, null);
     }
 
     /**
@@ -817,7 +817,7 @@ public class GameManager {
 
         // Checks if the distance between the 2 closest players to the finish is greater than half the map
         int closestPlayerToFinishPosition = -1;
-        int secondClosestPlayerToFisnishPosition = -1;
+        int secondClosestPlayerToFinishPosition = -1;
         for (int i = map.getMapSize(); i > 0; i--) {
             MapCell currentCell = map.getMapCell(i);
             int[] playersIDsInCell = currentCell.getPlayerIDsInCell();
@@ -825,14 +825,14 @@ public class GameManager {
             for (int playerID : playersIDsInCell) {
                 if (closestPlayerToFinishPosition < 0) {
                     closestPlayerToFinishPosition = i;
-                } else if (secondClosestPlayerToFisnishPosition < 0) {
-                    secondClosestPlayerToFisnishPosition = i;
+                } else if (secondClosestPlayerToFinishPosition < 0) {
+                    secondClosestPlayerToFinishPosition = i;
                     break;
                 }
             }
         }
 
-        return (closestPlayerToFinishPosition - secondClosestPlayerToFisnishPosition) > (map.getMapSize() / 2);
+        return (closestPlayerToFinishPosition - secondClosestPlayerToFinishPosition) > (map.getMapSize() / 2);
     }
 
     /**
