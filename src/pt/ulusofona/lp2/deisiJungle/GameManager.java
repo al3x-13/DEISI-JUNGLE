@@ -181,12 +181,7 @@ public class GameManager {
                 // Places food in the given map position
                 // If that cell already has a food item returns an error
                 Food newFood = createFood(foodID);
-                if (!foodCell.addFood(newFood)) {
-                    return new InitializationError(
-                                    "Invalid Food Position! " +
-                                    "The given food position is already filled with anothe food item."
-                    );
-                }
+                foodCell.setFood(newFood);
             }
         }
 
@@ -352,13 +347,7 @@ public class GameManager {
         if (!bypassValidation) {
             if (nrSquaresAbs < currentPlayerSpecies.getSpeedMin() || nrSquaresAbs > currentPlayerSpecies.getSpeedMax()) {
                 switchToNextPlayerAndUpdateCurrentPlay();
-                return new MovementResult(
-                        MovementResultCode.INVALID_MOVEMENT,
-                        "Invalid number of squares! " +
-                                "Value for " + currentPlayerSpecies.getName() +
-                                " must be between " + currentPlayerSpecies.getSpeedMin() +
-                                " and " + currentPlayerSpecies.getSpeedMax() + "."
-                );
+                return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
             }
         }
 
@@ -367,10 +356,7 @@ public class GameManager {
         int playerEnergyConsumedPerMove = currentPlayer.getEnergyConsumption();
         int playEnergyCost = nrSquaresAbs * playerEnergyConsumedPerMove;
         if (playerEnergy < playEnergyCost) {
-            return new MovementResult(
-                    MovementResultCode.NO_ENERGY,
-                    "Player does not have enough energy to make the play!"
-            );
+            return new MovementResult(MovementResultCode.NO_ENERGY, null);
         }
 
         // Makes sure the player does not exceed map limit
@@ -387,10 +373,7 @@ public class GameManager {
 
         if (!map.movePlayerAndUpdateEnergy(currentPlayer, playerDestinationIndex, playEnergyCost)) {
             switchToNextPlayerAndUpdateCurrentPlay();
-            return new MovementResult(
-                    MovementResultCode.INVALID_MOVEMENT,
-                    "Could not move player!"
-            );
+            return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
         }
 
         // Increase player covered distance
@@ -710,7 +693,7 @@ public class GameManager {
                 }
 
                 // Adds food to cell
-                cell.addFood(foodItem);
+                cell.setFood(foodItem);
             }
         }
     }

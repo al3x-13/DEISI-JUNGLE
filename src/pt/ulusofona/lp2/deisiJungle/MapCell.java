@@ -144,15 +144,9 @@ public class MapCell {
     /**
      * Adds food item to cell.
      * @param food Food to add
-     * @return Whether food was successfully added
      */
-    boolean addFood(Food food) {
-        if (this.foodItem != null) {
-            return false;
-        }
-
+    void setFood(Food food) {
         this.foodItem = food;
-        return true;
     }
 
     /**
