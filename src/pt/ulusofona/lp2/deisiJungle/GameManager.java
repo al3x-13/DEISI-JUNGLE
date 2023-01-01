@@ -5,8 +5,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class GameManager {
     // Game Species
@@ -34,7 +37,6 @@ public class GameManager {
     int currentPlay = 1;
     // Stores the current round player index for 'players' ArrayList
     int currentRoundPlayerIndex;
-    int energySpentPerPlay = 2;  // Amount of energy spend on each play
     boolean gameOver;
 
     public GameManager() {}
@@ -165,8 +167,8 @@ public class GameManager {
                     foodPosition = Integer.parseInt(food[1]);
                     if (foodPosition <= 1 || foodPosition >= jungleSize) {
                         return new InitializationError(
-                            "Invalid Food Position! " +
-                            "Food position must be in the map range except start and finish positions."
+                                "Invalid Food Position! " +
+                                        "Food position must be in the map range except start and finish positions."
                         );
                     }
                 } catch (NumberFormatException e) {
@@ -182,7 +184,7 @@ public class GameManager {
                 if (!foodCell.addFood(newFood)) {
                     return new InitializationError(
                             "Invalid Food Position! " +
-                            "The given food position is already filled with anothe food item."
+                                    "The given food position is already filled with anothe food item."
                     );
                 }
             }
@@ -430,10 +432,10 @@ public class GameManager {
         for (Player player : this.players) {
             if (player.getCurrentMapPosition() == this.map.getFinishMapCellIndex()) {
                 return new String[] {
-                    String.valueOf(player.getID()),
-                    player.getName(),
-                    String.valueOf(player.getSpecies().getID()),
-                    String.valueOf(player.getEnergy())
+                        String.valueOf(player.getID()),
+                        player.getName(),
+                        String.valueOf(player.getSpecies().getID()),
+                        String.valueOf(player.getEnergy())
                 };
             }
         }
@@ -534,7 +536,7 @@ public class GameManager {
      * @return Whether the game state was successfully saved or not
      */
     public boolean saveGame(File file) {
-        return false;
+        return generateGameSave(file);
     }
 
     /**
@@ -543,7 +545,7 @@ public class GameManager {
      * @return Whether the game state was successfully loaded or not
      */
     public boolean loadGame(File file) {
-        return false;
+        return loadGameSave(file);
     }
 
     /**
@@ -554,6 +556,185 @@ public class GameManager {
         players = new ArrayList<>();
         map = null;
         this.gameOver = false;
+    }
+
+    private boolean generateGameSave(File file) {
+        try {
+            FileWriter fw = new FileWriter(file);
+            saveGameInfo(fw);
+            saveGameMap(fw);
+            // Close file at the end
+            fw.close();
+        } catch (IOException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private void saveGameInfo(FileWriter fw) throws IOException {
+        // Saves current play number
+        fw.write(String.valueOf(currentPlay));
+        fw.write('\n');
+        // Saves current round player index
+        fw.write(String.valueOf(currentRoundPlayerIndex));
+        fw.write('\n');
+        // Saves players
+        // Format: '<id>,<name>,<speciesID>,<energy>,<mapPosition>,<distanceCovered>,<foodConsumed>,<consumedBananas>'
+        for (int i = 0; i < 4; i++) {
+            if (i < players.size()) {
+                Player player = players.get(i);
+                String[] playerData = new String[8];
+                playerData[0] = String.valueOf(player.getID());
+                playerData[1] = String.valueOf(player.getName());
+                playerData[2] = String.valueOf(player.getSpecies().getID());
+                playerData[3] = String.valueOf(player.getEnergy());
+                playerData[4] = String.valueOf(player.getCurrentMapPosition());
+                playerData[5] = String.valueOf(player.getDistanceCovered());
+                playerData[6] = String.valueOf(player.getTotalFoodConsumed());
+                playerData[7] = String.valueOf(player.getConsumedBananas());
+                fw.write(String.join(",", playerData));
+            } else {
+                fw.write("NULL");
+            }
+            // Appends newline char at the end
+            fw.write('\n');
+        }
+    }
+
+    private void saveGameMap(FileWriter fw) throws IOException {
+        // Saves map size
+        fw.write(String.valueOf(this.map.getMapSize()));
+        fw.write('\n');
+
+        // Format: '<index>,<backgroundImageFilename>,<cellType>,<foodId>:<foodData>'
+        for (MapCell mapCell : map.map) {
+            Food food = mapCell.getFoodItem();
+            String[] cellData = new String[2];
+            cellData[0] = String.valueOf(mapCell.getIndex());
+
+            // Saves food data
+            if (food != null) {
+                switch (food.getID()) {
+                    case 'b':
+                        cellData[1] = food.getID() + ":" + ((Bananas) food).getConsumableUnits();
+                        break;
+                    case 'm':
+                        cellData[1] = food.getID() + ":" + ((MagicMushrooms) food).getMagicNumber();
+                        break;
+                    default:
+                        cellData[1] = food.getID() + ":NULL";
+                }
+            } else {
+                cellData[1] = "NULL";
+            }
+
+            // Writes cell data to file
+            fw.write(String.join(",", cellData));
+            fw.write('\n');
+        }
+    }
+
+    private boolean loadGameSave(File file) {
+        reset();
+        try {
+            Scanner scanner = new Scanner(file);
+            loadGameInfo(scanner);
+            loadGameMap(scanner);
+            if (!loadPlayersIntoCorrectCells()) {
+                scanner.close();
+                return false;
+            }
+            // Close scanner at the end
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
+
+    private void loadGameInfo(Scanner scanner) {
+        // Gets current play number
+        String currentPlayString = scanner.nextLine();
+        this.currentPlay = Integer.parseInt(currentPlayString);
+        // Gets current round player index
+        String currentRoundPlayerIndexString = scanner.nextLine();
+        this.currentRoundPlayerIndex = Integer.parseInt(currentRoundPlayerIndexString);
+
+        // Gets players' info
+        for (int i = 0; i < 4; i++) {
+            String[] playerData = scanner.nextLine().split(",");
+            if (!playerData[0].equals("NULL")) {
+                int id = Integer.parseInt(playerData[0]);
+                String name = playerData[1];
+                char speciesID = playerData[2].charAt(0);
+                int energy = Integer.parseInt(playerData[3]);
+                int currentPos = Integer.parseInt(playerData[4]);
+                int distanceCovered = Integer.parseInt(playerData[5]);
+                int totalFood = Integer.parseInt(playerData[6]);
+                int bananas = Integer.parseInt(playerData[7]);
+
+                Species species = getSpeciesByID(speciesID);
+                Player player = new Player(id, name, species);
+                player.loadSavedData(energy, currentPos, distanceCovered, totalFood, bananas);
+                this.players.add(player);
+            }
+        }
+    }
+
+    private void loadGameMap(Scanner scanner) {
+        // Gets map size
+        int mapSize = Integer.parseInt(scanner.nextLine());
+
+        // Creates Game Map
+        this.map = new GameMap(mapSize, this.players);
+
+        while (scanner.hasNext()) {
+            String[] cellData = scanner.nextLine().split(",");;
+            int index = Integer.parseInt(cellData[0]);
+            String foodString = cellData[1];
+
+            // Gets map cell
+            MapCell cell = this.map.getMapCell(index);
+
+            if (!foodString.equals("NULL")) {
+                String[] foodData = foodString.split(":");
+                char foodID = foodData[0].charAt(0);
+                Food foodItem = createFood(foodID);
+
+                if (foodID == 'b') {
+                    ((Bananas)foodItem).loadSavedData(Integer.parseInt(foodData[1]));
+                }
+                if (foodID == 'm') {
+                    ((MagicMushrooms)foodItem).loadSavedData(Integer.parseInt(foodData[1]));
+                }
+
+                // Adds food to cell
+                cell.addFood(foodItem);
+            }
+        }
+    }
+
+    private boolean loadPlayersIntoCorrectCells() {
+        // Gets cell
+        MapCell firstCell = this.map.getMapCell(1);
+
+        // Removes players from the first cell
+        for (Player player : this.players) {
+            if (!firstCell.rmPlayer(player.getID())) {
+                return false;
+            }
+        }
+
+        // Places players in the right cell
+        for (Player player : this.players) {
+            // Gets cell
+            MapCell cell = this.map.getMapCell(player.getCurrentMapPosition());
+            if (!cell.addPlayer(player.getID())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -613,7 +794,7 @@ public class GameManager {
                     lowestID = j;
                 }
             }
-;
+            ;
             Player temp = this.players.get(lowestID);
             this.players.set(lowestID, this.players.get(i));
             this.players.set(i, temp);
