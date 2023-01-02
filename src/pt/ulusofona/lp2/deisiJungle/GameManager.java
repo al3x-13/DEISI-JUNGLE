@@ -165,7 +165,7 @@ public class GameManager {
                 int foodPosition;
                 try {
                     foodPosition = Integer.parseInt(food[1]);
-                    if (foodPosition < 1 || foodPosition > jungleSize) {
+                    if (foodPosition <= 1 || foodPosition >= jungleSize) {
                         return new InitializationError(
                                         "Invalid Food Position! " +
                                         "Food position must be in the map range except start and finish positions."
