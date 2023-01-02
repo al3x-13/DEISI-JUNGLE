@@ -354,8 +354,9 @@ public class GameManager {
         // Checks if player has sufficient energy to make the play
         int playerEnergy = currentPlayer.getEnergy();
         int playerEnergyConsumedPerMove = currentPlayer.getEnergyConsumption();
-        int playEnergyCost = nrSquaresAbs * playerEnergyConsumedPerMove;
+        int playEnergyCost = nrSquares * playerEnergyConsumedPerMove;
         if (playerEnergy < playEnergyCost) {
+            switchToNextPlayerAndUpdateCurrentPlay();
             return new MovementResult(MovementResultCode.NO_ENERGY, null);
         }
 
@@ -383,7 +384,7 @@ public class GameManager {
         MapCell destinationCell = this.map.getMapCell(playerDestinationIndex);
         Food destinationCellFood = destinationCell.getFoodItem();
         // Checks if destination has food in it
-        if (destinationCellFood != null) {
+        if (destinationCellFood != null && destinationCellFood.canBeConsumedBySpecies(currentPlayerSpecies)) {
             // Food consumption by the player
             destinationCellFood.consumeFood(currentPlayer, currentPlay);
             caughtFood = true;
