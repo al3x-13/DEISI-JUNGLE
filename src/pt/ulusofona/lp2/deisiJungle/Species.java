@@ -3,7 +3,7 @@ package pt.ulusofona.lp2.deisiJungle;
 import java.util.Objects;
 
 public class Species {
-    private Character id;
+    private char id;
     private String name;
     private String imageFilename;
     private DietType diet;
@@ -14,7 +14,7 @@ public class Species {
     private int speedMax;
 
     public Species(
-            Character id,
+            char id,
             String name,
             String imageFilename,
             DietType diet,
@@ -44,7 +44,7 @@ public class Species {
      */
     public String[] getSpeciesData() {
         return new String[] {
-                this.id.toString(),
+                String.valueOf(this.id),
                 this.name,
                 this.imageFilename,
                 String.valueOf(this.initialEnergy),
