@@ -35,23 +35,6 @@ public class Species {
         this.speedMax = speedMax;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Species species = (Species) o;
-        return Objects.equals(id, species.id) && Objects.equals(name, species.name) && Objects.equals(imageFilename, species.imageFilename);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, imageFilename);
-    }
-
     /**
      * Provides information about the species. The format is a String array as follows:<p>
      * [0] -> Species ID<p>
