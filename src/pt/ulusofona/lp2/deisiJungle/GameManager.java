@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -39,7 +38,7 @@ public class GameManager {
     private int currentPlay = 1;
     // Stores the current round player index for 'players' ArrayList
     private int currentRoundPlayerIndex;
-    private boolean gameOver;
+    private String creditsImagePath = "src/images/credits.png";
 
     public GameManager() {}
 
@@ -361,9 +360,6 @@ public class GameManager {
             caughtFood = true;
         }
 
-        // Checks if game is over
-        this.gameOver = isGameOver();
-
         // Updates player for next play
         switchToNextPlayerAndUpdateCurrentPlay();
 
@@ -467,7 +463,7 @@ public class GameManager {
         JPanel credits = new JPanel();
         credits.setBounds(0, 0, 300, 300);
         credits.setBackground(new Color(195, 216, 218));
-        File bgFile = new File("src/images/credits.png");
+        File bgFile = new File(this.creditsImagePath);
 
         BufferedImage img;
         try {
@@ -513,7 +509,6 @@ public class GameManager {
     public void reset() {
         players = new ArrayList<>();
         map = null;
-        this.gameOver = false;
     }
 
     /**
@@ -772,7 +767,7 @@ public class GameManager {
      * than half of the map size.
      * @return Whether the game is over or not
      */
-    boolean isGameOver() {
+    public boolean isGameOver() {
         // Checks if any of the players arrived at the finish cell (AKA won)
         for (Player player : this.players) {
             if (player.getCurrentMapPosition() == this.map.getFinishMapCellIndex()) {
@@ -803,7 +798,7 @@ public class GameManager {
     /**
      * Updates the current shift player.
      */
-    void switchToNextPlayerAndUpdateCurrentPlay() {
+    private void switchToNextPlayerAndUpdateCurrentPlay() {
         // Updates player for next play
         currentRoundPlayerIndex = currentRoundPlayerIndex + 1 < this.players.size() ? currentRoundPlayerIndex + 1 : 0;
         // Updates current playe number
@@ -918,5 +913,13 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Updates credits image path.
+     * @param newPath Image Path
+     */
+    public void updateCreditsImagePath(String newPath) {
+        this.creditsImagePath = newPath;
     }
 }

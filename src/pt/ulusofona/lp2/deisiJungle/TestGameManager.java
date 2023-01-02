@@ -1404,6 +1404,8 @@ public class TestGameManager {
     public void test_Credits() {
         GameManager game = new GameManager();
         game.getAuthorsPanel();
+        game.updateCreditsImagePath("");
+        game.getAuthorsPanel();
     }
 
     @Test
