@@ -167,7 +167,7 @@ public class GameManager {
                     foodPosition = Integer.parseInt(food[1]);
                     if (foodPosition <= 1 || foodPosition >= jungleSize) {
                         return new InitializationError(
-                                        "Invalid Food Position! " +
+                                "Invalid Food Position! " +
                                         "Food position must be in the map range except start and finish positions."
                         );
                     }
@@ -344,7 +344,7 @@ public class GameManager {
         int nrSquaresAbs = Math.abs(nrSquares);
 
         // Checks if 'nrSquares' is a valid value without 'bypassValidation'
-        if (!bypassValidation) {
+        if (!bypassValidation && nrSquaresAbs != 0) {
             if (nrSquaresAbs < currentPlayerSpecies.getSpeedMin() || nrSquaresAbs > currentPlayerSpecies.getSpeedMax()) {
                 switchToNextPlayerAndUpdateCurrentPlay();
                 return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
@@ -354,31 +354,42 @@ public class GameManager {
         // Checks if player has sufficient energy to make the play
         int playerEnergy = currentPlayer.getEnergy();
         int playerEnergyConsumedPerMove = currentPlayer.getEnergyConsumption();
-        int playEnergyCost = nrSquares * playerEnergyConsumedPerMove;
-        if (playerEnergy < playEnergyCost) {
-            switchToNextPlayerAndUpdateCurrentPlay();
-            return new MovementResult(MovementResultCode.NO_ENERGY, null);
-        }
+        int playEnergyCost = nrSquaresAbs == 0 ?
+                currentPlayerSpecies.getEnergyGainOnIdle()
+                : nrSquaresAbs * playerEnergyConsumedPerMove;
 
-        // Makes sure the player does not exceed map limit
         int playerCurrentPosition = currentPlayer.getCurrentMapPosition();
         int playerDestinationIndex = playerCurrentPosition + nrSquares;
-        if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
-            playerDestinationIndex = this.map.getFinishMapCellIndex();
+
+        // Checks if player has moved or not
+        if (nrSquaresAbs == 0) {
+            // Increases player energy on idle
+            currentPlayer.increaseEnergy(currentPlayerSpecies.getEnergyGainOnIdle());
+        } else {
+            if (playerEnergy < playEnergyCost) {
+                switchToNextPlayerAndUpdateCurrentPlay();
+                return new MovementResult(MovementResultCode.NO_ENERGY, null);
+            }
+
+            // Makes sure the player does not exceed map limit
+            if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
+                playerDestinationIndex = this.map.getFinishMapCellIndex();
+            }
+
+            // Makes sure the player cannot retreat behind position 1
+            if (playerDestinationIndex < 1) {
+                playerDestinationIndex = 1;
+            }
+
+            if (!map.movePlayerAndUpdateEnergy(currentPlayer, playerDestinationIndex, playEnergyCost)) {
+                switchToNextPlayerAndUpdateCurrentPlay();
+                return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
+            }
+
+            // Increases player covered distance
+            currentPlayer.increaseDistanceCovered(Math.abs(nrSquares));
         }
 
-        // Makes sure the player cannot retreat behind position 1
-        if (playerDestinationIndex < 1) {
-            playerDestinationIndex = 1;
-        }
-
-        if (!map.movePlayerAndUpdateEnergy(currentPlayer, playerDestinationIndex, playEnergyCost)) {
-            switchToNextPlayerAndUpdateCurrentPlay();
-            return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
-        }
-
-        // Increase player covered distance
-        currentPlayer.increaseDistanceCovered(Math.abs(nrSquares));
 
         boolean caughtFood = false;
         MapCell destinationCell = this.map.getMapCell(playerDestinationIndex);
