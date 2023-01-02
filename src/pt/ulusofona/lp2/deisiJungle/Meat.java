@@ -23,7 +23,7 @@ public class Meat extends Food {
             if (currentPlay <= 12) {
                 player.consumeFood(50);
             } else {
-                player.decreaseEnergy(player.getEnergy() / 2);
+                player.consumeFood(-(player.getEnergy() / 2));
             }
         }
     }

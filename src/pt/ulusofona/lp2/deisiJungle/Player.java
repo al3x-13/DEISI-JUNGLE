@@ -129,7 +129,9 @@ public class Player {
     public void consumeFood(int foodEnergy) {
         if (this.energyUnits + foodEnergy > 200) {
             this.energyUnits = 200;
-        } else {
+        } else if (this.energyUnits + foodEnergy < 0) {
+            this.energyUnits = 0;
+        }else {
             this.energyUnits += foodEnergy;
         }
         this.totalFoodConsumed++;

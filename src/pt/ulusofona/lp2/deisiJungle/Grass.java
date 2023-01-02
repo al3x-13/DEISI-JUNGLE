@@ -15,7 +15,7 @@ public class Grass extends Food {
         if (species.getDiet() == DietType.HERBIVORE || species.getDiet() == DietType.OMNIVORE) {
             player.consumeFood(20);
         } else {
-            player.decreaseEnergy(20);
+            player.consumeFood(-20);
         }
     }
 
