@@ -132,16 +132,50 @@ public class TestGameManager {
     public void test_08_CreateInitialJungle() {
         // Testing with valid values
         GameManager game = new GameManager();
-
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "L"},
                 { "3", "Player 2", "T"}
         };
-
         String[][] foodsInfo = new String[][] {
                 { "a", "3" }
         };
         assertNull(game.createInitialJungle(10, playersInfo, foodsInfo));
+    }
+
+    @Test
+    public void test_09_CreateInitialJungle() {
+        // Testing with invalid player ID
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "lulz", "Player 1", "L"},
+                { "3", "Player 2", "T"}
+        };
+        InitializationError error = game.createInitialJungle(10, playersInfo);
+        assertEquals("Invalid player ID! The ID must be a number.", error.getMessage());
+    }
+
+    @Test
+    public void test_10_CreateInitialJungle() {
+        // Testing with invalid Species ID
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", ""},
+                { "3", "Player 2", "T"}
+        };
+        InitializationError error = game.createInitialJungle(10, playersInfo);
+        assertEquals("Invalid Species ID! The Species ID must be a character.", error.getMessage());
+    }
+
+    @Test
+    public void test_11_CreateInitialJungle() {
+        // Testing with multiple Tarzans
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "Z"},
+                { "3", "Player 2", "Z"}
+        };
+        InitializationError error = game.createInitialJungle(10, playersInfo);
+        assertEquals("Tarzan already exists!", error.getMessage());
     }
 
     @Test
@@ -162,7 +196,6 @@ public class TestGameManager {
     public void test_02_GetPlayerIds() {
         // Testing with multiple player IDs in the same cell
         GameManager game = new GameManager();
-
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "L"},
                 { "3", "Player 2", "T"},
@@ -189,6 +222,19 @@ public class TestGameManager {
         expectedResult = new int[] { 5 };
         assertEquals(expectedResult.length, game.getPlayerIds(10).length);
         assertEquals(expectedResult[0], game.getPlayerIds(10)[0]);
+    }
+
+    @Test
+    public void test_03_GetPlayerIds() {
+        // Testing with invalid cell
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][]{
+                {"1", "Player 1", "L"},
+                {"3", "Player 2", "T"},
+                {"4", "Player 3", "T"}
+        };
+        game.createInitialJungle(10, playersInfo);
+        game.getPlayerIds(0);
     }
 
     @Test
