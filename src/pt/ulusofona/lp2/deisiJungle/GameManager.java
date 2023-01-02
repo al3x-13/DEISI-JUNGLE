@@ -553,6 +553,16 @@ public class GameManager {
         this.gameOver = false;
     }
 
+    /**
+     * File format:<p>
+     * Line | Info<p>
+     * 1    | Current Play Number<p>
+     * 2    | Current Round Player Index<p>
+     * 4..7 | Player Data<p>
+     * 8..  | Map Cell Data<p>
+     * @param file File
+     * @return Whether the save was successfully generated
+     */
     private boolean generateGameSave(File file) {
         try {
             FileWriter fw = new FileWriter(file);
@@ -630,6 +640,10 @@ public class GameManager {
         }
     }
 
+    /**
+     * @param file File
+     * @return Whether the save was successfully loaded
+     */
     private boolean loadGameSave(File file) {
         reset();
         try {
