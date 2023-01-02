@@ -94,7 +94,13 @@ public class Player {
      * @param energyUnits Energy units to decrease from overall energy
      */
     void decreaseEnergy(int energyUnits) {
-        this.energyUnits -= energyUnits;
+        if (this.energyUnits - energyUnits < 0) {
+            this.energyUnits = 0;
+        } else if (this.energyUnits + energyUnits > 200) {
+
+        } else {
+            this.energyUnits -= energyUnits;
+        }
     }
 
     /**
@@ -111,7 +117,11 @@ public class Player {
      * @param foodEnergy Energy to add/subtract
      */
     void consumeFood(int foodEnergy) {
-        this.energyUnits += foodEnergy;
+        if (this.energyUnits + foodEnergy > 200) {
+            this.energyUnits = 200;
+        } else {
+            this.energyUnits += foodEnergy;
+        }
         this.totalFoodConsumed++;
     }
 
