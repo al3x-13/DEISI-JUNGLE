@@ -199,10 +199,9 @@ public class TestGameManager {
                 { "3", "Player 2", "T"}
         };
         game.createInitialJungle(10, playersInfo);
-        int[] expectedResult = null;
-        assertEquals(expectedResult, game.getSquareInfo(30));
-        assertEquals(expectedResult, game.getSquareInfo(11));
-        assertEquals(expectedResult, game.getSquareInfo(0));
+        assertNull(game.getSquareInfo(30));
+        assertNull(game.getSquareInfo(11));
+        assertNull(game.getSquareInfo(0));
     }
 
     @Test
@@ -599,6 +598,28 @@ public class TestGameManager {
     }
 
     @Test
+    public void test_06_MoveCurrentPlayer() {
+        // Testing with backwards movements
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, playersInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        assertEquals(1, player1.getCurrentMapPosition());
+        game.moveCurrentPlayer(-5, false);
+        assertEquals(1, player1.getCurrentMapPosition());
+
+        assertEquals(1, player2.getCurrentMapPosition());
+        game.moveCurrentPlayer(-2, false);
+        assertEquals(1, player2.getCurrentMapPosition());
+    }
+
+    @Test
     public void test_01_Energy() {
         // Testing energy gain by consuming food
         GameManager game = new GameManager();
@@ -687,6 +708,90 @@ public class TestGameManager {
         game.moveCurrentPlayer(2, false);
         // 146 (energy) - 1 (move) - 1 (move) - 40 (banana) = 104
         assertEquals(104, player2.getEnergy());
+    }
+
+    @Test
+    public void test_04_Energy() {
+        // Testing energy gain by moving backwards
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "b", "3" },
+                { "b", "5" },
+                { "b", "7" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        assertEquals(80, player1.getEnergy());
+        game.moveCurrentPlayer(-5, false);
+        // 80 (energy) - 10 (move) = 70
+        assertEquals(70, player1.getEnergy());
+    }
+
+    @Test
+    public void test_05_Energy() {
+        // Testing energy gain by staying in place
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "b", "3" },
+                { "b", "5" },
+                { "b", "7" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        assertEquals(80, player1.getEnergy());
+        game.moveCurrentPlayer(0, false);
+        assertEquals(90, player1.getEnergy());
+
+        assertEquals(150, player2.getEnergy());
+        game.moveCurrentPlayer(0, false);
+        assertEquals(155, player2.getEnergy());
+    }
+
+    @Test
+    public void test_06_Energy() {
+        // Testing if energy exceeds 200
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "E" },
+                { "3", "Player 2", "T" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "b", "3" },
+                { "b", "5" },
+                { "b", "7" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        assertEquals(180, player1.getEnergy());
+        game.moveCurrentPlayer(0, false);
+        assertEquals(190, player1.getEnergy());
+
+        game.moveCurrentPlayer(0, false);
+
+        game.moveCurrentPlayer(0, false);
+        assertEquals(200, player1.getEnergy());
+
+        game.moveCurrentPlayer(0, false);
+
+        game.moveCurrentPlayer(0, false);
+        assertEquals(200, player1.getEnergy());
     }
 
     @Test
