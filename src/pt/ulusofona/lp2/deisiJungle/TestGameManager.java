@@ -10,6 +10,12 @@ import static org.junit.Assert.*;
 
 public class TestGameManager {
     @Test
+    public void test_Main() {
+        Main main = new Main();
+        assertEquals("lulz", main.getLulz());
+    }
+
+    @Test
     public void test_01_CreateInitialJungle() {
         // Testing 2 players with same ID
         GameManager game = new GameManager();
