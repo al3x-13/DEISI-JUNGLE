@@ -39,14 +39,14 @@ public class Meat extends Food {
      * @param currentPlay Current Player Number
      */
     public void updateSpoilStatusAndTooltip(int currentPlay) {
-        if (currentPlay > 12) {
+        if ((currentPlay - 1) > 12) {
             this.spoiled = true;
         }
 
         if (this.spoiled) {
             this.tooltip = "Carne toxica";
         } else {
-            this.tooltip = "Carne : + 50 energia : " + currentPlay + " jogadas";
+            this.tooltip = "Carne : + 50 energia : " + (currentPlay - 1) + " jogadas";
         }
     }
 }
