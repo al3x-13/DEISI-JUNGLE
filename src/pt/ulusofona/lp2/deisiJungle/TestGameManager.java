@@ -2,6 +2,7 @@ package pt.ulusofona.lp2.deisiJungle;
 
 import org.junit.Test;
 
+import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,6 +183,41 @@ public class TestGameManager {
         };
         InitializationError error = game.createInitialJungle(10, playersInfo);
         assertEquals("Tarzan already exists!", error.getMessage());
+    }
+
+    @Test
+    public void test_12_CreateInitialJungle() {
+        // Testing with invalid food position
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "E"},
+                { "3", "Player 2", "Z"}
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "0" }
+        };
+        InitializationError error = game.createInitialJungle(10, playersInfo, foodsInfo);
+        assertEquals(
+                "Invalid Food Position! Food position must be in " +
+                        "the map range except start and finish positions.",
+                error.getMessage());
+    }
+
+    @Test
+    public void test_13_CreateInitialJungle() {
+        // Testing with invalid food value
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "E"},
+                { "3", "Player 2", "Z"}
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "lulz" }
+        };
+        InitializationError error = game.createInitialJungle(10, playersInfo, foodsInfo);
+        assertEquals(
+                "Invalid Food Position! Food position must be an integer value.",
+                error.getMessage());
     }
 
     @Test
@@ -681,6 +717,25 @@ public class TestGameManager {
     }
 
     @Test
+    public void test_07_MoveCurrentPlayer() {
+        // Testing movement by a player in the same cell twice
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        MapCell cell = game.getMap().getMapCell(5);
+        cell.addPlayer(1);
+
+        assertNotNull(game.moveCurrentPlayer(4, true));
+    }
+
+    @Test
     public void test_01_Energy() {
         // Testing energy gain by consuming food
         GameManager game = new GameManager();
@@ -829,7 +884,7 @@ public class TestGameManager {
 
     @Test
     public void test_06_Energy() {
-        // Testing if energy exceeds 200
+        // Testing if energy exceeds 200 by staying in food cell
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "E" },
@@ -865,6 +920,46 @@ public class TestGameManager {
 
     @Test
     public void test_07_Energy() {
+        // Testing if energy exceeds 200 by moving
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "E" },
+                { "3", "Player 2", "T" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "b", "2" },
+                { "a", "3" },
+                { "a", "4" },
+                { "a", "5" },
+                { "a", "6" },
+                { "a", "7" },
+                { "a", "8" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
+
+        Player player1 = players.get(0);
+
+        assertEquals(180, player1.getEnergy());
+        game.moveCurrentPlayer(1, false);
+        assertEquals(200, player1.getEnergy());
+
+        game.moveCurrentPlayer(1, false);
+
+        game.moveCurrentPlayer(1, false);
+        assertEquals(200, player1.getEnergy());
+
+        game.moveCurrentPlayer(1, false);
+
+        game.moveCurrentPlayer(1, false);
+        assertEquals(200, player1.getEnergy());
+
+        game.moveCurrentPlayer(1, false);
+        assertEquals(200, player1.getEnergy());
+    }
+
+    @Test
+    public void test_08_Energy() {
         // Testing energy gain after consuming spoiled meat
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
@@ -899,7 +994,7 @@ public class TestGameManager {
     }
 
     @Test
-    public void test_08_Energy() {
+    public void test_09_Energy() {
         // Testing energy to check if it goes below 0
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
@@ -927,7 +1022,7 @@ public class TestGameManager {
     }
 
     @Test
-    public void test_09_Energy() {
+    public void test_10_Energy() {
         // Testing energy gain by consuming Magic Mushroom
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
@@ -960,7 +1055,7 @@ public class TestGameManager {
     }
 
     @Test
-    public void test_10_Energy() {
+    public void test_11_Energy() {
         // Testing energy gain by consuming multiple foods
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
@@ -992,6 +1087,28 @@ public class TestGameManager {
         game.moveCurrentPlayer(5, true);
         // 70 - 10 (move) + 12 (water) = 72
         assertEquals(72, player2.getEnergy());
+    }
+
+    @Test
+    public void test_12_Energy() {
+        // Testing if energy does not drop below 0 when constantly moving
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "Z" },
+        };
+        game.createInitialJungle(50, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+
+        for (int i = 0; i < 84; i++) {
+            game.moveCurrentPlayer(1, true);
+        }
+
+        assertEquals(0, player1.getEnergy());
+        assertEquals(0, player2.getEnergy());
     }
 
     @Test
@@ -1150,12 +1267,31 @@ public class TestGameManager {
         };
         String[][] foodsInfo = new String[][] {
                 { "a", "3" },
-                { "b", "7" }
+                { "b", "7" },
+                { "m", "9" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
 
         File saveFile = new File("test-files/test_save_game");
         assertTrue(game.saveGame(saveFile));
+    }
+
+    @Test
+    public void test_02_SaveGame() {
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "3" },
+                { "b", "7" },
+                { "m", "9" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        File saveFile = new File("");
+        assertFalse(game.saveGame(saveFile));
     }
 
     @Test
@@ -1167,11 +1303,22 @@ public class TestGameManager {
         };
         game.createInitialJungle(33, playersInfo);
 
-        File saveFile = new File("test-files/save_game");
+        File saveFile = new File("test-files/load_game");
         assertTrue(game.loadGame(saveFile));
-        // TODO
     }
 
+    @Test
+    public void test_02_LoadGame() {
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "5", "Player 1", "E" },
+                { "9", "Player 2", "L" }
+        };
+        game.createInitialJungle(33, playersInfo);
+
+        File saveFile = new File("");
+        assertFalse(game.loadGame(saveFile));
+    }
 
     @Test
     public void test_01_getSpecies() {
@@ -1251,5 +1398,17 @@ public class TestGameManager {
     public void test_01_InitializationError() {
         InitializationError error = new InitializationError("Test error");
         assertEquals("Test error", error.getMessage());
+    }
+
+    @Test
+    public void test_Credits() {
+        GameManager game = new GameManager();
+        assertNotNull(game.getAuthorsPanel());
+    }
+
+    @Test
+    public void test_WhoIsTaborda() {
+        GameManager game = new GameManager();
+        assertEquals("professional wrestling", game.whoIsTaborda());
     }
 }

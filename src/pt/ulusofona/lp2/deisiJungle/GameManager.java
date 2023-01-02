@@ -694,18 +694,14 @@ public class GameManager {
 
         // Removes players from the first cell
         for (Player player : this.players) {
-            if (!firstCell.rmPlayer(player.getID())) {
-                return false;
-            }
+            firstCell.rmPlayer(player.getID());
         }
 
         // Places players in the right cell
         for (Player player : this.players) {
             // Gets cell
             MapCell cell = this.map.getMapCell(player.getCurrentMapPosition());
-            if (!cell.addPlayer(player.getID())) {
-                return false;
-            }
+            cell.addPlayer(player.getID());
         }
         return true;
     }
