@@ -2,6 +2,8 @@ package pt.ulusofona.lp2.deisiJungle;
 
 import org.junit.Test;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
@@ -777,7 +779,6 @@ public class TestGameManager {
         game.createInitialJungle(10, playersInfo, foodsInfo);
 
         Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
 
         assertEquals(180, player1.getEnergy());
         game.moveCurrentPlayer(0, false);
@@ -792,6 +793,70 @@ public class TestGameManager {
 
         game.moveCurrentPlayer(0, false);
         assertEquals(200, player1.getEnergy());
+
+        game.moveCurrentPlayer(0, false);
+        assertEquals(200, player1.getEnergy());
+    }
+
+    @Test
+    public void test_07_Energy() {
+        // Testing energy gain after consuming spoiled meat
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "Z" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "c", "8" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        // Makes 12 plays
+        for (int i = 0; i < 11; i++) {
+             game.moveCurrentPlayer(1, true);
+        }
+
+        assertEquals(60, player2.getEnergy());
+        game.moveCurrentPlayer(1, true);
+        assertEquals(58, player2.getEnergy());
+
+        assertEquals(68, player1.getEnergy());
+        game.moveCurrentPlayer(1, true);
+        assertEquals(33, player1.getEnergy());
+
+        assertEquals(58, player2.getEnergy());
+        game.moveCurrentPlayer(1, true);
+        assertEquals(28, player2.getEnergy());
+    }
+
+    @Test
+    public void test_08_Energy() {
+        // Testing energy to check if it goes below 0
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "L" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "e", "2" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        game.moveCurrentPlayer(1, true);
+        game.moveCurrentPlayer(1, true);
+
+        for (int i = 0; i < 20; i++) {
+            game.moveCurrentPlayer(0, false);
+        }
+
+        assertEquals(0, player1.getEnergy());
+        assertEquals(0, player2.getEnergy());
     }
 
     @Test
@@ -843,26 +908,64 @@ public class TestGameManager {
 
     @Test
     public void test_03_FullGame() {
-        // Testing no energy tie
+        // Testing win by gap between 2 first player bigger than half the map
         GameManager game = new GameManager();
 
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "L" },
-                { "3", "Player 2", "T" }
+                { "3", "Player 2", "T" },
+                { "8", "Player 3", "Z" }
         };
-        game.createInitialJungle(10, playersInfo);
+        game.createInitialJungle(12, playersInfo);
 
         game.moveCurrentPlayer(2, true);
-        assertFalse(game.isGameOver());
-        assertNull(game.getWinnerInfo());
-        game.moveCurrentPlayer(5, true);
-        assertFalse(game.isGameOver());
-        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(1, true);
         game.moveCurrentPlayer(2, true);
-        assertFalse(game.isGameOver());
-        assertNull(game.getWinnerInfo());
+        game.moveCurrentPlayer(3, true);
+        game.moveCurrentPlayer(1, true);
+        game.moveCurrentPlayer(1, true);
         game.moveCurrentPlayer(5, true);
+
         assertTrue(game.isGameOver());
-        assertEquals(3, Integer.parseInt(game.getWinnerInfo()[0]));
+        assertEquals(8, Integer.parseInt(game.getWinnerInfo()[0]));
+        ArrayList<String> results = game.getGameResults();
+
+        // Checks game results
+        assertTrue(
+                results.get(0).equals("#1 Player 3, Tarzan, 4, 3, 0")
+                        && results.get(1).equals("#2 Player 1, Leão, 11, 10, 0")
+                        && results.get(2).equals("#3 Player 2, Tartaruga, 3, 2, 0")
+        );
+    }
+
+    @Test
+    public void test_01_SaveGame() {
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "3" },
+                { "b", "7" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        File saveFile = new File("test-files/test_save_game");
+        assertTrue(game.saveGame(saveFile));
+    }
+
+    @Test
+    public void test_01_LoadGame() {
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "5", "Player 1", "E" },
+                { "9", "Player 2", "L" }
+        };
+        game.createInitialJungle(33, playersInfo);
+
+        File saveFile = new File("test-files/save_game");
+        assertTrue(game.saveGame(saveFile));
+        // TODO
     }
 }
