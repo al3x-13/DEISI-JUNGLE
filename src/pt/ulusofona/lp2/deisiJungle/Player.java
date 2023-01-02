@@ -85,19 +85,29 @@ public class Player {
      * Updates Player Map Position
      * @param newPosition New Player Position
      */
-    void updateMapPosition(int newPosition) {
+    public void updateMapPosition(int newPosition) {
         this.currentMapPosition = newPosition;
+    }
+
+    /**
+     * Increases player energy by the given amount of units.
+     * @param energyUnits Energy units to increase from overall energy
+     */
+    public void increaseEnergy(int energyUnits) {
+        if (this.energyUnits + energyUnits > 200) {
+            this.energyUnits = 200;
+        } else {
+            this.energyUnits += energyUnits;
+        }
     }
 
     /**
      * Decreases player energy by the given amount of units (move cost).
      * @param energyUnits Energy units to decrease from overall energy
      */
-    void decreaseEnergy(int energyUnits) {
+    public void decreaseEnergy(int energyUnits) {
         if (this.energyUnits - energyUnits < 0) {
             this.energyUnits = 0;
-        } else if (this.energyUnits + energyUnits > 200) {
-
         } else {
             this.energyUnits -= energyUnits;
         }
@@ -107,7 +117,7 @@ public class Player {
      * Increases distance covered by the player
      * @param nrCells Number of cells to increase
      */
-    void increaseDistanceCovered(int nrCells) {
+    public void increaseDistanceCovered(int nrCells) {
         this.distanceCovered += nrCells;
     }
 
@@ -116,7 +126,7 @@ public class Player {
      * Increases total consumed food count by 1.
      * @param foodEnergy Energy to add/subtract
      */
-    void consumeFood(int foodEnergy) {
+    public void consumeFood(int foodEnergy) {
         if (this.energyUnits + foodEnergy > 200) {
             this.energyUnits = 200;
         } else {
@@ -135,7 +145,7 @@ public class Player {
     /**
      * Increases total bananas consumed by 1.
      */
-    void increaseBananasConsumedBy1() {
+    public void increaseBananasConsumedBy1() {
         this.consumedBananas++;
     }
 
@@ -146,7 +156,7 @@ public class Player {
      * @param totalFoodConsumed Total Food Consumed
      * @param consumedBananas Consumed Bananas
      */
-    void loadSavedData(int energyUnits, int currentMapPosition, int distanceCovered, int totalFoodConsumed, int consumedBananas) {
+    public void loadSavedData(int energyUnits, int currentMapPosition, int distanceCovered, int totalFoodConsumed, int consumedBananas) {
         this.energyUnits = energyUnits;
         this.currentMapPosition = currentMapPosition;
         this.distanceCovered = distanceCovered;
