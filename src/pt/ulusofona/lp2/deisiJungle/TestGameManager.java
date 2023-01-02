@@ -3,6 +3,7 @@ package pt.ulusofona.lp2.deisiJungle;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -929,11 +930,12 @@ public class TestGameManager {
         assertTrue(game.isGameOver());
         assertEquals(8, Integer.parseInt(game.getWinnerInfo()[0]));
         ArrayList<String> results = game.getGameResults();
+        System.out.println(results.toString());
 
         // Checks game results
         assertTrue(
                 results.get(0).equals("#1 Player 3, Tarzan, 4, 3, 0")
-                        && results.get(1).equals("#2 Player 1, Leão, 11, 10, 0")
+                        && results.get(1).equals("#2 Player 1, Leao, 11, 10, 0")
                         && results.get(2).equals("#3 Player 2, Tartaruga, 3, 2, 0")
         );
     }

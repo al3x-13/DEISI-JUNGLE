@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -473,7 +474,10 @@ public class GameManager {
                                     .append(" ")
                                     .append(player.getName())
                                     .append(", ")
-                                    .append(player.getSpecies().getName())
+                                    .append(Normalizer.normalize(
+                                            player.getSpecies().getName(), Normalizer.Form.NFD)
+                                            .replaceAll("[^\\p{ASCII}]", "")
+                                    )
                                     .append(", ")
                                     .append(player.getCurrentMapPosition())
                                     .append(", ")
