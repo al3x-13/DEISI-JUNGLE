@@ -41,7 +41,7 @@ public class MapCell {
      * @param playerID Player ID
      * @return Whether the player ID is in the cell
      */
-    boolean hasPlayerID(int playerID) {
+    public boolean hasPlayerID(int playerID) {
         for (int id : this.playerIDsInCell) {
             if (id == playerID) {
                 return true;
@@ -55,7 +55,7 @@ public class MapCell {
      * @param playerID Player ID
      * @return Whether the player ID was successfully added
      */
-    boolean addPlayer(int playerID) {
+    public boolean addPlayer(int playerID) {
         // Check if ID is already in cell
         if (this.hasPlayerID(playerID)) {
             return false;
@@ -71,7 +71,7 @@ public class MapCell {
      * @param playerID Player ID
      * @return Whether the player ID was successfully removed
      */
-    boolean rmPlayer(int playerID) {
+    public boolean rmPlayer(int playerID) {
         // Check if ID is in the cell
         if (!this.hasPlayerID(playerID)) {
             return false;
@@ -91,21 +91,21 @@ public class MapCell {
     /**
      * @return Cell Index
      */
-    int getIndex(){
+    public int getIndex(){
         return this.index;
     }
 
     /**
      * @return Cell type
      */
-    String getCellType() {
+    public String getCellType() {
         return this.cellType;
     }
 
     /**
      * @return Image filename
      */
-    String getImageFilename() {
+    public String getImageFilename() {
         return this.backgroundImageFilename;
     }
 
@@ -113,7 +113,7 @@ public class MapCell {
      * Gets player IDs in current cell in integer array format (e.g. [3,5], for players with ID 3 and 5).
      * @return Array with player IDs
      */
-    int[] getPlayerIDsInCell(){
+    public int[] getPlayerIDsInCell(){
         int output[] = new int[this.playerIDsInCell.size()];
         for (int i = 0; i < this.playerIDsInCell.size(); i++){
             output[i] = this.playerIDsInCell.get(i);
@@ -125,7 +125,7 @@ public class MapCell {
      * Gets player IDs in current cell in String format (e.g. "3,5", for players with ID 3 and 5).
      * @return String with current players in cell
      */
-    String getPlayerIDsInCellToString() {
+    public String getPlayerIDsInCellToString() {
         String output = "";
 
         if (this.playerIDsInCell.size() > 0) {
@@ -145,14 +145,14 @@ public class MapCell {
      * Adds food item to cell.
      * @param food Food to add
      */
-    void setFood(Food food) {
+    public void setFood(Food food) {
         this.foodItem = food;
     }
 
     /**
      * @return Cell Food Item, if there's no food returns null
      */
-    Food getFoodItem(){
+    public Food getFoodItem(){
         return this.foodItem;
     }
 }

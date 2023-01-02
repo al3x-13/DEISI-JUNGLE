@@ -171,7 +171,7 @@ public class TestGameManager {
         game.createInitialJungle(10, playersInfo);
 
         // Adds player with ID 3 to cell with index 20
-        MapCell cell = game.map.getMapCell(10);
+        MapCell cell = game.getMap().getMapCell(10);
         cell.addPlayer(3);
         int[] expectedResult = new int[] { 3 };
         assertEquals(expectedResult.length, game.getPlayerIds(10).length);
@@ -238,7 +238,7 @@ public class TestGameManager {
         game.createInitialJungle(10, playersInfo);
 
         // Add players with ID 3 to cell 5
-        MapCell cell = game.map.getMapCell(5);
+        MapCell cell = game.getMap().getMapCell(5);
         cell.addPlayer(3);
         String[] expectedResult = new String[] { "middle.png", "Vazio", "3" };
         String[] realResult = game.getSquareInfo(5);
@@ -261,7 +261,7 @@ public class TestGameManager {
         game.createInitialJungle(10, playersInfo);
 
         // Add players with ID 3 to cell 5
-        MapCell cell = game.map.getMapCell(10);
+        MapCell cell = game.getMap().getMapCell(10);
         cell.addPlayer(3);
 
         String[] expectedResult = new String[] { "finish.png", "Meta", "3" };
@@ -472,12 +472,13 @@ public class TestGameManager {
         };
         game.createInitialJungle(10, playersInfo);
         game.sortPlayersByID();
+        ArrayList<Player> players = game.getPlayers();
 
         assertTrue(
-                game.players.get(0).getID() == 1
-                        && game.players.get(1).getID() == 3
-                        && game.players.get(2).getID() == 4
-                        && game.players.get(3).getID() == 22
+                players.get(0).getID() == 1
+                        && players.get(1).getID() == 3
+                        && players.get(2).getID() == 4
+                        && players.get(3).getID() == 22
         );
     }
 
@@ -494,12 +495,13 @@ public class TestGameManager {
         };
         game.createInitialJungle(10, playersInfo);
         game.sortPlayersByID();
+        ArrayList<Player> players = game.getPlayers();
 
         assertTrue(
-                game.players.get(0).getID() == 1
-                        && game.players.get(1).getID() == 3
-                        && game.players.get(2).getID() == 4
-                        && game.players.get(3).getID() == 22
+                players.get(0).getID() == 1
+                        && players.get(1).getID() == 3
+                        && players.get(2).getID() == 4
+                        && players.get(3).getID() == 22
         );
     }
 
@@ -513,10 +515,11 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertEquals(1, players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(7, false).code());
-        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertEquals(1, players.get(0).getCurrentMapPosition());
     }
 
     @Test
@@ -529,10 +532,11 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertEquals(1, players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(7, true).code());
-        assertEquals(8, game.players.get(0).getCurrentMapPosition());
+        assertEquals(8, players.get(0).getCurrentMapPosition());
     }
 
     @Test
@@ -545,16 +549,17 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
 
         // Moving player with ID 1
-        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertEquals(1, players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(5, false).code());
         // Getting current player position from player object
-        assertEquals(6, game.players.get(0).getCurrentMapPosition());
+        assertEquals(6, players.get(0).getCurrentMapPosition());
         // Checking if player was removed from the previous cell
-        assertFalse(game.map.map[0].hasPlayerID(1));
+        assertFalse(game.getMap().getMapCell(1).hasPlayerID(1));
         // Checking if player was added to the correct cell
-        assertTrue(game.map.map[5].hasPlayerID(1));
+        assertTrue(game.getMap().getMapCell(6).hasPlayerID(1));
     }
 
     @Test
@@ -567,16 +572,17 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
 
         // Moving player with ID 1
-        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertEquals(1, players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(11, true).code());
         // Getting current player position from player object
-        assertEquals(10, game.players.get(0).getCurrentMapPosition());
+        assertEquals(10, players.get(0).getCurrentMapPosition());
         // Checking if player was removed from the previous cell
-        assertFalse(game.map.map[0].hasPlayerID(1));
+        assertFalse(game.getMap().getMapCell(1).hasPlayerID(1));
         // Checking if player was added to the correct cell (last one in this case)
-        assertTrue(game.map.map[9].hasPlayerID(1));
+        assertTrue(game.getMap().getMapCell(10).hasPlayerID(1));
     }
 
     @Test
@@ -588,13 +594,14 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
 
         // Moving player with ID 1
-        assertEquals(1, game.players.get(0).getCurrentMapPosition());
+        assertEquals(1, players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(4, false).code());
-        assertEquals(5, game.players.get(0).getCurrentMapPosition());
+        assertEquals(5, players.get(0).getCurrentMapPosition());
         assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(2, false).code());
-        game.players.get(0).setEnergy(1);
+        players.get(0).setEnergy(1);
         assertEquals(MovementResultCode.NO_ENERGY, game.moveCurrentPlayer(4, false).code());
     }
 
@@ -607,9 +614,10 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         assertEquals(1, player1.getCurrentMapPosition());
         game.moveCurrentPlayer(-5, false);
@@ -633,9 +641,10 @@ public class TestGameManager {
                 { "b", "6" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         assertEquals(80, player1.getEnergy());
         game.moveCurrentPlayer(2, true);
@@ -661,9 +670,10 @@ public class TestGameManager {
                 { "b", "6" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         assertEquals(80, player1.getEnergy());
         game.moveCurrentPlayer(2, true);
@@ -690,9 +700,10 @@ public class TestGameManager {
                 { "b", "7" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         game.moveCurrentPlayer(3, true);
         assertEquals(150, player2.getEnergy());
@@ -725,9 +736,10 @@ public class TestGameManager {
                 { "b", "7" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         assertEquals(80, player1.getEnergy());
         game.moveCurrentPlayer(-5, false);
@@ -749,9 +761,10 @@ public class TestGameManager {
                 { "b", "7" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         assertEquals(80, player1.getEnergy());
         game.moveCurrentPlayer(0, false);
@@ -776,8 +789,9 @@ public class TestGameManager {
                 { "b", "7" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
+        Player player1 = players.get(0);
 
         assertEquals(180, player1.getEnergy());
         game.moveCurrentPlayer(0, false);
@@ -809,9 +823,10 @@ public class TestGameManager {
                 { "c", "8" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         // Makes 12 plays
         for (int i = 0; i < 11; i++) {
@@ -843,9 +858,10 @@ public class TestGameManager {
                 { "e", "2" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
         game.moveCurrentPlayer(1, true);
         game.moveCurrentPlayer(1, true);
@@ -871,11 +887,12 @@ public class TestGameManager {
                 { "m", "4" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
 
-        Player player1 = game.players.get(0);
-        Player player2 = game.players.get(1);
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
 
-        MagicMushrooms magicMushroom = (MagicMushrooms)game.map.getMapCell(4).getFoodItem();
+        MagicMushrooms magicMushroom = (MagicMushrooms)game.getMap().getMapCell(4).getFoodItem();
         int magicNumber = magicMushroom.getMagicNumber();
         assertTrue(magicMushroom.canBeConsumedBySpecies(player1.getSpecies()));
         assertTrue(magicMushroom.canBeConsumedBySpecies(player2.getSpecies()));
@@ -903,7 +920,7 @@ public class TestGameManager {
                 { "b", "3" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
-        MapCell cell = game.map.getMapCell(3);
+        MapCell cell = game.getMap().getMapCell(3);
         Bananas bananas = (Bananas)cell.getFoodItem();
         assertEquals(3, bananas.getConsumableUnits());
         bananas.loadSavedData(2);
@@ -923,7 +940,7 @@ public class TestGameManager {
                 { "m", "3" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
-        MapCell cell = game.map.getMapCell(3);
+        MapCell cell = game.getMap().getMapCell(3);
         MagicMushrooms mushrooms = (MagicMushrooms)cell.getFoodItem();
         mushrooms.loadSavedData(13);
         assertEquals("Cogumelo Magico : +- 13% energia", mushrooms.getTooltip());
@@ -942,7 +959,7 @@ public class TestGameManager {
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
 
-        Meat meat = (Meat) game.map.getMapCell(3).getFoodItem();
+        Meat meat = (Meat) game.getMap().getMapCell(3).getFoodItem();
         game.moveCurrentPlayer(1, true);
         game.getSquareInfo(3);
         assertEquals("Carne : + 50 energia : 1 jogadas", meat.getTooltip());

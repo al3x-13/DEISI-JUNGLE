@@ -42,7 +42,7 @@ public abstract class Food {
      * [2] -> Food Image Filename, e.g. 'water.png'
      * @return Food data
      */
-    String[] getFoodData() {
+    public String[] getFoodData() {
         return new String[] { String.valueOf(this.id), this.name, this.imageFilename };
     }
 

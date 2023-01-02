@@ -8,13 +8,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GameManager {
     // Game Species
-    ArrayList<Species> species = new ArrayList<>() {
+    private ArrayList<Species> species = new ArrayList<>() {
         {
             add(new Species('E', "Elefante", "elephant.png", DietType.HERBIVORE, 180, 4, 10, 1, 6));
             add(new Species('L', "Leão", "lion.png", DietType.CARNIVORE, 80, 2, 10, 4, 6));
@@ -24,7 +25,7 @@ public class GameManager {
         }
     };
     // Game Food Types
-    ArrayList<Food> foods = new ArrayList<>() {
+    private ArrayList<Food> foods = new ArrayList<>() {
         {
             add(new Grass());
             add(new Water());
@@ -33,12 +34,12 @@ public class GameManager {
             add(new MagicMushrooms());
         }
     };
-    ArrayList<Player> players = new ArrayList<>();
-    GameMap map = null;
-    int currentPlay = 1;
+    private ArrayList<Player> players = new ArrayList<>();
+    private GameMap map = null;
+    private int currentPlay = 1;
     // Stores the current round player index for 'players' ArrayList
-    int currentRoundPlayerIndex;
-    boolean gameOver;
+    private int currentRoundPlayerIndex;
+    private boolean gameOver;
 
     public GameManager() {}
 
@@ -611,7 +612,8 @@ public class GameManager {
         fw.write('\n');
 
         // Format: '<index>,<backgroundImageFilename>,<cellType>,<foodId>:<foodData>'
-        for (MapCell mapCell : map.map) {
+        for (int i = 1; i <= map.getMapSize(); i++) {
+            MapCell mapCell = map.getMapCell(i);
             Food food = mapCell.getFoodItem();
             String[] cellData = new String[2];
             cellData[0] = String.valueOf(mapCell.getIndex());
@@ -898,5 +900,19 @@ public class GameManager {
                 ((Meat) food).updateSpoilStatusAndTooltip(currentPlay);
                 break;
         }
+    }
+
+    /**
+     * @return Players
+     */
+    public ArrayList<Player> getPlayers() {
+        return this.players;
+    }
+
+    /**
+     * @return Game Map
+     */
+    public GameMap getMap() {
+        return this.map;
     }
 }

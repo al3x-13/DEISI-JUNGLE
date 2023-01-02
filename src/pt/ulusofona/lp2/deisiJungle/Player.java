@@ -20,21 +20,21 @@ public class Player {
     /**
      * @return Player ID
      */
-    int getID() {
+    public int getID() {
         return this.id;
     }
 
     /**
      * @return Player name
      */
-    String getName() {
+    public String getName() {
         return this.name;
     }
 
     /**
      * @return Player current energy units
      */
-    int getEnergy() {
+    public int getEnergy() {
         return this.energyUnits;
     }
 
@@ -42,21 +42,21 @@ public class Player {
      * Sets player energy to the given value.
      * @param energy New player energy
      */
-    void setEnergy(int energy) {
+    public void setEnergy(int energy) {
         this.energyUnits = energy;
     }
 
     /**
      * @return Player Species
      */
-    Species getSpecies() {
+    public Species getSpecies() {
         return this.species;
     }
 
     /**
      * @return Player current position in the map
      */
-    int getCurrentMapPosition() {
+    public int getCurrentMapPosition() {
         return this.currentMapPosition;
     }
 

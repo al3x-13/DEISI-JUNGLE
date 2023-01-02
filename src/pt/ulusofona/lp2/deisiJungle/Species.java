@@ -42,7 +42,7 @@ public class Species {
      * [2] -> Species Image Filename, e.g. 'lion.png'
      * @return Species data
      */
-    String[] getSpeciesData() {
+    public String[] getSpeciesData() {
         return new String[] {
                 this.id.toString(),
                 this.name,
@@ -57,14 +57,14 @@ public class Species {
     /**
      * @return Species ID
      */
-    Character getID() {
+    public Character getID() {
         return this.id;
     }
 
     /**
      * @return Species Name
      */
-    String getName() {
+    public String getName() {
         return this.name;
     }
 

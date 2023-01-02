@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class GameMap {
-    int size;
-    MapCell[] map;
+    private int size;
+    private MapCell[] map;
 
-    GameMap(int size, ArrayList<Player> players) {
+    public GameMap(int size, ArrayList<Player> players) {
         if (size < 1) {
             throw new IllegalArgumentException("Map size must be greater than 1!");
         }
@@ -36,14 +36,14 @@ public class GameMap {
     /**
      * @return Map Size
      */
-    int getMapSize() {
+    public int getMapSize() {
         return this.size;
     }
 
     /**
      * @return Index (game index) of the MapCell with finish
      */
-    int getFinishMapCellIndex() {
+    public int getFinishMapCellIndex() {
         return this.size;
     }
 
@@ -52,7 +52,7 @@ public class GameMap {
      * @param squareNr Cell index
      * @return Cell
      */
-    MapCell getMapCell(int squareNr){
+    public MapCell getMapCell(int squareNr){
         for (MapCell mapCell : map) {
             if (mapCell.getIndex() == squareNr) {
                 return mapCell;
@@ -67,7 +67,7 @@ public class GameMap {
      * @param destIndex Index of the destination MapCell
      * @return Whether the player was successfully moved to the desired destination or not
      */
-    boolean movePlayerAndUpdateEnergy(Player player, int destIndex, int energyCost) {
+    public boolean movePlayerAndUpdateEnergy(Player player, int destIndex, int energyCost) {
         // Gets player current position in the map
         int currentIndex = player.getCurrentMapPosition();
 
@@ -97,7 +97,7 @@ public class GameMap {
      * @param playerID  Player ID
      * @param cellIndex Destination cell index
      */
-    void placePlayerInCell(int playerID, int cellIndex) {
+    public void placePlayerInCell(int playerID, int cellIndex) {
         this.map[cellIndex - 1].addPlayer(playerID);
     }
 
@@ -105,7 +105,7 @@ public class GameMap {
      * Gets the player IDs at game finish ordered from 1st to last.
      * @return Player IDs ordered by game finish positions
      */
-    ArrayList<Integer> getGameResultsByIDs() {
+    public ArrayList<Integer> getGameResultsByIDs() {
         ArrayList<Integer> playerIDs = new ArrayList<>();
 
         // Checks if any of the players arrived at the finish cell (AKA won)
