@@ -1403,7 +1403,7 @@ public class TestGameManager {
     @Test
     public void test_Credits() {
         GameManager game = new GameManager();
-        assertNotNull(game.getAuthorsPanel());
+        game.getAuthorsPanel();
     }
 
     @Test

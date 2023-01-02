@@ -614,10 +614,7 @@ public class GameManager {
             Scanner scanner = new Scanner(file);
             loadGameInfo(scanner);
             loadGameMap(scanner);
-            if (!loadPlayersIntoCorrectCells()) {
-                scanner.close();
-                return false;
-            }
+            loadPlayersIntoCorrectCells();
             // Close scanner at the end
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -688,7 +685,7 @@ public class GameManager {
         }
     }
 
-    private boolean loadPlayersIntoCorrectCells() {
+    private void loadPlayersIntoCorrectCells() {
         // Gets cell
         MapCell firstCell = this.map.getMapCell(1);
 
@@ -703,7 +700,6 @@ public class GameManager {
             MapCell cell = this.map.getMapCell(player.getCurrentMapPosition());
             cell.addPlayer(player.getID());
         }
-        return true;
     }
 
     /**
