@@ -22,6 +22,13 @@ public abstract class Food {
     public abstract void consumeFood(Player player, int currentPlay);
 
     /**
+     * Checks if the food can be consumed by the given species.
+     * @param species Species
+     * @return Whether the food can be consumed by the given species
+     */
+    public abstract boolean canBeConsumedBySpecies(Species species);
+
+    /**
      * @return Food ID
      */
     public char getID() {

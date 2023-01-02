@@ -25,6 +25,15 @@ public class Meat extends Food {
         }
     }
 
+    @Override
+    public boolean canBeConsumedBySpecies(Species species) {
+        DietType diet = species.getDiet();
+        if (diet == DietType.CARNIVORE || diet == DietType.OMNIVORE) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Updates Meat Spoil Status
      * @param currentPlay Current Player Number

@@ -22,6 +22,11 @@ public class MagicMushrooms extends Food {
         player.consumeFood(foodEnergy);
     }
 
+    @Override
+    public boolean canBeConsumedBySpecies(Species species) {
+        return true;
+    }
+
     /**
      * @return Magic Number
      */

@@ -21,4 +21,9 @@ public class Grass extends Food {
 
         player.consumeFood(foodEnergy);
     }
+
+    @Override
+    public boolean canBeConsumedBySpecies(Species species) {
+        return true;
+    }
 }
