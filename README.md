@@ -2,7 +2,7 @@
 
 ## **UML Diagram**
 ___
-![Game Screenshot #1](/assets/DEISI-JUNGLE-DIAGRAM.png)
+![Game Screenshot #1](/assets/DEISI-JUNGLE-UML.png)
 
 ## **Game Screenshots**
 ___
