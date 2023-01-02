@@ -659,15 +659,15 @@ public class TestGameManager {
 
     @Test
     public void test_02_Energy() {
-        // Testing energy gain by consuming water
+        // Testing energy gain by consuming water and grass
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "L" },
-                { "3", "Player 2", "Z" },
+                { "3", "Player 2", "E" },
         };
         String[][] foodsInfo = new String[][] {
                 { "a", "3" },
-                { "b", "6" }
+                { "e", "4" }
         };
         game.createInitialJungle(10, playersInfo, foodsInfo);
         ArrayList<Player> players = game.getPlayers();
@@ -680,10 +680,10 @@ public class TestGameManager {
         // 80 (energy) - 2 (move) - 2 (move) + 15 (water) = 91
         assertEquals(91, player1.getEnergy());
 
-        assertEquals(70, player2.getEnergy());
-        game.moveCurrentPlayer(2, true);
-        // 70 (energy) - 2 (move) - 2 (move) + 13 (water) = 79
-        assertEquals(79, player2.getEnergy());
+        assertEquals(180, player2.getEnergy());
+        game.moveCurrentPlayer(3, true);
+        // 180 (energy) - 12 (move) + 20 (grass) = 192
+        assertEquals(188, player2.getEnergy());
     }
 
     @Test
@@ -877,7 +877,6 @@ public class TestGameManager {
     @Test
     public void test_09_Energy() {
         // Testing energy gain by consuming Magic Mushroom
-        // Testing energy to check if it goes below 0
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "L" },
@@ -906,6 +905,41 @@ public class TestGameManager {
         assertEquals((74 - (int)(74 * (magicNumber / 100.0f))), player1.getEnergy());
         // 70 - 6 (move) - (64 * (magicNumber / 100))
         assertEquals((64 + (int)(64 * (magicNumber / 100.0f))), player2.getEnergy());
+    }
+
+    @Test
+    public void test_10_Energy() {
+        // Testing energy gain by consuming multiple foods
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "Z" },
+                { "8", "Player 3", "E" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "c", "4" },
+                { "a", "6" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+        ArrayList<Player> players = game.getPlayers();
+
+        Player player1 = players.get(0);
+        Player player2 = players.get(1);
+        Player player3 = players.get(2);
+
+        Meat meat = (Meat) game.getMap().getMapCell(4).getFoodItem();
+        assertTrue(meat.canBeConsumedBySpecies(player1.getSpecies()));
+        assertFalse(meat.canBeConsumedBySpecies(player3.getSpecies()));
+
+        assertEquals(1, game.getCurrentPlay());
+        game.moveCurrentPlayer(3, true);
+        // 80 - 6 (move) - 50 (meat) = 124
+        assertEquals(124, player1.getEnergy());
+
+        assertEquals(2, game.getCurrentPlay());
+        game.moveCurrentPlayer(5, true);
+        // 70 - 10 (move) + 12 (water) = 72
+        assertEquals(72, player2.getEnergy());
     }
 
     @Test

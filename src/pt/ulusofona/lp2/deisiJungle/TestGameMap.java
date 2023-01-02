@@ -14,6 +14,11 @@ public class TestGameMap {
         assertNull(map.getMapCell(11));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void test_GameMap_With_Invalid_Size() {
+        GameMap map = new GameMap(0, new ArrayList<>());
+    }
+
     @Test
     public void test_MovePlayerAndUpdateEnergy_With_Missing_Player() {
         Player player1 = new Player(
@@ -23,9 +28,22 @@ public class TestGameMap {
         );
         player1.updateMapPosition(3);
         GameMap map = new GameMap(10, new ArrayList<>());
-        MapCell cell = map.getMapCell(5);
 
         assertFalse(map.movePlayerAndUpdateEnergy(player1, 8, 2));
+    }
+
+    @Test
+    public void test_MovePlayerAndUpdateEnergy_With_Duplicate_Player() {
+        Player player1 = new Player(
+                3,
+                "Player 1",
+                new Species('L', "Leão", "lion.png", DietType.CARNIVORE, 80, 2, 10, 4, 6)
+        );
+        GameMap map = new GameMap(10, new ArrayList<>());
+        map.getMapCell(1).addPlayer(3);
+        MapCell cell = map.getMapCell(5);
+        assertTrue(cell.addPlayer(3));
+        assertFalse(map.movePlayerAndUpdateEnergy(player1, 5, 2));
     }
 
     @Test

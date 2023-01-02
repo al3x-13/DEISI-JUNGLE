@@ -49,4 +49,14 @@ public class TestMapCell {
         assertFalse(cell.rmPlayer(3));
         assertFalse(cell.hasPlayerID(3));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_01_MapCell_With_Invalid_Index() {
+        new MapCell(0, "Middle");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_02_MapCell_With_Invalid_CellType() {
+        new MapCell(3, "YaY");
+    }
 }

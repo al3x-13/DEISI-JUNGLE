@@ -82,10 +82,9 @@ public class MapCell {
             int currentID = this.playerIDsInCell.get(i);
             if (currentID == playerID) {
                 this.playerIDsInCell.remove(i);
-                return true;
             }
         }
-        return false;
+        return true;
     }
 
     /**
