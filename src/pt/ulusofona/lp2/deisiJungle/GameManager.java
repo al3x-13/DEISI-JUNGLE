@@ -333,10 +333,10 @@ public class GameManager {
     public MovementResult moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
         // TODO: refactor this
         // Checks if game is over
-        if (this.gameOver) {
+        /* if (this.gameOver) {
             switchToNextPlayerAndUpdateCurrentPlay();
             return null;
-        }
+        }*/
 
         // Gets current player
         Player currentPlayer = this.players.get(currentRoundPlayerIndex);
