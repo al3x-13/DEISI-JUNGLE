@@ -46,7 +46,7 @@ public class Meat extends Food {
         if (this.spoiled) {
             this.tooltip = "Carne toxica";
         } else {
-            this.tooltip = "Carne : + 50 energia : " + (currentPlay - 1) + " jogadas";
+            this.tooltip = "Carne : + 50 energia : " + currentPlay + " jogadas";
         }
     }
 }

@@ -17,7 +17,7 @@ public class GameManager {
         {
             add(new Species('E', "Elefante", "elephant.png", DietType.HERBIVORE, 180, 4, 10, 1, 6));
             add(new Species('L', "Leão", "lion.png", DietType.CARNIVORE, 80, 2, 10, 4, 6));
-            add(new Species('T', "Tartaruga", "turtle.png", DietType.HERBIVORE, 150, 1, 5, 1, 3));
+            add(new Species('T', "Tartaruga", "turtle.png", DietType.OMNIVORE, 150, 1, 5, 1, 3));
             add(new Species('P', "Pássaro", "bird.png", DietType.OMNIVORE, 70, 4, 50, 5, 6));
             add(new Species('Z', "Tarzan", "tarzan.png", DietType.OMNIVORE, 70, 2, 20, 1, 6));
         }
@@ -316,7 +316,7 @@ public class GameManager {
     public String[] getCurrentPlayerEnergyInfo(int nrPositions) {
         String[] playerEnergyInfo = new String[2];
         playerEnergyInfo[0] = String.valueOf(
-                this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyConsumption() * nrPositions
+                Math.abs(this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyConsumption() * nrPositions)
         );
         playerEnergyInfo[1] = String.valueOf(
                 this.players.get(currentRoundPlayerIndex).getSpecies().getEnergyGainOnIdle()
