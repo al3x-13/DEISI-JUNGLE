@@ -3,7 +3,6 @@ package pt.ulusofona.lp2.deisiJungle;
 import org.junit.Test;
 
 import java.io.File;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -299,7 +298,6 @@ public class TestGameManager {
         game.moveCurrentPlayer(5, true);
         expectedResult = new String[] { "bananas.png", "Bananas : 2 : + 40 energia", "1" };
         realResult = game.getSquareInfo(6);
-        System.out.println(Arrays.toString(realResult));
         assertTrue(
                 expectedResult[0].equals(realResult[0])
                         && expectedResult[1].equals(realResult[1])
@@ -861,10 +859,101 @@ public class TestGameManager {
     }
 
     @Test
+    public void test_09_Energy() {
+        // Testing energy gain by consuming Magic Mushroom
+        // Testing energy to check if it goes below 0
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "Z" },
+        };
+        String[][] foodsInfo = new String[][] {
+                { "m", "4" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Player player1 = game.players.get(0);
+        Player player2 = game.players.get(1);
+
+        MagicMushrooms magicMushroom = (MagicMushrooms)game.map.getMapCell(4).getFoodItem();
+        int magicNumber = magicMushroom.getMagicNumber();
+        assertTrue(magicMushroom.canBeConsumedBySpecies(player1.getSpecies()));
+        assertTrue(magicMushroom.canBeConsumedBySpecies(player2.getSpecies()));
+
+        assertEquals(1, game.getCurrentPlay());
+        game.moveCurrentPlayer(3, true);
+        assertEquals(2, game.getCurrentPlay());
+        game.moveCurrentPlayer(3, true);
+
+        // 80 - 6 (move) - (74 * (magicNumber / 100))
+        assertEquals((74 - (int)(74 * (magicNumber / 100.0f))), player1.getEnergy());
+        // 70 - 6 (move) - (64 * (magicNumber / 100))
+        assertEquals((64 + (int)(64 * (magicNumber / 100.0f))), player2.getEnergy());
+    }
+
+    @Test
+    public void test_01_loadSavedData() {
+        // Testing Bananas' 'loadSavedData'
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "b", "3" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+        MapCell cell = game.map.getMapCell(3);
+        Bananas bananas = (Bananas)cell.getFoodItem();
+        assertEquals(3, bananas.getConsumableUnits());
+        bananas.loadSavedData(2);
+        assertEquals(2, bananas.getConsumableUnits());
+        assertEquals("Bananas : 2 : + 40 energia", bananas.getTooltip());
+    }
+
+    @Test
+    public void test_02_loadSavedData() {
+        // Testing MagicMushrooms' 'loadSavedData'
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "m", "3" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+        MapCell cell = game.map.getMapCell(3);
+        MagicMushrooms mushrooms = (MagicMushrooms)cell.getFoodItem();
+        mushrooms.loadSavedData(13);
+        assertEquals("Cogumelo Magico : +- 13% energia", mushrooms.getTooltip());
+    }
+
+    @Test
+    public void test_01_UpdateSpoilStatusAndTooltip() {
+        // Testing Meat's 'updateSpoilStatusAndTooltip'
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        String[][] foodsInfo = new String[][] {
+                { "c", "3" }
+        };
+        game.createInitialJungle(10, playersInfo, foodsInfo);
+
+        Meat meat = (Meat) game.map.getMapCell(3).getFoodItem();
+        game.moveCurrentPlayer(1, true);
+        game.getSquareInfo(3);
+        assertEquals("Carne : + 50 energia : 1 jogadas", meat.getTooltip());
+        meat.updateSpoilStatusAndTooltip(14);
+        assertEquals("Carne toxica", meat.getTooltip());
+    }
+
+    @Test
     public void test_01_FullGame() {
         // Testing player with the lowest ID gets to the finish line
         GameManager game = new GameManager();
-
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "L" },
                 { "3", "Player 2", "T" }
@@ -892,7 +981,15 @@ public class TestGameManager {
                 { "3", "Player 2", "T" }
         };
         game.createInitialJungle(10, playersInfo);
+        String[] realResult = game.getCurrentPlayerInfo();
+        String[] expectedResult = new String[] { "1", "Player 1", "L", "80", "4..6" };
 
+        assertTrue(
+                expectedResult[0].equals(realResult[0])
+                        && expectedResult[1].equals(realResult[1])
+                        && expectedResult[2].equals(realResult[2])
+                        && expectedResult[3].equals(realResult[3])
+        );
         game.moveCurrentPlayer(2, true);
         assertFalse(game.isGameOver());
         assertNull(game.getWinnerInfo());
@@ -919,6 +1016,7 @@ public class TestGameManager {
         };
         game.createInitialJungle(12, playersInfo);
 
+        assertEquals(1, game.getCurrentPlay());
         game.moveCurrentPlayer(2, true);
         game.moveCurrentPlayer(1, true);
         game.moveCurrentPlayer(2, true);
@@ -926,11 +1024,11 @@ public class TestGameManager {
         game.moveCurrentPlayer(1, true);
         game.moveCurrentPlayer(1, true);
         game.moveCurrentPlayer(5, true);
+        assertEquals(8, game.getCurrentPlay());
 
         assertTrue(game.isGameOver());
         assertEquals(8, Integer.parseInt(game.getWinnerInfo()[0]));
         ArrayList<String> results = game.getGameResults();
-        System.out.println(results.toString());
 
         // Checks game results
         assertTrue(
@@ -967,7 +1065,88 @@ public class TestGameManager {
         game.createInitialJungle(33, playersInfo);
 
         File saveFile = new File("test-files/save_game");
-        assertTrue(game.saveGame(saveFile));
+        assertTrue(game.loadGame(saveFile));
         // TODO
+    }
+
+
+    @Test
+    public void test_01_getSpecies() {
+        GameManager game = new GameManager();
+        String[][] species = game.getSpecies();
+        boolean hasElephant = false;
+        boolean hasLion = false;
+        boolean hasTurtle = false;
+        boolean hasBird = false;
+        boolean hasTarzan = false;
+
+        for (String[] item : species) {
+            if (item[0].equals("E") && item[1].equals("Elefante")) {
+                hasElephant = true;
+            }
+            if (item[0].equals("L") && item[1].equals("Leão")) {
+                hasLion = true;
+            }
+            if (item[0].equals("T") && item[1].equals("Tartaruga")) {
+                hasTurtle = true;
+            }
+            if (item[0].equals("P") && item[1].equals("Pássaro")) {
+                hasBird = true;
+            }
+            if (item[0].equals("Z") && item[1].equals("Tarzan")) {
+                hasTarzan = true;
+            }
+        }
+
+        assertTrue(
+                hasElephant
+                && hasLion
+                && hasTurtle
+                && hasBird
+                && hasTarzan
+        );
+    }
+
+    @Test
+    public void test_01_getFoodTypes() {
+        GameManager game = new GameManager();
+        String[][] foods = game.getFoodTypes();
+        boolean hasGrass = false;
+        boolean hasWater = false;
+        boolean hasBananas = false;
+        boolean hasMeat = false;
+        boolean hasMagicMushrooms = false;
+
+        for (String[] item : foods) {
+            if (item[0].equals("a") && item[1].equals("Agua")) {
+                hasWater = true;
+            }
+            if (item[0].equals("e") && item[1].equals("Erva")) {
+                hasGrass = true;
+            }
+            if (item[0].equals("b") && item[1].equals("Bananas")) {
+                hasBananas = true;
+            }
+            if (item[0].equals("c") && item[1].equals("Carne")) {
+                hasMeat = true;
+            }
+            if (item[0].equals("m") && item[1].equals("Cogumelo Magico")) {
+                hasMagicMushrooms = true;
+            }
+        }
+
+        assertTrue(
+                hasWater
+                        && hasGrass
+                        && hasBananas
+                        && hasMeat
+                        && hasMagicMushrooms
+        );
+    }
+
+    @Test
+    public void test_01_InitializationError() {
+        InitializationError error = new InitializationError("Test error");
+        assertEquals("Test error", error.getMessage());
     }
 }
