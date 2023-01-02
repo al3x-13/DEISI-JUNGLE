@@ -106,11 +106,7 @@ public class Player {
      * @param energyUnits Energy units to decrease from overall energy
      */
     public void decreaseEnergy(int energyUnits) {
-        if (this.energyUnits - energyUnits < 0) {
-            this.energyUnits = 0;
-        } else {
-            this.energyUnits -= energyUnits;
-        }
+        this.energyUnits -= energyUnits;
     }
 
     /**
