@@ -20,7 +20,7 @@ public class Meat extends Food {
     public void consumeFood(Player player, int currentPlay) {
         Species species = player.getSpecies();
         if (species.getDiet() == DietType.CARNIVORE || species.getDiet() == DietType.OMNIVORE) {
-            int foodEnergy = currentPlay <= 12 ? 50 : -50;
+            int foodEnergy = currentPlay < 12 ? 50 : -50;
             player.consumeFood(foodEnergy);
         }
     }
