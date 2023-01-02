@@ -467,7 +467,7 @@ public class GameManager {
     public ArrayList<String> getGameResults() {
         ArrayList<String> gameResults = new ArrayList<>();
 
-        ArrayList<Integer> orderedPlayerIDs = this.map.getPlayerIDsOrderedByFinishPosition();
+        ArrayList<Integer> orderedPlayerIDs = this.map.getGameResultsByIDs();
         for (int i = 0; i < orderedPlayerIDs.size(); i++) {
             for (Player player : this.players) {
                 if (player.getID() == orderedPlayerIDs.get(i)) {

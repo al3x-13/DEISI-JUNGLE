@@ -105,16 +105,62 @@ public class GameMap {
      * Gets the player IDs at game finish ordered from 1st to last.
      * @return Player IDs ordered by game finish positions
      */
-    ArrayList<Integer> getPlayerIDsOrderedByFinishPosition() {
+    ArrayList<Integer> getGameResultsByIDs() {
         ArrayList<Integer> playerIDs = new ArrayList<>();
 
-        // Iterates over game map from finish to start to get player IDs ordered from 1st to last
-        for (int i = this.map.length - 1; i >= 0 ; i--) {
-            int[] ids = this.map[i].getPlayerIDsInCell();
-            Arrays.sort(ids);
+        // Checks if any of the players arrived at the finish cell (AKA won)
+        MapCell finishCell = getMapCell(size);
+        if (finishCell.getPlayerIDsInCell().length != 0) {
+            playerIDs.add(finishCell.getPlayerIDsInCell()[0]);
 
-            for (int id : ids) {
-                playerIDs.add(id);
+            // Iterates over game map from finish to start to get player IDs ordered from 1st to last
+            for (int i = size - 1; i > 0 ; i--) {
+                int[] ids = getMapCell(i).getPlayerIDsInCell();
+                Arrays.sort(ids);
+
+                for (int id : ids) {
+                    playerIDs.add(id);
+                }
+            }
+        } else {
+            // Checks if the distance between the 2 closest players to the finish is greater than half the map
+            int closestPlayerToFinishPosition = -1;
+            int secondClosestPlayerToFinishPosition = -1;
+            for (int i = this.size; i > 0; i--) {
+                MapCell currentCell = getMapCell(i);
+                int[] playersIDsInCell = currentCell.getPlayerIDsInCell();
+
+                for (int playerID : playersIDsInCell) {
+                    if (closestPlayerToFinishPosition < 0) {
+                        closestPlayerToFinishPosition = i;
+                    } else if (secondClosestPlayerToFinishPosition < 0) {
+                        secondClosestPlayerToFinishPosition = i;
+                        break;
+                    }
+                }
+            }
+
+            MapCell closestPlayerCell = getMapCell(closestPlayerToFinishPosition);
+            MapCell secondClosestPlayerCell = getMapCell(secondClosestPlayerToFinishPosition);
+            int[] secondClosestCellPlayerIDs = secondClosestPlayerCell.getPlayerIDsInCell();
+            Arrays.sort(secondClosestCellPlayerIDs);
+            playerIDs.add(secondClosestCellPlayerIDs[0]);
+            playerIDs.add(closestPlayerCell.getPlayerIDsInCell()[0]);
+
+            // Iterates over game map from finish to start to get player IDs ordered from 1st to last
+            for (int i = secondClosestPlayerToFinishPosition; i > 0 ; i--) {
+                int[] ids = getMapCell(i).getPlayerIDsInCell();
+                Arrays.sort(ids);
+
+                for (int j = 0; j < ids.length; j++) {
+                    if (i == secondClosestPlayerToFinishPosition) {
+                        if (j != 0) {
+                            playerIDs.add(ids[j]);
+                        }
+                    } else {
+                        playerIDs.add(ids[j]);
+                    }
+                }
             }
         }
         return playerIDs;
