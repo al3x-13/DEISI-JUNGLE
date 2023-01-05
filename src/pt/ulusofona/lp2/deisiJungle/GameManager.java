@@ -83,18 +83,18 @@ public class GameManager {
      * @param foodsInfo foods info
      * @return Whether the initial map was successfully created
      */
-    public InitializationError createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo) {
+    public void createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo) throws InvalidInitialJungleException {
         reset();  // Resets game data structures
 
         // Validates number of players (2-4 players)
         int numberOfPlayers = playersInfo.length;
         if (numberOfPlayers < 2 || numberOfPlayers > 4) {
-            return new InitializationError("Invalid number of players! The number of players must be between 2 and 4.");
+            throw new InvalidInitialJungleException("Invalid number of players! The number of players must be between 2 and 4.",ExceptionCause.PLAYER);
         }
 
         // Validates jungleSize, the map must have at least 2 cells per player
         if (jungleSize < numberOfPlayers * 2) {
-            return new InitializationError("Invalid jungle size! The map must have at least 2 cells per player.");
+            throw new InvalidInitialJungleException("Invalid jungle size! The map must have at least 2 cells per player.",ExceptionCause.PLAYER);
         }
 
         // Validates players' info
@@ -103,19 +103,19 @@ public class GameManager {
             try {
                 playerID = Integer.parseInt(player[0]);
             } catch (NumberFormatException e) {
-                return new InitializationError("Invalid player ID! The ID must be a number.");
+                throw new InvalidInitialJungleException("Invalid player ID! The ID must be a number.",ExceptionCause.PLAYER);
             }
 
             String playerName;
             if (player[1] == null || player[1].length() == 0) {
-                return new InitializationError("Invalid player name! The name must not be null nor empty.");
+                throw new InvalidInitialJungleException("Invalid player name! The name must not be null nor empty.",ExceptionCause.PLAYER);
             } else {
                 playerName = player[1];
             }
 
             Character playerSpeciesID;
             if (player[2] == null || player[2].length() == 0) {
-                return new InitializationError("Invalid Species ID! The Species ID must be a character.");
+                throw new InvalidInitialJungleException("Invalid Species ID! The Species ID must be a character.",ExceptionCause.PLAYER);
             } else {
                 playerSpeciesID = player[2].charAt(0);
             }
@@ -124,18 +124,18 @@ public class GameManager {
 
             // Validates player species (checks if it exists)
             if (playerSpecies == null) {
-                return new InitializationError("Invalid Species ID! The given Species does not exist.");
+                throw new InvalidInitialJungleException("Invalid Species ID! The given Species does not exist.",ExceptionCause.PLAYER);
             }
 
             for (Player currentPlayer : players) {
                 // Checks if the ID already exists
                 if (currentPlayer.getID() == playerID) {
-                    return new InitializationError("Invalid player ID! This ID already exists.");
+                    throw new InvalidInitialJungleException("Invalid player ID! This ID already exists.",ExceptionCause.PLAYER);
                 }
 
                 // In case the player species corresponds to 'tarzan' (cant have 2 'tarzan's)
                 if (playerSpecies.getName().equals("Tarzan") && currentPlayer.getSpecies().getID() == playerSpeciesID) {
-                    return new InitializationError("Tarzan already exists!");
+                    throw new InvalidInitialJungleException("Tarzan already exists!",ExceptionCause.PLAYER);
                 }
             }
 
@@ -148,12 +148,11 @@ public class GameManager {
 
         InitializationError validateFoodsReturn = validateFoodsAndAddToMap(foodsInfo, jungleSize);
         if (validateFoodsReturn != null) {
-            return validateFoodsReturn;
+            throw new InvalidInitialJungleException("Invalid Food",ExceptionCause.FOOD);
         }
 
         sortPlayersByID();
         currentRoundPlayerIndex = 0;  // Sets the index of the first player to make a play
-        return null;
     }
 
     /**
@@ -162,8 +161,8 @@ public class GameManager {
      * @param playersInfo players info
      * @return Whether the initial map was successfully created
      */
-    public InitializationError createInitialJungle(int jungleSize, String[][] playersInfo) {
-        return createInitialJungle(jungleSize, playersInfo, null);
+    public void createInitialJungle(int jungleSize, String[][] playersInfo) throws InvalidInitialJungleException  {
+        createInitialJungle(jungleSize, playersInfo, null);
     }
 
     /**
