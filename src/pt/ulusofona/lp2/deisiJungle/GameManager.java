@@ -83,18 +83,24 @@ public class GameManager {
      * @param foodsInfo foods info
      * @return Whether the initial map was successfully created
      */
-    public void createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo) throws InvalidInitialJungleException {
+    public void createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo)
+            throws InvalidInitialJungleException
+    {
         reset();  // Resets game data structures
 
         // Validates number of players (2-4 players)
         int numberOfPlayers = playersInfo.length;
         if (numberOfPlayers < 2 || numberOfPlayers > 4) {
-            throw new InvalidInitialJungleException("Invalid number of players! The number of players must be between 2 and 4.",ExceptionCause.PLAYER);
+            throw new InvalidInitialJungleException(
+                    "Invalid number of players! The number of players must be between 2 and 4.", ExceptionCause.PLAYER
+            );
         }
 
         // Validates jungleSize, the map must have at least 2 cells per player
         if (jungleSize < numberOfPlayers * 2) {
-            throw new InvalidInitialJungleException("Invalid jungle size! The map must have at least 2 cells per player.",ExceptionCause.PLAYER);
+            throw new InvalidInitialJungleException(
+                    "Invalid jungle size! The map must have at least 2 cells per player.", ExceptionCause.PLAYER
+            );
         }
 
         // Validates players' info
@@ -103,19 +109,25 @@ public class GameManager {
             try {
                 playerID = Integer.parseInt(player[0]);
             } catch (NumberFormatException e) {
-                throw new InvalidInitialJungleException("Invalid player ID! The ID must be a number.",ExceptionCause.PLAYER);
+                throw new InvalidInitialJungleException(
+                        "Invalid player ID! The ID must be a number.", ExceptionCause.PLAYER
+                );
             }
 
             String playerName;
             if (player[1] == null || player[1].length() == 0) {
-                throw new InvalidInitialJungleException("Invalid player name! The name must not be null nor empty.",ExceptionCause.PLAYER);
+                throw new InvalidInitialJungleException(
+                        "Invalid player name! The name must not be null nor empty.", ExceptionCause.PLAYER
+                );
             } else {
                 playerName = player[1];
             }
 
             Character playerSpeciesID;
             if (player[2] == null || player[2].length() == 0) {
-                throw new InvalidInitialJungleException("Invalid Species ID! The Species ID must be a character.",ExceptionCause.PLAYER);
+                throw new InvalidInitialJungleException(
+                        "Invalid Species ID! The Species ID must be a character.",ExceptionCause.PLAYER
+                );
             } else {
                 playerSpeciesID = player[2].charAt(0);
             }
@@ -124,13 +136,17 @@ public class GameManager {
 
             // Validates player species (checks if it exists)
             if (playerSpecies == null) {
-                throw new InvalidInitialJungleException("Invalid Species ID! The given Species does not exist.",ExceptionCause.PLAYER);
+                throw new InvalidInitialJungleException(
+                        "Invalid Species ID! The given Species does not exist.", ExceptionCause.PLAYER
+                );
             }
 
             for (Player currentPlayer : players) {
                 // Checks if the ID already exists
                 if (currentPlayer.getID() == playerID) {
-                    throw new InvalidInitialJungleException("Invalid player ID! This ID already exists.",ExceptionCause.PLAYER);
+                    throw new InvalidInitialJungleException(
+                            "Invalid player ID! This ID already exists.",ExceptionCause.PLAYER
+                    );
                 }
 
                 // In case the player species corresponds to 'tarzan' (cant have 2 'tarzan's)
