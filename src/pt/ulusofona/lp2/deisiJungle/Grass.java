@@ -22,6 +22,6 @@ public class Grass extends Food {
 
     @Override
     public boolean canBeConsumedBySpecies(Species species) {
-        return true;
+        return species.getDiet() == DietType.HERBIVORE || species.getDiet() == DietType.OMNIVORE;
     }
 }

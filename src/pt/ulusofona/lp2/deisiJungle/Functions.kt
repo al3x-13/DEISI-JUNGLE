@@ -76,6 +76,7 @@ fun getPlayersBySpecie(manager: GameManager, args: List<String>): String? {
     return manager.players
         .filter { it.species.id == speciesID }
         .sortedBy { it.name }
+        .reversed()
         .joinToString(",") { it.name }
 }
 
@@ -113,7 +114,7 @@ fun getConsumedFoods(manager: GameManager, args: List<String>): String? {
         .filter { it.foodItem != null }
         .map { it.foodItem }
         .filter { it.getConsumedCount() > 0 }
-        .sortedBy { it.getName() }.joinToString("\n") { "${it.name}" }
+        .sortedBy { it.getName() }.joinToString("\n") { it.name }
 }
 
 fun postMove(manager: GameManager, args: List<String>): String? {
