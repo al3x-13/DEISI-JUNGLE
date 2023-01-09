@@ -15,7 +15,7 @@ class TestFunctions {
         )
         game.createInitialJungle(10, playersInfo)
         val router = router()
-        val expectedResult = "3 | Player 1 | Leão | 80 | 1"
+        val expectedResult = "3 | Player 1 | Leao | 80 | 1"
         val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYER_INFO", "Player 1"))
         assertEquals(expectedResult, realResult)
     }
