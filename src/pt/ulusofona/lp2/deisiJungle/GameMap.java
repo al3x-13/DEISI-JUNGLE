@@ -34,6 +34,13 @@ public class GameMap {
     }
 
     /**
+     * @return Map Cells
+     */
+    public MapCell[] getMapCells() {
+        return this.map;
+    }
+
+    /**
      * @return Map Size
      */
     public int getMapSize() {
