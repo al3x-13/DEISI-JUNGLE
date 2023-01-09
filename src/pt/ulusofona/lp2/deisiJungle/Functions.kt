@@ -20,7 +20,7 @@ fun command(typeCommand: CommandType): Function2<GameManager, List<String>, Stri
 // Executes 'GET' commands
 fun getCommand(manager: GameManager, args: List<String>): String? {
     if (args.isNotEmpty()) {
-        return when(args[1]){
+        return when(args[0]){
             "PLAYER_INFO" -> getPlayerInfo(manager,args)
             "PLAYERS_BY_SPECIE" -> getPlayersBySpecie(manager,args)
             "MOST_TRAVELED" -> getMostTraveled(manager,args)
@@ -35,7 +35,7 @@ fun getCommand(manager: GameManager, args: List<String>): String? {
 // Executes 'POST' commands
 fun postCommand(manager: GameManager, args: List<String>): String? {
     if (args.isNotEmpty()) {
-        return when (args[1]) {
+        return when (args[0]) {
             "MOVE" -> postMove(manager, args)
             else -> null
         }
@@ -45,10 +45,10 @@ fun postCommand(manager: GameManager, args: List<String>): String? {
 
 fun getPlayerInfo(manager: GameManager, args: List<String>): String? {
     // Checks if the number of inputs is correct
-    if (args.size < 3) {
+    if (args.size < 2) {
         return null
     }
-    val name = args[2]
+    val name = args[1]
     val result = manager.players
         .filter { it.name == name }
         .map { "${it.id} | ${it.name} | ${it.species.name} | ${it.energy} | ${it.currentMapPosition}" }
@@ -58,10 +58,10 @@ fun getPlayerInfo(manager: GameManager, args: List<String>): String? {
 
 fun getPlayersBySpecie(manager: GameManager, args: List<String>): String? {
     // Checks if the number of inputs is correct
-    if (args.size < 3) {
+    if (args.size < 2) {
         return null
     }
-    val speciesID = args[2][0]
+    val speciesID = args[1][0]
 
     return manager.players
         .filter { it.species.id == speciesID }.joinToString(",") { it.name }
@@ -79,12 +79,12 @@ fun getMostTraveled(manager: GameManager, args: List<String>): String? {
 
 fun getTopEnergeticOmnivores(manager: GameManager, args: List<String>): String? {
     // Checks if the number of inputs is correct
-    if (args.size < 3) {
+    if (args.size < 2) {
         return null
     }
     val maxResults: Number
     try {
-        maxResults = args[2].toInt()
+        maxResults = args[1].toInt()
     } catch (e: NumberFormatException) {
         return null
     }
@@ -106,12 +106,12 @@ fun getConsumedFoods(manager: GameManager, args: List<String>): String? {
 
 fun postMove(manager: GameManager, args: List<String>): String? {
     // Checks if the number of inputs is correct
-    if (args.size < 3) {
+    if (args.size < 2) {
         return null
     }
     val numberOfPositionToMove: Number
     try {
-        numberOfPositionToMove = args[2].toInt()
+        numberOfPositionToMove = args[1].toInt()
     } catch (e: NumberFormatException) {
         return null
     }
