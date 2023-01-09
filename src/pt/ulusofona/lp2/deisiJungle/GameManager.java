@@ -162,10 +162,8 @@ public class GameManager {
         // Initializes game map and places players in the first 'MapCell'
         map = new GameMap(jungleSize, this.players);
 
-        InitializationError validateFoodsReturn = validateFoodsAndAddToMap(foodsInfo, jungleSize);
-        if (validateFoodsReturn != null) {
-            throw new InvalidInitialJungleException("Invalid Food",ExceptionCause.FOOD);
-        }
+        // Food validation and setup
+        validateFoodsAndAddToMap(foodsInfo, jungleSize);
 
         sortPlayersByID();
         currentRoundPlayerIndex = 0;  // Sets the index of the first player to make a play
@@ -888,20 +886,24 @@ public class GameManager {
      * @param jungleSize Jungle Size
      * @return InitializationError if an error occurred during validation and null otherwise
      */
-    private InitializationError validateFoodsAndAddToMap(String[][] foodsInfo, int jungleSize) {
+    private void validateFoodsAndAddToMap(String[][] foodsInfo, int jungleSize) throws InvalidInitialJungleException {
         // Validates foods info
         if (foodsInfo != null) {
             for (String[] food : foodsInfo) {
                 // Checks if food ID has a valid format
                 char foodID;
                 if (food[0] == null || food[0].length() == 0) {
-                    return new InitializationError("Invalid Food ID! The Food ID must be a character.");
+                    throw new InvalidInitialJungleException(
+                            "Invalid Food ID! The Food ID must be a character.", ExceptionCause.FOOD
+                    );
                 }
                 foodID = food[0].charAt(0);
 
                 // Checks if food ID is valid (i.e. contained in 'getFoodTypes')
                 if (!foodExists(foodID)) {
-                    return new InitializationError("Invalid Food ID! The given Food ID does not exist.");
+                    throw new InvalidInitialJungleException(
+                            "Invalid Food ID! The given Food ID does not exist.", ExceptionCause.FOOD
+                    );
                 }
 
                 // Checks if food object has a valid position
@@ -909,13 +911,17 @@ public class GameManager {
                 try {
                     foodPosition = Integer.parseInt(food[1]);
                     if (foodPosition <= 1 || foodPosition >= jungleSize) {
-                        return new InitializationError(
+                        throw new InvalidInitialJungleException(
                                 "Invalid Food Position! " +
-                                        "Food position must be in the map range except start and finish positions."
+                                        "Food position must be in the map range except start and finish positions.",
+                                ExceptionCause.FOOD
                         );
                     }
                 } catch (NumberFormatException e) {
-                    return new InitializationError("Invalid Food Position! Food position must be an integer value.");
+                    throw new InvalidInitialJungleException(
+                            "Invalid Food Position! Food position must be an integer value.",
+                            ExceptionCause.FOOD
+                    );
                 }
 
                 // Gets 'MapCell' in which the food will be placed
@@ -927,7 +933,6 @@ public class GameManager {
                 foodCell.setFood(newFood);
             }
         }
-        return null;
     }
 
     /**
