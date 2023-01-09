@@ -312,7 +312,6 @@ public class GameManager {
 
         MovementResult validateSquares = validateNumberOfSquares(nrSquares, currentPlayerSpecies, bypassValidation);
         if (validateSquares != null) {
-            switchToNextPlayerAndUpdateCurrentPlay();
             return validateSquares;
         }
 
