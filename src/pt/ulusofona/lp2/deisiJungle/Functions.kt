@@ -74,7 +74,9 @@ fun getPlayersBySpecie(manager: GameManager, args: List<String>): String? {
     val speciesID = args[1][0]
 
     return manager.players
-        .filter { it.species.id == speciesID }.joinToString(",") { it.name }
+        .filter { it.species.id == speciesID }
+        .sortedBy { it.name }
+        .joinToString(",") { it.name }
 }
 
 fun getMostTraveled(manager: GameManager, args: List<String>): String? {

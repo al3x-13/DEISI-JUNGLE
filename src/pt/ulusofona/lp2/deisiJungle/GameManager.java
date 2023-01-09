@@ -88,13 +88,9 @@ public class GameManager {
     {
         reset();  // Resets game data structures
 
-        // Validates number of players (2-4 players)
+        validateNumberOfPlayers(playersInfo);
+
         int numberOfPlayers = playersInfo.length;
-        if (numberOfPlayers < 2 || numberOfPlayers > 4) {
-            throw new InvalidInitialJungleException(
-                    "Invalid number of players! The number of players must be between 2 and 4.", ExceptionCause.PLAYER
-            );
-        }
 
         // Validates jungleSize, the map must have at least 2 cells per player
         if (jungleSize < numberOfPlayers * 2) {
@@ -342,11 +338,13 @@ public class GameManager {
 
             // Makes sure the player does not exceed map limit
             if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
+                if (bypassValidation) { return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null); }
                 playerDestinationIndex = this.map.getFinishMapCellIndex();
             }
 
             // Makes sure the player cannot retreat behind position 1
             if (playerDestinationIndex < 1) {
+                if (bypassValidation) { return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null); }
                 playerDestinationIndex = 1;
             }
 
@@ -946,11 +944,6 @@ public class GameManager {
     ) {
         int nrSquaresAbs = Math.abs(nrSquares);
 
-        // Checks if 'nrSquares' is valid with 'bypassValidation'
-        if (bypassValidation && (nrSquaresAbs < 1 || nrSquares > this.map.getFinishMapCellIndex())) {
-            return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
-        }
-
         // Checks if 'nrSquares' is a valid value without 'bypassValidation'
         if (!bypassValidation && nrSquaresAbs != 0) {
             if (nrSquaresAbs < currentPlayerSpecies.getSpeedMin() || nrSquaresAbs > currentPlayerSpecies.getSpeedMax()) {
@@ -959,6 +952,22 @@ public class GameManager {
             }
         }
         return null;
+    }
+
+    /**
+     * Validates number of game players.
+     * @param playersInfo Players Info
+     * @throws InvalidInitialJungleException Exception
+     */
+    public void validateNumberOfPlayers(String[][] playersInfo) throws InvalidInitialJungleException {
+        // Validates number of players (2-4 players)
+        int numberOfPlayers = playersInfo.length;
+        if (numberOfPlayers < 2 || numberOfPlayers > 4) {
+            throw new InvalidInitialJungleException(
+                    "Invalid number of players! The number of players must be between 2 and 4.", ExceptionCause.PLAYER
+            );
+        }
+
     }
 
     /**

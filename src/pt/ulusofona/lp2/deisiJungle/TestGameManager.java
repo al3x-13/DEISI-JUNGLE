@@ -814,6 +814,27 @@ public class TestGameManager {
     }
 
     @Test
+    public void test_08_MoveCurrentPlayer() throws InvalidInitialJungleException {
+        // Testing staying in place (with bypassValidation)
+        GameManager game = new GameManager();
+
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" }
+        };
+        game.createInitialJungle(10, playersInfo);
+        ArrayList<Player> players = game.getPlayers();
+
+        // Moving player with ID 1
+        assertEquals(1, players.get(0).getCurrentMapPosition());
+        assertEquals(
+                MovementResultCode.VALID_MOVEMENT,
+                game.moveCurrentPlayer(0, true).code());
+        // Getting current player position from player object
+        assertEquals(1, players.get(0).getCurrentMapPosition());
+    }
+
+    @Test
     public void test_01_Energy() throws InvalidInitialJungleException {
         // Testing energy gain by consuming food
         GameManager game = new GameManager();
@@ -1264,7 +1285,7 @@ public class TestGameManager {
         game.moveCurrentPlayer(3, true);
         assertFalse(game.isGameOver());
         assertNull(game.getWinnerInfo());
-        game.moveCurrentPlayer(6, true);
+        game.moveCurrentPlayer(6, false);
         assertTrue(game.isGameOver());
         assertEquals(1, Integer.parseInt(game.getWinnerInfo()[0]));
     }
@@ -1297,7 +1318,7 @@ public class TestGameManager {
         game.moveCurrentPlayer(6, true);
         assertFalse(game.isGameOver());
         assertNull(game.getWinnerInfo());
-        game.moveCurrentPlayer(5, true);
+        game.moveCurrentPlayer(4, true);
         assertTrue(game.isGameOver());
         assertEquals(3, Integer.parseInt(game.getWinnerInfo()[0]));
     }
