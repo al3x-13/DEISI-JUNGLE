@@ -38,6 +38,7 @@ public class GameManager {
     private int currentPlay = 1;
     // Stores the current round player index for 'players' ArrayList
     private int currentRoundPlayerIndex;
+    private boolean gameOver = false;
     private String creditsImagePath = "src/images/credits.png";
 
     public GameManager() {}
@@ -81,7 +82,6 @@ public class GameManager {
      * @param jungleSize map size
      * @param playersInfo players info
      * @param foodsInfo foods info
-     * @return Whether the initial map was successfully created
      */
     public void createInitialJungle(int jungleSize, String[][] playersInfo, String[][] foodsInfo)
             throws InvalidInitialJungleException
@@ -169,7 +169,6 @@ public class GameManager {
      * Creates the initial game Map.
      * @param jungleSize map size
      * @param playersInfo players info
-     * @return Whether the initial map was successfully created
      */
     public void createInitialJungle(int jungleSize, String[][] playersInfo) throws InvalidInitialJungleException  {
         createInitialJungle(jungleSize, playersInfo, null);
@@ -306,6 +305,11 @@ public class GameManager {
      * @return Whether current player was moved successfully
      */
     public MovementResult moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
+        // Checks if game is over
+        if (this.gameOver) {
+            return new MovementResult(MovementResultCode.VALID_MOVEMENT, null);
+        }
+
         // Gets current player
         Player currentPlayer = this.players.get(currentRoundPlayerIndex);
         Species currentPlayerSpecies = currentPlayer.getSpecies();
@@ -388,6 +392,7 @@ public class GameManager {
         if (!isGameOver()) {
             return null;
         }
+        this.gameOver = true;
 
         // Gets winner in case one has gotten to the finish
         for (Player player : this.players) {

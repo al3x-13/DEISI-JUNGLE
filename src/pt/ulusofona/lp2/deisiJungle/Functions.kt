@@ -131,6 +131,7 @@ fun postMove(manager: GameManager, args: List<String>): String? {
     val movementResult = manager.moveCurrentPlayer(numberOfPositionToMove, true)
 
     return when (movementResult.code) {
+        MovementResultCode.VALID_MOVEMENT -> "OK"
         MovementResultCode.INVALID_MOVEMENT -> "Movimento invalido"
         MovementResultCode.NO_ENERGY -> "Sem energia"
         MovementResultCode.CAUGHT_FOOD -> "Apanhou comida"
