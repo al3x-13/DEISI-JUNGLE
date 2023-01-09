@@ -3,8 +3,62 @@ package pt.ulusofona.lp2.deisiJungle
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.lang.NumberFormatException
+import kotlin.math.exp
 
 class TestFunctions {
+    @Test
+    fun test_01_GET_COMMAND() {
+        // Testing with empty arg list
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T")
+        )
+        game.createInitialJungle(10, playersInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.GET).invoke(game, listOf()))
+    }
+
+    @Test
+    fun test_02_GET_COMMAND() {
+        // Testing with a non-existent query
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T")
+        )
+        game.createInitialJungle(10, playersInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.GET).invoke(game, listOf("LULZ")))
+    }
+
+    @Test
+    fun test_01_POST_COMMAND() {
+        // Testing with empty arg list
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T")
+        )
+        game.createInitialJungle(10, playersInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.POST).invoke(game, listOf()))
+    }
+
+    @Test
+    fun test_02_POST_COMMAND() {
+        // Testing with empty non-existent query
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T")
+        )
+        game.createInitialJungle(10, playersInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.POST).invoke(game, listOf("LULZ")))
+    }
+
     @Test
     fun test_01_GET_PLAYER_INFO() {
         // Testing with valid player
@@ -96,6 +150,19 @@ class TestFunctions {
     }
 
     @Test
+    fun test_04_GET_PLAYERS_BY_SPECIE() {
+        // Testing with invalid number of args
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T")
+        )
+        game.createInitialJungle(10, playersInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.GET).invoke(game, listOf("PLAYERS_BY_SPECIE")))
+    }
+
+    @Test
     fun test_01_GET_MOST_TRAVELED() {
         // Testing with valid data
         val game = GameManager()
@@ -155,6 +222,20 @@ class TestFunctions {
         val expectedResult = "Player 2:150\nPlayer 3:70"
         val realResult = router.invoke(CommandType.GET).invoke(game, listOf("TOP_ENERGETIC_OMNIVORES", "3"))
         assertEquals(expectedResult, realResult)
+    }
+
+    @Test
+    fun test_02_GET_TOP_ENERGETIC_OMNIVORES() {
+        // Testing with invalid number of args
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T"),
+            arrayOf("8", "Player 3", "Z")
+        )
+        game.createInitialJungle(10, playersInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.GET).invoke(game, listOf("TOP_ENERGETIC_OMNIVORES")))
     }
 
     @Test

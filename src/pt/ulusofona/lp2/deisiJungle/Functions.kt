@@ -95,12 +95,8 @@ fun getTopEnergeticOmnivores(manager: GameManager, args: List<String>): String? 
     if (args.size < 2) {
         return null
     }
-    val maxResults: Number
-    try {
-        maxResults = args[1].toInt()
-    } catch (e: NumberFormatException) {
-        return null
-    }
+    val maxResults = args[1].toInt()
+    println("Number: $maxResults")
 
     return manager.players
         .filter { it.species.diet == DietType.OMNIVORE }
@@ -122,12 +118,7 @@ fun postMove(manager: GameManager, args: List<String>): String? {
     if (args.size < 2) {
         return null
     }
-    val numberOfPositionsToMove: Number
-    try {
-        numberOfPositionsToMove = args[1].toInt()
-    } catch (e: NumberFormatException) {
-        return null
-    }
+    val numberOfPositionsToMove = args[1].toInt()
     val movementResult = manager.moveCurrentPlayer(numberOfPositionsToMove, true)
 
     return when (movementResult.code) {
