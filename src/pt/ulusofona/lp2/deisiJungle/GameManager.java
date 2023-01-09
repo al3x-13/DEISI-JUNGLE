@@ -364,8 +364,10 @@ public class GameManager {
         // Checks if destination has food in it
         if (destinationCellFood != null && destinationCellFood.canBeConsumedBySpecies(currentPlayerSpecies)) {
             // Food consumption by the player
+            if (!(destinationCellFood.id == 'b' && ((Bananas)destinationCellFood).getConsumableUnits() < 1)) {
+                caughtFood = true;
+            }
             destinationCellFood.consumeFood(currentPlayer, currentPlay);
-            caughtFood = true;
         }
 
         // Updates player for next play
