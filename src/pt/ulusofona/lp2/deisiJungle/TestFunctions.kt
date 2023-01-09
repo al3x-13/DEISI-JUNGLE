@@ -16,7 +16,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = "3 | Player 1 | Leão | 80 | 1"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "PLAYER_INFO", "Player 1"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYER_INFO", "Player 1"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -31,7 +31,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = "Inexistent player"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "PLAYER_INFO", "Player 3"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYER_INFO", "Player 3"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -45,7 +45,7 @@ class TestFunctions {
         )
         game.createInitialJungle(10, playersInfo)
         val router = router()
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "PLAYER_INFO"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYER_INFO"))
         assertNull(realResult)
     }
 
@@ -61,7 +61,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = "Player 2,Player 3"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "PLAYERS_BY_SPECIE", "T"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYERS_BY_SPECIE", "T"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -76,7 +76,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = ""
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "PLAYERS_BY_SPECIE", "E"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYERS_BY_SPECIE", "E"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -91,7 +91,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = ""
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "PLAYERS_BY_SPECIE", "H"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("PLAYERS_BY_SPECIE", "H"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -114,7 +114,7 @@ class TestFunctions {
                 "\nPlayer 1:L:10" +
                 "\nPlayer 3:Z:8" +
                 "\nTotal:41"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "MOST_TRAVELED"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("MOST_TRAVELED"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -137,7 +137,7 @@ class TestFunctions {
                 "\nPlayer 3:Z:11" +
                 "\nPlayer 1:L:5" +
                 "\nTotal:27"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "MOST_TRAVELED"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("MOST_TRAVELED"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -153,7 +153,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = "Player 2:150\nPlayer 3:70"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "TOP_ENERGETIC_OMNIVORES", "3"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("TOP_ENERGETIC_OMNIVORES", "3"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -177,7 +177,7 @@ class TestFunctions {
         game.map.getMapCell(8).foodItem.consumedCount = 1;
         val router = router()
         val expectedResult = "Agua\nBananas\nCogumelo Magico"
-        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("GET", "CONSUMED_FOODS"))
+        val realResult = router.invoke(CommandType.GET).invoke(game, listOf("CONSUMED_FOODS"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -192,7 +192,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo)
         val router = router()
         val expectedResult = "OK"
-        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("POST", "MOVE", "7"))
+        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("MOVE", "7"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -208,7 +208,7 @@ class TestFunctions {
         game.players[0].decreaseEnergy(70)
         val router = router()
         val expectedResult = "Sem energia"
-        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("POST", "MOVE", "7"))
+        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("MOVE", "7"))
         assertEquals(expectedResult, realResult)
     }
 
@@ -226,7 +226,7 @@ class TestFunctions {
         game.createInitialJungle(10, playersInfo, foodsInfo)
         val router = router()
         val expectedResult = "Apanhou comida"
-        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("POST", "MOVE", "3"))
+        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("MOVE", "3"))
         assertEquals(expectedResult, realResult)
     }
 }
