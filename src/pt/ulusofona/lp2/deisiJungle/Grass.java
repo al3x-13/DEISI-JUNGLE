@@ -17,6 +17,7 @@ public class Grass extends Food {
         } else {
             player.consumeFood(-20);
         }
+        this.consumedCount++;
     }
 
     @Override

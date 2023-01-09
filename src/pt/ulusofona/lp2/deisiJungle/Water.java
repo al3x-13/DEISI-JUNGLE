@@ -18,8 +18,8 @@ public class Water extends Food {
         } else {
             foodEnergy = 15;
         }
-
         player.consumeFood(foodEnergy);
+        this.consumedCount++;
     }
 
     @Override

@@ -5,6 +5,7 @@ public abstract class Food {
     protected String name;
     protected String imageFilename;
     protected String tooltip;
+    protected int consumedCount = 0;
 
     public Food(char id, String name, String imageFilename, String tooltip) {
         this.id = id;
@@ -36,6 +37,13 @@ public abstract class Food {
     }
 
     /**
+     * @return Food Name
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
      * Provides information about the food type. The format is a String array as follows:<p>
      * [0] -> Food ID<p>
      * [1] -> Food Name<p>
@@ -57,6 +65,13 @@ public abstract class Food {
      * @return Food Tooltip
      */
     public String getTooltip() {
-        return tooltip;
+        return this.tooltip;
+    }
+
+    /**
+     * @return Number of Times Consumed
+     */
+    public int getConsumedCount() {
+        return this.consumedCount;
     }
 }

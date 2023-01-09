@@ -20,6 +20,7 @@ public class MagicMushrooms extends Food {
         foodEnergy = currentPlay % 2 == 0 ? foodEnergy : -foodEnergy;
 
         player.consumeFood(foodEnergy);
+        this.consumedCount++;
     }
 
     @Override
