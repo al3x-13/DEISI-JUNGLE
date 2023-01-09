@@ -746,9 +746,9 @@ public class TestGameManager {
 
         // Moving player with ID 1
         assertEquals(1, players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(11, true).code());
+        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(11, true).code());
         // Getting current player position from player object
-        assertEquals(1, players.get(0).getCurrentMapPosition());
+        assertEquals(10, players.get(0).getCurrentMapPosition());
     }
 
     @Test

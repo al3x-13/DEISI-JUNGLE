@@ -327,7 +327,7 @@ public class GameManager {
         int playerDestinationIndex = playerCurrentPosition + nrSquares;
 
         // Checks if player has moved or not
-        if (nrSquares == 0) {
+        if (nrSquaresAbs == 0) {
             // Increases player energy on idle
             currentPlayer.increaseEnergy(currentPlayerSpecies.getEnergyGainOnIdle());
         } else {
@@ -338,10 +338,6 @@ public class GameManager {
 
             // Makes sure the player does not exceed map limit
             if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
-                if (bypassValidation) {
-                    switchToNextPlayerAndUpdateCurrentPlay();
-                    return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
-                }
                 playerDestinationIndex = this.map.getFinishMapCellIndex();
             }
 
