@@ -305,11 +305,6 @@ public class GameManager {
      * @return Whether current player was moved successfully
      */
     public MovementResult moveCurrentPlayer(int nrSquares, boolean bypassValidation) {
-        // Checks if game is over
-        if (this.gameOver) {
-            return new MovementResult(MovementResultCode.VALID_MOVEMENT, null);
-        }
-
         // Gets current player
         Player currentPlayer = this.players.get(currentRoundPlayerIndex);
         Species currentPlayerSpecies = currentPlayer.getSpecies();
@@ -317,6 +312,7 @@ public class GameManager {
 
         MovementResult validateSquares = validateNumberOfSquares(nrSquares, currentPlayerSpecies, bypassValidation);
         if (validateSquares != null) {
+            switchToNextPlayerAndUpdateCurrentPlay();
             return validateSquares;
         }
 
@@ -331,7 +327,7 @@ public class GameManager {
         int playerDestinationIndex = playerCurrentPosition + nrSquares;
 
         // Checks if player has moved or not
-        if (nrSquaresAbs == 0) {
+        if (nrSquares == 0) {
             // Increases player energy on idle
             currentPlayer.increaseEnergy(currentPlayerSpecies.getEnergyGainOnIdle());
         } else {
@@ -342,13 +338,19 @@ public class GameManager {
 
             // Makes sure the player does not exceed map limit
             if (playerDestinationIndex > this.map.getFinishMapCellIndex()) {
-                if (bypassValidation) { return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null); }
+                if (bypassValidation) {
+                    switchToNextPlayerAndUpdateCurrentPlay();
+                    return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
+                }
                 playerDestinationIndex = this.map.getFinishMapCellIndex();
             }
 
             // Makes sure the player cannot retreat behind position 1
             if (playerDestinationIndex < 1) {
-                if (bypassValidation) { return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null); }
+                if (bypassValidation) {
+                    switchToNextPlayerAndUpdateCurrentPlay();
+                    return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
+                }
                 playerDestinationIndex = 1;
             }
 
@@ -367,11 +369,8 @@ public class GameManager {
         Food destinationCellFood = destinationCell.getFoodItem();
         // Checks if destination has food in it
         if (destinationCellFood != null && destinationCellFood.canBeConsumedBySpecies(currentPlayerSpecies)) {
-            // Food consumption by the player
             // If the destination cell has bananas checks if there are any left
-            if (nrSquares == 0) {
-                caughtFood = false;
-            } else if (!(destinationCellFood.id == 'b' && ((Bananas)destinationCellFood).getConsumableUnits() < 1)) {
+            if (!(destinationCellFood.id == 'b' && ((Bananas)destinationCellFood).getConsumableUnits() < 1)) {
                 caughtFood = true;
             }
             destinationCellFood.consumeFood(currentPlayer, currentPlay);

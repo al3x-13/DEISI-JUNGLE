@@ -835,6 +835,24 @@ public class TestGameManager {
     }
 
     @Test
+    public void test_09_MoveCurrentPlayer() throws InvalidInitialJungleException {
+        // Testing with many moves
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "L" },
+                { "3", "Player 2", "T" },
+                { "5", "Player 3", "Z" }
+        };
+        game.createInitialJungle(10, playersInfo);
+
+        // Moves players
+        game.moveCurrentPlayer(8, true);
+        game.moveCurrentPlayer(2, true);
+        game.moveCurrentPlayer(-10, true);
+        assertEquals("1", game.getCurrentPlayerInfo()[0]);
+    }
+
+    @Test
     public void test_01_Energy() throws InvalidInitialJungleException {
         // Testing energy gain by consuming food
         GameManager game = new GameManager();
