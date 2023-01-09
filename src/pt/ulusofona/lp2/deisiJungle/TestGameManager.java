@@ -746,13 +746,9 @@ public class TestGameManager {
 
         // Moving player with ID 1
         assertEquals(1, players.get(0).getCurrentMapPosition());
-        assertEquals(MovementResultCode.VALID_MOVEMENT, game.moveCurrentPlayer(11, true).code());
+        assertEquals(MovementResultCode.INVALID_MOVEMENT, game.moveCurrentPlayer(11, true).code());
         // Getting current player position from player object
-        assertEquals(10, players.get(0).getCurrentMapPosition());
-        // Checking if player was removed from the previous cell
-        assertFalse(game.getMap().getMapCell(1).hasPlayerID(1));
-        // Checking if player was added to the correct cell (last one in this case)
-        assertTrue(game.getMap().getMapCell(10).hasPlayerID(1));
+        assertEquals(1, players.get(0).getCurrentMapPosition());
     }
 
     @Test

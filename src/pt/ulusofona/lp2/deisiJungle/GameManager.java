@@ -315,12 +315,9 @@ public class GameManager {
         Species currentPlayerSpecies = currentPlayer.getSpecies();
         int nrSquaresAbs = Math.abs(nrSquares);
 
-        // Checks if 'nrSquares' is a valid value without 'bypassValidation'
-        if (!bypassValidation && nrSquaresAbs != 0) {
-            if (nrSquaresAbs < currentPlayerSpecies.getSpeedMin() || nrSquaresAbs > currentPlayerSpecies.getSpeedMax()) {
-                switchToNextPlayerAndUpdateCurrentPlay();
-                return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
-            }
+        MovementResult validateSquares = validateNumberOfSquares(nrSquares, currentPlayerSpecies, bypassValidation);
+        if (validateSquares != null) {
+            return validateSquares;
         }
 
         // Checks if player has sufficient energy to make the play
@@ -933,6 +930,35 @@ public class GameManager {
                 foodCell.setFood(newFood);
             }
         }
+    }
+
+    /**
+     * Validates the number of squares given to prevent player from making invalid moves.
+     * @param nrSquares Number of Squares
+     * @param currentPlayerSpecies Current Player Species
+     * @param bypassValidation Bypass Validation
+     * @return Movement Result if nrSquares is invalid, null otherwise
+     */
+    public MovementResult validateNumberOfSquares(
+            int nrSquares,
+            Species currentPlayerSpecies,
+            boolean bypassValidation
+    ) {
+        int nrSquaresAbs = Math.abs(nrSquares);
+
+        // Checks if 'nrSquares' is valid with 'bypassValidation'
+        if (bypassValidation && (nrSquaresAbs < 1 || nrSquares > this.map.getFinishMapCellIndex())) {
+            return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
+        }
+
+        // Checks if 'nrSquares' is a valid value without 'bypassValidation'
+        if (!bypassValidation && nrSquaresAbs != 0) {
+            if (nrSquaresAbs < currentPlayerSpecies.getSpeedMin() || nrSquaresAbs > currentPlayerSpecies.getSpeedMax()) {
+                switchToNextPlayerAndUpdateCurrentPlay();
+                return new MovementResult(MovementResultCode.INVALID_MOVEMENT, null);
+            }
+        }
+        return null;
     }
 
     /**
