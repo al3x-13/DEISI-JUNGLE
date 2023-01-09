@@ -122,16 +122,15 @@ fun postMove(manager: GameManager, args: List<String>): String? {
     if (args.size < 2) {
         return null
     }
-    val numberOfPositionToMove: Number
+    val numberOfPositionsToMove: Number
     try {
-        numberOfPositionToMove = args[1].toInt()
+        numberOfPositionsToMove = args[1].toInt()
     } catch (e: NumberFormatException) {
         return null
     }
-    val movementResult = manager.moveCurrentPlayer(numberOfPositionToMove, true)
+    val movementResult = manager.moveCurrentPlayer(numberOfPositionsToMove, true)
 
     return when (movementResult.code) {
-        MovementResultCode.VALID_MOVEMENT -> "OK"
         MovementResultCode.INVALID_MOVEMENT -> "Movimento invalido"
         MovementResultCode.NO_ENERGY -> "Sem energia"
         MovementResultCode.CAUGHT_FOOD -> "Apanhou comida"
