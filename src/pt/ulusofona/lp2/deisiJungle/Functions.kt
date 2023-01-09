@@ -1,6 +1,7 @@
 package pt.ulusofona.lp2.deisiJungle
 
 import java.lang.NumberFormatException
+import java.text.Normalizer
 
 enum class CommandType {
     GET,
@@ -49,9 +50,18 @@ fun getPlayerInfo(manager: GameManager, args: List<String>): String? {
         return null
     }
     val name = args[1]
+    val REGEX_RM_ACCENTS = "\\p{InCombiningDiacriticalMarks}+".toRegex();
     val result = manager.players
         .filter { it.name == name }
-        .map { "${it.id} | ${it.name} | ${it.species.name} | ${it.energy} | ${it.currentMapPosition}" }
+        .map { "${it.id} | " +
+                "${it.name} | " +
+                (REGEX_RM_ACCENTS
+                    .replace(
+                        Normalizer.normalize(it.species.name, Normalizer.Form.NFD),
+                        ""
+                    ) + " | ") +
+                "${it.energy} | " +
+                "${it.currentMapPosition}" }
 
     return if (result.isEmpty()) "Inexistent player" else result[0]
 }
