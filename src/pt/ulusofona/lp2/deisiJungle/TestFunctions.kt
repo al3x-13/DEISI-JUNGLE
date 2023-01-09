@@ -310,4 +310,38 @@ class TestFunctions {
         val realResult = router.invoke(CommandType.POST).invoke(game, listOf("MOVE", "3"))
         assertEquals(expectedResult, realResult)
     }
+
+    @Test
+    fun test_04_POST_MOVE() {
+        // Testing with invalid number of args
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T"),
+        )
+        val foodsInfo = arrayOf(
+            arrayOf("a", "4"),
+        )
+        game.createInitialJungle(10, playersInfo, foodsInfo)
+        val router = router()
+        assertNull(router.invoke(CommandType.POST).invoke(game, listOf("MOVE")))
+    }
+
+    @Test
+    fun test_05_POST_MOVE() {
+        // Testing with invalid move
+        val game = GameManager()
+        val playersInfo = arrayOf(
+            arrayOf("3", "Player 1", "L"),
+            arrayOf("5", "Player 2", "T"),
+        )
+        val foodsInfo = arrayOf(
+            arrayOf("a", "4"),
+        )
+        game.createInitialJungle(10, playersInfo, foodsInfo)
+        val router = router()
+        val expectedResult = "Movimento invalido"
+        val realResult = router.invoke(CommandType.POST).invoke(game, listOf("MOVE", "-10"))
+        assertEquals(expectedResult, realResult)
+    }
 }

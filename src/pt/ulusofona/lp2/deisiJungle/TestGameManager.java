@@ -284,7 +284,7 @@ public class TestGameManager {
 
     @Test
     public void test_13_CreateInitialJungle() {
-        // Testing with invalid food value
+        // Testing with invalid food position format
         GameManager game = new GameManager();
         String[][] playersInfo = new String[][] {
                 { "1", "Player 1", "E"},
@@ -296,7 +296,28 @@ public class TestGameManager {
         String expectedMessage = "Invalid Food Position! Food position must be an integer value.";
 
         try{
-            game.createInitialJungle(10, playersInfo);
+            game.createInitialJungle(10, playersInfo, foodsInfo);
+        } catch (InvalidInitialJungleException e) {
+            assertEquals(expectedMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void test_14_CreateInitialJungle() {
+        // Testing with invalid food position
+        GameManager game = new GameManager();
+        String[][] playersInfo = new String[][] {
+                { "1", "Player 1", "E"},
+                { "3", "Player 2", "Z"}
+        };
+        String[][] foodsInfo = new String[][] {
+                { "a", "0" }
+        };
+        String expectedMessage = "Invalid Food Position! " +
+                "Food position must be in the map range except start and finish positions.";
+
+        try{
+            game.createInitialJungle(10, playersInfo, foodsInfo);
         } catch (InvalidInitialJungleException e) {
             assertEquals(expectedMessage, e.getMessage());
         }
